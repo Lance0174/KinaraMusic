@@ -1,0 +1,7 @@
+ZXing Core 3.5.3
+Copyright ZXing authors.
+https://github.com/zxing/zxing
+Licensed under the Apache License, Version 2.0.
+See zxing-Apache-2.0.txt in this directory.
+
+Kinara — Copyright (C) 2026 Kinara contributors. GPL-3.0.

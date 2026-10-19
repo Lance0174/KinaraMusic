@@ -1,0 +1,8 @@
+# Kinara Bilibili Audio Worker
+name = "kinara-bili-audio"
+main = "worker.js"
+compatibility_date = "2026-09-01"
+# Configure the deploying account locally or through Wrangler/GitHub Actions.
+# Do not commit a personal Cloudflare account identifier or API token here.
+
+workers_dev = true

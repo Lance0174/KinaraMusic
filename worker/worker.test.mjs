@@ -1,0 +1,112 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+let serial = 0;
+const BV = 'BV1xx411c7mD';
+async function worker(t, fetch) {
+  const old = globalThis.fetch;
+  globalThis.fetch = fetch;
+  t.after(() => { globalThis.fetch = old; });
+  return (await import(`./worker.js?test=${serial++}`)).default;
+}
+const json = value => new Response(JSON.stringify(value), { headers: { 'Content-Type': 'application/json' } });
+const req = (path, init) => new Request('https://kinara.example' + path, init);
+function upstream(url) {
+  if (url === 'https://www.bilibili.com/') return new Response('', { headers: { 'set-cookie': 'buvid3=guest; Path=/' } });
+  if (url.includes('/view?')) return json({ code: 0, data: { cid: 123 } });
+  if (url.includes('/playurl?')) return json({ code: 0, data: { dash: { audio: [{ id: 30280, bandwidth: 192000, baseUrl: 'https://cn-test.bilivideo.com/audio.m4s' }] } } });
+  throw new Error('unexpected upstream: ' + url);
+}
+
+test('reject arbitrary URL, malformed BVID, methods and ranges before any fetch', async t => {
+  const w = await worker(t, () => { throw new Error('must not fetch'); });
+  for (const path of ['/bili/stream?u=https://example.com/', '/bili/stream?bvid=evil', '/bili/search?kw='])
+    assert.equal((await w.fetch(req(path))).status, 400);
+  assert.equal((await w.fetch(req('/bili/stream?bvid=' + BV, { headers: { Range: 'bytes=0-5,10-15' } }))).status, 400);
+  assert.equal((await w.fetch(req('/health', { method: 'POST' }))).status, 405);
+});
+
+test('CDN whitelist rejects credentials, lookalike suffixes, cleartext and alternate ports', async () => {
+  const { trustedAudioUrl } = await import('./worker.js');
+  for (const url of ['https://evilbilivideo.com/a', 'https://bilivideo.com.evil.test/a', 'http://cn.bilivideo.com/a', 'https://user@cn.bilivideo.com/a', 'https://cn.bilivideo.com:8443/a', 'https://127.0.0.1/'])
+    assert.equal(trustedAudioUrl(url), false, url);
+  assert.equal(trustedAudioUrl('https://cn.bilivideo.com/a?deadline=42'), true);
+  assert.equal(trustedAudioUrl('https://cn.mcdn.bilivideo.cn/a'), true);
+});
+
+test('HTML challenge retries once with refreshed guest cookie and returns an honest failure', async t => {
+  let apis = 0, cookies = 0;
+  const w = await worker(t, async url => {
+    if (url === 'https://www.bilibili.com/') { cookies++; return new Response(''); }
+    apis++; return new Response('<html>challenge</html>', { headers: { 'content-type': 'text/html' } });
+  });
+  const r = await w.fetch(req('/bili/search?kw=test'));
+  assert.equal(r.status, 503); assert.equal(apis, 2); assert.equal(cookies, 2);
+  assert.match((await r.json()).error, /限制/);
+});
+
+test('JSON risk code never becomes a successful empty list', async t => {
+  let apis = 0;
+  const w = await worker(t, async url => url === 'https://www.bilibili.com/' ? new Response('') : (++apis, json({ code: -412 })));
+  const r = await w.fetch(req('/bili/search?kw=test'));
+  assert.equal(r.status, 503); assert.equal(apis, 2); assert.equal((await r.json()).code, -412);
+});
+
+test('bounded retry can recover, strips tags and parses mm:ss duration', async t => {
+  let apis = 0;
+  const w = await worker(t, async url => {
+    if (url === 'https://www.bilibili.com/') return new Response('');
+    if (++apis === 1) return json({ code: -412 });
+    return json({ code: 0, data: { result: [{ bvid: BV, title: '<em>Song</em>', duration: '04:09' }] } });
+  });
+  const r = await w.fetch(req('/bili/search?kw=test'));
+  assert.equal(r.status, 200);
+  assert.deepEqual((await r.json()).result[0], { bvid: BV, title: 'Song', author: '', duration: 249 });
+});
+
+test('resolve binds to this Worker; streaming forwards Range/If-Range and preserves 206', async t => {
+  let cdnCalls = 0;
+  const w = await worker(t, async (url, init) => {
+    if (!url.includes('cn-test.bilivideo.com')) return upstream(url);
+    cdnCalls++;
+    assert.equal(init.headers.range, 'bytes=8-11'); assert.equal(init.headers['if-range'], 'etag-a');
+    assert.equal(init.headers.Referer, 'https://www.bilibili.com/'); assert.equal(init.redirect, 'manual');
+    return new Response('abcd', { status: 206, headers: { 'Content-Range': 'bytes 8-11/100', 'Content-Length': '4', 'Accept-Ranges': 'bytes', 'Content-Type': 'audio/mp4' } });
+  });
+  const parsed = await (await w.fetch(req('/bili/resolve?bvid=' + BV))).json();
+  assert.equal(parsed.url, 'https://kinara.example/bili/stream?bvid=' + BV);
+  const r = await w.fetch(req(parsed.streamPath, { headers: { Range: 'bytes=8-11', 'If-Range': 'etag-a' } }));
+  assert.equal(r.status, 206); assert.equal(r.headers.get('Content-Range'), 'bytes 8-11/100');
+  assert.equal(await r.text(), 'abcd'); assert.equal(cdnCalls, 1);
+});
+
+test('external redirect never reaches an untrusted host', async t => {
+  const calls = [];
+  const w = await worker(t, async url => {
+    calls.push(url);
+    if (url.includes('cn-test.bilivideo.com')) return new Response(null, { status: 302, headers: { Location: 'https://example.com/private' } });
+    return upstream(url);
+  });
+  assert.equal((await w.fetch(req('/bili/stream?bvid=' + BV))).status, 502);
+  assert.ok(!calls.some(u => u.includes('example.com')));
+});
+
+test('preserves unsatisfiable Range response and HEAD has no body', async t => {
+  const w = await worker(t, async (url, init) => {
+    if (!url.includes('cn-test.bilivideo.com')) return upstream(url);
+    return new Response(null, { status: init.method === 'HEAD' ? 200 : 416, headers: { 'Content-Range': 'bytes */100' } });
+  });
+  const r = await w.fetch(req('/bili/stream?bvid=' + BV, { headers: { Range: 'bytes=999-' } }));
+  assert.equal(r.status, 416); assert.equal(r.headers.get('Content-Range'), 'bytes */100');
+  const head = await w.fetch(req('/bili/stream?bvid=' + BV, { method: 'HEAD' }));
+  assert.equal(head.status, 200); assert.equal(await head.text(), '');
+});
+
+
+test('homepage warmup failure does not prevent a public API request', async t => {
+  const w = await worker(t, async url => {
+    if (url === 'https://www.bilibili.com/') throw new Error('homepage offline');
+    return json({ code: 0, data: { result: [] } });
+  });
+  const r = await w.fetch(req('/bili/search?kw=test'));
+  assert.equal(r.status, 200); assert.deepEqual((await r.json()).result, []);
+});

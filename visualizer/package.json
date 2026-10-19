@@ -1,0 +1,20 @@
+{
+  "name": "kinara-folia-lumiere",
+  "version": "1.3.0",
+  "private": true,
+  "type": "module",
+  "license": "AGPL-3.0-only",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test test/*.test.mjs",
+    "test:browser": "playwright test"
+  },
+  "dependencies": {
+    "@chenglou/pretext": "0.0.9",
+    "pixi.js": "8.21.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.12",
+    "@playwright/test": "1.56.1"
+  }
+}

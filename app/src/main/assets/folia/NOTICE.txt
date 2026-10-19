@@ -1,0 +1,4 @@
+Folia Lumiere © 2026 chthollyphile — AGPL-3.0.
+https://github.com/chthollyphile/folia-major
+Kinara Android integration © 2026 Kinara contributors.
+Corresponding renderer source and build scripts: visualizer/ in the Kinara source archive.

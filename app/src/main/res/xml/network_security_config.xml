@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  明文（HTTP）放行清单——逐域名核对（教训：放行范围＝最终请求域名，不是接口域名）：
+   - search.kuwo.cn / antiserver.kuwo.cn / m.kuwo.cn  酷我搜索/地址/歌词（接口与CDN均明文）
+   - mobilecdn.kugou.com / krcs.kugou.com / lyrics.kugou.com  酷狗搜索/歌词
+   - music.126.net / qqmusic.qq.com / gtimg.com：仅在音源返回 HTTP 时，音频先尝试 HTTPS，失败回退原地址。
+  其余一律 HTTPS；账号请求保持官方 HTTPS，不向音频服务器转发凭证。
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false" />
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">search.kuwo.cn</domain>
+        <domain includeSubdomains="false">antiserver.kuwo.cn</domain>
+        <domain includeSubdomains="false">m.kuwo.cn</domain>
+        <domain includeSubdomains="false">mobilecdn.kugou.com</domain>
+        <domain includeSubdomains="false">krcs.kugou.com</domain>
+        <domain includeSubdomains="false">lyrics.kugou.com</domain>
+        <domain includeSubdomains="true">music.126.net</domain>
+        <domain includeSubdomains="true">qqmusic.qq.com</domain>
+        <domain includeSubdomains="true">gtimg.com</domain>
+    </domain-config>
+</network-security-config>

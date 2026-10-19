@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 工业风图标：红色双层外圈 + 冰蓝唱臂，呼应主题的双层边框规范 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <path android:fillColor="#C62828"
+        android:pathData="M54,18 A36,36 0 1,0 54,90 A36,36 0 1,0 54,18 Z M54,26 A28,28 0 1,1 54,82 A28,28 0 1,1 54,26 Z" />
+    <path android:fillColor="#E53935"
+        android:pathData="M54,30 A24,24 0 1,0 54,78 A24,24 0 1,0 54,30 Z M54,38 A16,16 0 1,1 54,70 A16,16 0 1,1 54,38 Z" />
+    <path android:fillColor="#29B6E8"
+        android:pathData="M54,44 A10,10 0 1,0 54,64 A10,10 0 1,0 54,44 Z" />
+    <path android:strokeColor="#7FD8F5" android:strokeWidth="4" android:strokeLineCap="round"
+        android:pathData="M70,38 L84,24" />
+    <path android:fillColor="#7FD8F5"
+        android:pathData="M84,20 A5,5 0 1,0 84,30 A5,5 0 1,0 84,20 Z" />
+</vector>

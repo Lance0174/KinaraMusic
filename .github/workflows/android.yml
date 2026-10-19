@@ -1,0 +1,49 @@
+name: Android validation
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: visualizer/package-lock.json
+      - uses: android-actions/setup-android@v3
+      - name: Install Android SDK
+        run: sdkmanager 'platforms;android-34' 'build-tools;34.0.0'
+      - name: Tests, Lint and unsigned release
+        run: bash ./gradlew --console=plain testDebugUnitTest lintDebug assembleRelease -PciUnsigned=true
+      - name: Worker tests
+        run: node --test worker/worker.test.mjs
+      - name: Folia clock and WebGL tests
+        working-directory: visualizer
+        run: |
+          npm ci
+          npm test
+          npx playwright install --with-deps chromium
+          npm run test:browser
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: android-validation
+          path: |
+            app/build/outputs/apk/release/*.apk
+            app/build/test-results/testDebugUnitTest/
+            app/build/reports/lint-results-debug.*
+            app/build/reports/performance/
+            app/build/reports/v110-screens/
+            app/build/folia-screens/
+            visualizer/test-results/

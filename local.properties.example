@@ -1,0 +1,14 @@
+# Copy this file to local.properties for a local build. Never commit local.properties.
+sdk.dir=<path-to-android-sdk>
+
+# Optional local-only Solara configuration. An APK built with these values includes them
+# in BuildConfig; the public source defaults to an empty value and keeps Solara disabled.
+kinara.solaraBaseUrl=https://your-solara-host.example/
+kinara.solaraSecret=<local-secret>
+
+# Optional local-only Bilibili Worker bases, in priority order. Separate with commas.
+# The public checkout leaves this empty; configure your own Worker before packaging a local APK.
+kinara.biliWorkerBases=https://your-bili-worker.example,https://your-bili-worker-backup.example
+
+# Optional release signing properties file outside this repository.
+# kinara.signingProperties=<path-to-private-signing.properties>
