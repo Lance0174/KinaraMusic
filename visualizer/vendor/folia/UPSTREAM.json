@@ -1,7 +1,8 @@
 {
   "repository": "https://github.com/chthollyphile/folia-major",
   "version": "0.7.20",
-  "origin": "previously reviewed local source snapshot",
+  "commit": "1b39fd868e2ddda95788f1baa839c032f3e7a285",
+  "origin": "All 81 original hashes independently matched the upstream v0.7.20 commit on 2026-10-19. Local adaptations are listed in visualizer/README.md.",
   "sha256": {
     "src/components/visualizer/colorMix.ts": "8267b4a6f525c0305048eac42a88316069a58623da1b85bd5858d2f61782997e",
     "src/components/visualizer/loadPixi.ts": "31d64cd960b66f093017b5ca1886d3b22373f5e4c9cc8b7388f618c14be2ed91",

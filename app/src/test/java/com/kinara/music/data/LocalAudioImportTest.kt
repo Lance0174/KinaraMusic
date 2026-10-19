@@ -22,6 +22,26 @@ import java.io.File
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [31, 34])
 class LocalAudioImportTest {
+    @Test fun unknownSizeProviderCannotFillPrivateStorage() = runBlocking {
+        val output = java.io.ByteArrayOutputStream()
+        try {
+            copyImportedAudio(ByteArray(1025).inputStream(), output, maxBytes = 1024)
+            fail("must reject oversized stream")
+        } catch (_: IllegalStateException) { assertTrue(output.size() <= 1024) }
+    }
+    @Test fun privateCopyStopsWhenCancelled() = runBlocking {
+        val job = kotlinx.coroutines.Job()
+        val input = object : java.io.ByteArrayInputStream(ByteArray(65536)) {
+            override fun read(b: ByteArray, off: Int, len: Int): Int {
+                job.cancel(); return super.read(b, off, len)
+            }
+        }
+        val output = java.io.ByteArrayOutputStream()
+        try {
+            kotlinx.coroutines.withContext(job) { copyImportedAudio(input, output) }
+            fail("must cancel")
+        } catch (_: kotlinx.coroutines.CancellationException) { assertTrue(output.size() < 65536) }
+    }
     @Test fun missingTagsUseFilenameAndRepeatedImportKeepsStableIdentity() = checkImport(false)
     @Test @Config(shadows = [NonPersistentResolver::class])
     fun providersWithoutPersistentGrantsAreCopiedAndRemainReadable() = checkImport(true)

@@ -121,7 +121,8 @@ class PlaybackService : MediaSessionService() {
         })
         mediaSession = MediaSession.Builder(this, player).setCallback(object : MediaSession.Callback {
             override fun onConnect(session: MediaSession, controller: MediaSession.ControllerInfo): MediaSession.ConnectionResult {
-                if (controller.uid != applicationInfo.uid) return super.onConnect(session, controller)
+                if (controller.uid != applicationInfo.uid) return MediaSession.ConnectionResult.accept(
+                    MediaSession.ConnectionResult.DEFAULT_SESSION_COMMANDS, externalPlayerCommands())
                 return MediaSession.ConnectionResult.accept(MediaSession.ConnectionResult.DEFAULT_SESSION_COMMANDS.buildUpon()
                     .add(SessionCommand(SleepTimer.COMMAND, Bundle.EMPTY)).add(SessionCommand(RETRY_COMMAND, Bundle.EMPTY)).build(),
                     MediaSession.ConnectionResult.DEFAULT_PLAYER_COMMANDS)
@@ -150,3 +151,8 @@ class PlaybackService : MediaSessionService() {
     }
     companion object { const val RETRY_COMMAND = "kinara.retry" }
 }
+
+/** Lock-screen/Bluetooth controllers may control playback, but cannot inject a remote or private file URI. */
+@androidx.annotation.OptIn(markerClass = [androidx.media3.common.util.UnstableApi::class])
+internal fun externalPlayerCommands(): Player.Commands = MediaSession.ConnectionResult.DEFAULT_PLAYER_COMMANDS.buildUpon()
+    .remove(Player.COMMAND_SET_MEDIA_ITEM).remove(Player.COMMAND_CHANGE_MEDIA_ITEMS).build()

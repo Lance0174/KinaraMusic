@@ -7,6 +7,7 @@
  */
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36';
 const REFERER = 'https://www.bilibili.com/';
+const MAX_JSON_BYTES = 2 * 1024 * 1024;
 let cookieCache = null;
 const audioCache = new Map();
 const bvidPattern = /^BV[0-9A-Za-z]{10}$/;
@@ -43,7 +44,7 @@ async function biliJson(url) {
       redirect: 'manual', signal: AbortSignal.timeout(8000),
     });
     const contentType = response.headers.get('content-type') || '';
-    const body = await response.text();
+    const body = await readResponseText(response);
     let data;
     if (!contentType.includes('text/html')) { try { data = JSON.parse(body); } catch {} }
     const blocked = response.status === 412 || contentType.includes('text/html') || data?.code === -412 || data?.code === -352;
@@ -59,11 +60,41 @@ async function biliJson(url) {
   }
 }
 
+async function readResponseText(response) {
+  const declared = Number(response.headers.get('content-length'));
+  if (Number.isFinite(declared) && declared > MAX_JSON_BYTES) {
+    await response.body?.cancel();
+    throw new UpstreamError('B站响应体过大', 502);
+  }
+  if (!response.body) return '';
+  const reader = response.body.getReader();
+  const chunks = [];
+  let total = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      total += value?.byteLength || 0;
+      if (total > MAX_JSON_BYTES) {
+        await reader.cancel();
+        throw new UpstreamError('B站响应体过大', 502);
+      }
+      if (value) chunks.push(value);
+    }
+  } finally {
+    reader.releaseLock();
+  }
+  const bytes = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
+  return new TextDecoder().decode(bytes);
+}
+
 export function trustedAudioUrl(value) {
   try {
     const u = new URL(value);
     return u.protocol === 'https:' && !u.username && !u.password && (!u.port || u.port === '443') &&
-      ['bilivideo.com', 'bilivideo.cn'].some(domain => u.hostname === domain || u.hostname.endsWith('.' + domain));
+      !u.hash && ['bilivideo.com', 'bilivideo.cn'].some(domain => u.hostname === domain || u.hostname.endsWith('.' + domain));
   } catch { return false; }
 }
 
@@ -74,7 +105,9 @@ async function resolveAudio(bvid) {
   const cid = view.data?.cid;
   if (!Number.isSafeInteger(cid) || cid <= 0) throw new UpstreamError('视频不存在或不可访问', 404);
   const play = await biliJson(`https://api.bilibili.com/x/player/playurl?bvid=${bvid}&cid=${cid}&fnval=16&fnver=0&fourk=0`);
-  const audio = [...(play.data?.dash?.audio || [])].sort((a, b) => b.bandwidth - a.bandwidth);
+  const audio = [...(play.data?.dash?.audio || [])]
+    .filter(a => /^mp4a\./i.test(a.codecs || '') || (!a.codecs && [30216, 30232, 30280].includes(a.id)))
+    .sort((a, b) => b.bandwidth - a.bandwidth);
   for (const stream of audio) {
     const targets = [stream.baseUrl || stream.base_url, ...(stream.backupUrl || stream.backup_url || [])].filter(trustedAudioUrl);
     if (!targets.length) continue;
@@ -137,9 +170,15 @@ export default {
         }
         let response;
         for (const target of audio.targets) {
-          response = await fetchAudio(target, request);
-          if (response.ok || response.status === 416) break;
-          await response.body?.cancel();
+          try {
+            response = await fetchAudio(target, request);
+            const type = response.headers.get('content-type') || '';
+            if (response.status === 416 || (response.ok && !/text\/html|json/i.test(type))) break;
+            await response.body?.cancel();
+          } catch {
+            // A single unavailable CDN or rejected redirect must not hide healthy backups.
+          }
+          response = null;
         }
         if (!response || (!response.ok && response.status !== 416)) {
           audioCache.delete(bvid);

@@ -42,7 +42,7 @@ object KuwoSource {
 
     suspend fun resolveUrl(id: String, br: String): ResolvedUrl { return try {
         val fmt = if (br == "flac") "flac" else "mp3"
-        val resp = OnlineTransport.getText(URL_API.format(id, fmt))
+        val resp = OnlineTransport.getText(URL_API.format(OnlineTransport.enc(id), fmt))
         val url = resp.body.trim().lines().firstOrNull().orEmpty()
         if (resp.code == 200 && url.startsWith("http")) {
             ResolvedUrl(ResolveStage.OK, url)
@@ -56,7 +56,7 @@ object KuwoSource {
 } // fix: close converted block body
 
     suspend fun lyric(id: String): String? { return try {
-        val resp = OnlineTransport.getText(LYRIC_API.format(id))
+        val resp = OnlineTransport.getText(LYRIC_API.format(OnlineTransport.enc(id)))
         if (resp.code != 200) return null
         parseLyric(JSONObject(resp.body))
     } catch (e: Exception) {

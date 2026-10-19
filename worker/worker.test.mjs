@@ -51,6 +51,17 @@ test('JSON risk code never becomes a successful empty list', async t => {
   assert.equal(r.status, 503); assert.equal(apis, 2); assert.equal((await r.json()).code, -412);
 });
 
+test('oversized upstream JSON is rejected before parsing', async t => {
+  let apis = 0;
+  const huge = 'x'.repeat(2 * 1024 * 1024 + 1);
+  const w = await worker(t, async url => url === 'https://www.bilibili.com/' ? new Response('') : (++apis,
+    new Response(huge, { headers: { 'content-type': 'application/json' } })));
+  const r = await w.fetch(req('/bili/search?kw=test'));
+  assert.equal(r.status, 502);
+  assert.equal(apis, 1);
+  assert.match((await r.json()).error, /响应体过大/);
+});
+
 test('bounded retry can recover, strips tags and parses mm:ss duration', async t => {
   let apis = 0;
   const w = await worker(t, async url => {
@@ -88,6 +99,29 @@ test('external redirect never reaches an untrusted host', async t => {
   });
   assert.equal((await w.fetch(req('/bili/stream?bvid=' + BV))).status, 502);
   assert.ok(!calls.some(u => u.includes('example.com')));
+});
+
+for (const failure of ['network', 'html', 'redirect']) test(`CDN ${failure} failure uses the next trusted backup`, async t => {
+  const calls = [];
+  const w = await worker(t, async url => {
+    calls.push(url);
+    if (url.includes('/playurl?')) return json({ code: 0, data: { dash: { audio: [
+      { id: 30250, codecs: 'ec-3', bandwidth: 400000, baseUrl: 'https://wrong.bilivideo.com/audio' },
+      { id: 30280, codecs: 'mp4a.40.2', bandwidth: 192000, baseUrl: 'https://first.bilivideo.com/audio',
+        backupUrl: ['https://second.bilivideo.com/audio'] },
+    ] } } });
+    if (url.includes('first.bilivideo.com')) {
+      if (failure === 'network') throw new Error('CDN unavailable');
+      if (failure === 'html') return new Response('<html>challenge</html>', { headers: { 'content-type': 'text/html' } });
+      return new Response(null, { status: 302, headers: { location: 'https://untrusted.test/audio' } });
+    }
+    if (url.includes('second.bilivideo.com')) return new Response('audio', { headers: { 'content-type': 'audio/mp4' } });
+    return upstream(url);
+  });
+  const response = await w.fetch(req('/bili/stream?bvid=' + BV));
+  assert.equal(response.status, 200); assert.equal(await response.text(), 'audio');
+  assert.ok(calls.some(u => u.includes('second.bilivideo.com')));
+  assert.ok(!calls.some(u => u.includes('wrong.bilivideo.com') || u.includes('untrusted.test')));
 });
 
 test('preserves unsatisfiable Range response and HEAD has no body', async t => {

@@ -26,7 +26,7 @@ class LibraryArtworkTest {
         val metadata = TrackInfoRepository(File(app.cacheDir, "cover-repair-${System.nanoTime()}"), { track, _ ->
             requests.incrementAndGet(); peak.accumulateAndGet(active.incrementAndGet(), ::maxOf)
             delay(50); active.decrementAndGet()
-            OnlineTrack("netease", track.onlineKey!!.id, track.title, track.artist, track.album, track.durationMs, "https://example.com/${track.onlineKey!!.id}.jpg")
+            OnlineTrack("netease", track.onlineKey!!.id, track.title, track.artist, track.album, track.durationMs, "https://p1.music.126.net/${track.onlineKey!!.id}.jpg")
         })
         val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
         try {
@@ -56,7 +56,7 @@ class LibraryArtworkTest {
         val release = CompletableDeferred<Unit>()
         val metadata = TrackInfoRepository(File(app.cacheDir, "late-artwork-${System.nanoTime()}"), { track, _ ->
             started.send(Unit); release.await()
-            OnlineTrack("netease", track.onlineKey!!.id, track.title, track.artist, track.album, track.durationMs, "https://example.com/cover.jpg")
+            OnlineTrack("netease", track.onlineKey!!.id, track.title, track.artist, track.album, track.durationMs, "https://p1.music.126.net/cover.jpg")
         })
         val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
         try {

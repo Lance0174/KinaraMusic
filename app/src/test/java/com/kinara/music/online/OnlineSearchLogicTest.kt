@@ -89,4 +89,10 @@ class OnlineSearchLogicTest {
         assertTrue(t.mediaId.startsWith("O"))
         assertEquals("netease", t.onlineKey?.platform)
     }
+
+    @Test
+    fun `toTrack drops untrusted artwork URLs`() {
+        assertEquals(null, OnlineTrack("netease", "123", "T", "A", "Al", picUrl = "https://example.org/art.jpg")
+            .toTrack("320").coverUrl)
+    }
 }

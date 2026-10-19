@@ -8,10 +8,21 @@ Solara and anonymous Bilibili Worker access are disabled when their build-time c
 
 ## Network rules
 
-- Text APIs go through `OnlineTransport`, which runs on `Dispatchers.IO`, limits responses to 2 MiB, and closes connections on cancellation.
-- Audio candidates are restricted to known provider CDN suffixes and the Bilibili Worker hosts configured in the current APK. Credentials and cookies are not forwarded to audio CDNs.
+- Text APIs go through `OnlineTransport`, which runs on `Dispatchers.IO`, limits responses to 2 MiB, closes the active connection on cancellation, and only follows default-port redirects on the same host without an HTTPS downgrade.
+- Player and Coil requests use a separate OkHttp client with automatic redirects disabled. Every hop is validated before connecting. Audio candidates are restricted to provider CDN suffixes and the Bilibili Worker hosts configured in the current APK. Credentials and cookies are stripped from media requests.
 - The Worker accepts BVIDs rather than caller-provided upstream URLs, validates audio CDN redirects, preserves range semantics, and returns an explicit error for upstream challenges.
-- Cover URLs are upgraded to HTTPS and rejected when they contain credentials or non-default ports.
+- Cover URLs are upgraded to HTTPS, restricted to provider image domains, and rejected when they contain credentials, fragments or non-default ports. Offline artwork requests explicitly disable the network.
+- The platform DownloadManager performs its own network requests after the application has checked the URL and audio header; the application cannot enforce its per-hop network policy inside that system service. A completed download is checked again before it is exposed as audio.
+
+## Storage and controllers
+
+The settings file may contain locally configured Solara credentials, so it is excluded from both cloud backup and device transfer. Bilibili credentials use Android Keystore encryption and `noBackupFilesDir`. Library data remains eligible for backup; settings must be reconfigured after migration.
+
+External MediaSession controllers retain playback/seek controls but cannot replace or mutate the queue. Downloads retain the actual recording's online ID after source fallback, while preserving the original request for retry and deduplication. Private copies from non-persistable file providers are limited to 512 MiB and support cancellation between read chunks.
+
+## Dependency provenance
+
+Use official repositories and committed lockfiles. The Gradle distribution checksum, artifact checksums in `gradle/verification-metadata.xml`, and all GitHub Actions references are pinned. The current Kotlin plugin has a known build-cache deserialization advisory; Gradle build-cache reuse, Kotlin incremental compilation and CI Gradle cache restoration are disabled pending a compatible toolchain upgrade. These mitigations do not count as upgrading the affected plugin. Install npm dependencies with `npm ci --ignore-scripts`; inspect any necessary installation script before explicitly enabling it. Renderer changes must rebuild the bundle; CI independently rebuilds and compares it. See [the supply-chain review](SUPPLY_CHAIN_REVIEW.md) for source hashes, concrete findings and the limits of the audit.
 
 ## Reporting
 

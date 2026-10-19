@@ -24,7 +24,8 @@ import android.os.ParcelFileDescriptor
 
 enum class DownloadPhase { RESOLVING, RUNNING, COMPLETE, FAILED, CANCELLED }
 data class DownloadEntry(val key: String, val track: Track, val id: Long = -1, val phase: DownloadPhase = DownloadPhase.RESOLVING,
-    val bytes: Long = 0, val total: Long = 0, val uri: String? = null, val message: String = "", val addedAt: Long = System.currentTimeMillis()) {
+    val bytes: Long = 0, val total: Long = 0, val uri: String? = null, val message: String = "", val addedAt: Long = System.currentTimeMillis(),
+    val requestedTrack: Track = track) {
     fun localTrack(): Track? = uri?.takeIf { phase == DownloadPhase.COMPLETE }?.let { track.copy(localPath = it, coverUrl = null) }
 }
 
@@ -55,7 +56,7 @@ private suspend fun probeDownload(context: Context, track: Track): PreparedDownl
         var count = 0
         while (count < header.size) { val n = source.read(header, count, header.size - count); if (n <= 0) break; count += n }
         val extension = audioExtension(header.copyOf(count)) ?: error("音源返回的不是支持的音频文件")
-        return PreparedDownload(source.uri?.toString() ?: error("音频地址无效"), extension)
+        return PreparedDownload(source.uri?.toString() ?: error("音频地址无效"), extension, candidate)
     } catch (e: Exception) {
         if (e is CancellationException) throw e
         source.close()
@@ -64,7 +65,7 @@ private suspend fun probeDownload(context: Context, track: Track): PreparedDownl
     }
 }
 
-internal data class PreparedDownload(val url: String, val extension: String)
+internal data class PreparedDownload(val url: String, val extension: String, val track: Track)
 
 @androidx.annotation.OptIn(markerClass = [androidx.media3.common.util.UnstableApi::class])
 class Downloads internal constructor(private val context: Context,
@@ -103,8 +104,9 @@ class Downloads internal constructor(private val context: Context,
             var recorded = false
             try {
                 check(Build.VERSION.SDK_INT >= 29) { "下载功能需要 Android 10 或更新版本" }
+                val prepared = withContext(Dispatchers.IO) { prepare(adjusted) }
                 systemId = withContext(Dispatchers.IO) {
-                    val (url, extension) = prepare(adjusted)
+                    val (url, extension) = prepared
                     coroutineContext.ensureActive()
                     val name = adjusted.title.replace(Regex("[\\\\/:*?\"<>|\\p{Cntrl}]"), "_").take(60).ifBlank { "音频" }
                     val request = DownloadManager.Request(Uri.parse(url)).setTitle(adjusted.title)
@@ -115,7 +117,7 @@ class Downloads internal constructor(private val context: Context,
                         .forEach { (name, value) -> request.addRequestHeader(name, value) }
                     manager.enqueue(request).also { systemId = it }
                 }
-                change(key) { it.copy(id = systemId, phase = DownloadPhase.RUNNING) }
+                change(key) { it.copy(id = systemId, track = prepared.track.copy(mediaId = adjusted.mediaId), phase = DownloadPhase.RUNNING) }
                 recorded = true; refresh()
             } catch (e: Exception) {
                 if (e is CancellationException) throw e
@@ -133,7 +135,7 @@ class Downloads internal constructor(private val context: Context,
         change(key) { it.copy(phase = DownloadPhase.CANCELLED, message = "已取消") }
         if (entry.id >= 0) withContext(Dispatchers.IO) { manager.remove(entry.id) }
     }
-    fun retry(entry: DownloadEntry) { enqueue(entry.track, entry.track.onlineKey?.bitrate ?: "320") }
+    fun retry(entry: DownloadEntry) { enqueue(entry.requestedTrack, entry.requestedTrack.onlineKey?.bitrate ?: "320") }
 
     fun refresh() {
         if (polling?.isActive == true) return
@@ -176,13 +178,15 @@ class Downloads internal constructor(private val context: Context,
     } catch (_: Exception) { entry.copy(phase = DownloadPhase.FAILED, uri = null, message = "音频文件无效或已移走，请重试") }
 
     private fun encode(items: List<DownloadEntry>) = JSONArray(items.map { e -> JSONObject().put("key", e.key).put("track", encodeTrackLine(e.track))
+        .put("requestedTrack", encodeTrackLine(e.requestedTrack))
         .put("id", e.id).put("phase", e.phase.name).put("at", e.addedAt).put("uri", e.uri.orEmpty()).put("bytes", e.bytes).put("total", e.total).put("message", e.message) }).toString()
     private fun decode(value: String): List<DownloadEntry> = runCatching {
         val array = JSONArray(value)
         (0 until array.length()).mapNotNull { i -> val e = array.getJSONObject(i); val track = decodeTrackLine(e.optString("track")) ?: return@mapNotNull null
             val phase = runCatching { DownloadPhase.valueOf(e.optString("phase")) }.getOrDefault(DownloadPhase.FAILED)
             DownloadEntry(e.getString("key"), track, e.optLong("id", -1), if (phase == DownloadPhase.RESOLVING) DownloadPhase.FAILED else phase,
-                e.optLong("bytes"), e.optLong("total"), e.optString("uri").ifBlank { null }, e.optString("message"), e.optLong("at")) }
+                e.optLong("bytes"), e.optLong("total"), e.optString("uri").ifBlank { null }, e.optString("message"), e.optLong("at"),
+                decodeTrackLine(e.optString("requestedTrack")) ?: track) }
     }.getOrDefault(emptyList())
     companion object {
         @Volatile private var instance: Downloads? = null

@@ -40,10 +40,10 @@ object KuGouSource {
 
     /** 歌词：krcs 候选 → base64 LRC（上轮实测可用）。 */
     suspend fun lyric(hash: String): String? { return try {
-        val cand = JSONObject(OnlineTransport.getText(LYRIC_CAND.format(hash)).body)
+        val cand = JSONObject(OnlineTransport.getText(LYRIC_CAND.format(OnlineTransport.enc(hash))).body)
         val c0 = cand.optJSONArray("candidates")?.optJSONObject(0) ?: return null
         val id = c0.optString("id"); val key = c0.optString("access_key")
-        val dl = JSONObject(OnlineTransport.getText(LYRIC_DL.format(id, key)).body)
+        val dl = JSONObject(OnlineTransport.getText(LYRIC_DL.format(OnlineTransport.enc(id), OnlineTransport.enc(key))).body)
         val b64 = dl.optString("content")
         if (b64.isNotBlank()) String(android.util.Base64.decode(b64, android.util.Base64.DEFAULT), Charsets.UTF_8) else null
     } catch (e: Exception) {

@@ -45,7 +45,7 @@ object NeteaseSource {
 
     suspend fun resolveUrl(id: String, br: String): ResolvedUrl { return try {
         val brParam = if (br == "flac") "999000" else "${br}000"
-        val resp = OnlineTransport.getText(URL_API.format(OnlineTransport.enc("[$id]"), brParam))
+        val resp = OnlineTransport.getText(URL_API.format(OnlineTransport.enc("[$id]"), OnlineTransport.enc(brParam)))
         val code = JSONObject(resp.body).optInt("code")
         val data = JSONObject(resp.body).optJSONArray("data")?.optJSONObject(0)
         val url = data?.optString("url").orEmpty()

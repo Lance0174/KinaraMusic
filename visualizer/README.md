@@ -1,12 +1,12 @@
 # Folia Lumiere for Kinara
 
-Kinara 1.3.0 bundles the actual Folia 0.7.20 Lumiere Pixi/WebGL renderer. The paragraph compiler, scene catalog, light field, fog, particles, glyph composition and transitions come from Folia, copyright 2026 chthollyphile, AGPL-3.0. `vendor/folia/UPSTREAM.json` records the original file hashes; `vendor/folia/LICENSE` contains the license.
+Kinara 1.3.0 bundles the actual Folia 0.7.20 Lumiere Pixi/WebGL renderer. The paragraph compiler, scene catalog, light field, fog, particles, glyph composition and transitions come from Folia, copyright 2026 chthollyphile, AGPL-3.0. `vendor/folia/UPSTREAM.json` records the original file hashes and immutable upstream commit independently verified on 2026-10-19; `vendor/folia/LICENSE` contains the license.
 
 Rebuild offline assets with Node.js 20+:
 
 ```
 cd visualizer
-npm ci
+npm ci --ignore-scripts
 npm run build
 npm test
 npm run test:browser
@@ -22,4 +22,4 @@ Upstream modifications:
 - `lumiere/createLumierePixiRuntime.ts`: mobile ticker cap of 30 fps for Low and 60 fps for Balanced/Full. These are limits, not measured device performance.
 - The build substitutes a local empty icon resolver. Kinara supplies no AI theme icons; the renderer's generated line art is retained.
 
-Android integration source is in `app/src/main/java/com/kinara/music/ui/FoliaLyrics.kt`. This adapter and the web integration are AGPL-3.0; the existing Kinara native code retains GPL-3.0. Distribution of the combined application follows GPLv3 section 13 and the applicable AGPL requirements. Each APK is accompanied by the complete corresponding application/renderer source, lockfile, build scripts and third-party notices.
+Android integration source is in `app/src/main/java/com/kinara/music/ui/FoliaLyrics.kt`. This adapter and the web integration are AGPL-3.0; the existing Kinara native code retains GPL-3.0. Distribution of the combined application follows GPLv3 section 13 and the applicable AGPL requirements. When distributing an APK, include the complete corresponding application/renderer source archive, lockfile, build scripts and third-party notices alongside it. The APK itself contains the notices, not a source archive.

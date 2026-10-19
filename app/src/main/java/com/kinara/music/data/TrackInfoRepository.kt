@@ -58,10 +58,23 @@ internal fun metadataMatch(track: Track, candidate: OnlineTrack): Boolean =
     track.durationMs > 0 && candidate.durationMs > 0 && sameRecording(track, candidate) &&
         (!knownAlbum(track.album) || track.album.trim().equals(candidate.album.trim(), true))
 
-internal fun safeCoverUrl(raw: String?): String? = raw?.takeIf { it.isNotBlank() }?.let {
-    val url = if (it.startsWith("http://")) "https://" + it.removePrefix("http://") else it
-    url.takeIf { runCatching { URI(it).let { uri ->
-        uri.scheme == "https" && uri.host != null && uri.userInfo == null && uri.port in listOf(-1, 443)
+private val COVER_HOSTS = listOf(
+    "music.126.net", "gtimg.cn", "gtimg.com", "qq.com", "kugou.com", "kuwo.cn",
+    "hdslb.com", "bilibili.com", "bilivideo.com", "bilivideo.cn",
+)
+
+/** Only platform image CDNs are loaded; playlist data must not turn into an arbitrary URL fetch. */
+internal fun safeCoverUrl(raw: String?): String? = raw?.trim()?.takeIf { it.isNotBlank() }?.let {
+    val normalized = when {
+        it.startsWith("//") -> "https:$it"
+        it.startsWith("http://", true) -> "https://" + it.substringAfter("://")
+        else -> it
+    }
+    normalized.takeIf { value -> runCatching { URI(value).let { uri ->
+        val host = uri.host?.lowercase()
+        uri.scheme.equals("https", true) && uri.rawUserInfo == null && uri.rawFragment == null &&
+            uri.port in listOf(-1, 443) && !host.isNullOrBlank() &&
+            COVER_HOSTS.any { domain -> host == domain || host.endsWith(".$domain") }
     } }.getOrDefault(false) }
 }
 

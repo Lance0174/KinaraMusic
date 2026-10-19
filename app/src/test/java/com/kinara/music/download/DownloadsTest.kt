@@ -18,6 +18,31 @@ import org.robolectric.annotation.Config
 @Config(sdk = [31, 34])
 class DownloadsTest {
     private val song = Track("online", "歌曲", "歌手", "", 0, "bilibili", onlineKey = OnlineKey("bilibili", "BVtest"))
+    @Test fun fallbackDownloadPersistsActualLyricIdentityAndKeepsOriginalRetryKey() = runBlocking {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val prefs = context.getSharedPreferences("kinara_downloads", 0)
+        prefs.edit().clear().commit()
+        val firstScope = CoroutineScope(SupervisorJob() + Dispatchers.Unconfined)
+        val secondScope = CoroutineScope(SupervisorJob() + Dispatchers.Unconfined)
+        val actual = song.copy(source = "netease", onlineKey = OnlineKey("netease", "actual42"))
+        try {
+            val first = Downloads(context, { PreparedDownload("https://m10.music.126.net/song", "mp3", actual) }, firstScope)
+            first.enqueue(song, "320").join()
+            val entry = withTimeout(10_000) { first.entries.first { it.firstOrNull()?.phase == DownloadPhase.RUNNING }.first() }
+            assertEquals("netease:actual42", lyricIdentity(entry.track))
+            assertEquals(song.onlineKey, entry.requestedTrack.onlineKey)
+            withTimeout(10_000) { while (!prefs.getString("items", "").orEmpty().contains("RUNNING")) delay(5) }
+            firstScope.cancel()
+            val restored = Downloads(context, { error("must reuse system task") }, secondScope)
+            val recovered = withTimeout(10_000) { restored.entries.first { it.firstOrNull()?.phase == DownloadPhase.RUNNING }.first() }
+            assertEquals(entry.key, recovered.key)
+            assertEquals(actual.onlineKey, recovered.track.onlineKey)
+            assertEquals(song.onlineKey, recovered.requestedTrack.onlineKey)
+            val local = recovered.copy(phase = DownloadPhase.COMPLETE, uri = "content://downloads/42").localTrack()!!
+            assertEquals("netease:actual42", lyricIdentity(local))
+            restored.cancel(recovered.key).join()
+        } finally { firstScope.cancel(); secondScope.cancel() }
+    }
     @Test fun persistedSystemTaskReconnectsWithoutResolvingAnExpiredUrl() = runBlocking {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val prefs = context.getSharedPreferences("kinara_downloads", 0)
@@ -25,7 +50,7 @@ class DownloadsTest {
         val firstScope = CoroutineScope(SupervisorJob() + Dispatchers.Unconfined)
         val secondScope = CoroutineScope(SupervisorJob() + Dispatchers.Unconfined)
         try {
-            val first = Downloads(context, { PreparedDownload("https://audio.bilivideo.com/first", "m4a") }, firstScope)
+            val first = Downloads(context, { PreparedDownload("https://audio.bilivideo.com/first", "m4a", song) }, firstScope)
             first.enqueue(song, "320").join()
             val entry = withTimeout(10_000) { first.entries.first { it.firstOrNull()?.phase == DownloadPhase.RUNNING }.first() }
             withTimeout(10_000) { while (!prefs.getString("items", "").orEmpty().contains("RUNNING")) delay(5) }
@@ -41,7 +66,7 @@ class DownloadsTest {
         context.getSharedPreferences("kinara_downloads", 0).edit().clear().commit()
         val scope = CoroutineScope(SupervisorJob() + Dispatchers.Unconfined)
         var bitrate = ""
-        val downloads = Downloads(context, { track -> bitrate = track.onlineKey!!.bitrate; PreparedDownload("https://audio.bilivideo.com/test", "m4a") }, scope)
+        val downloads = Downloads(context, { track -> bitrate = track.onlineKey!!.bitrate; PreparedDownload("https://audio.bilivideo.com/test", "m4a", song) }, scope)
         try {
             downloads.enqueue(song, "flac").join()
             val entry = withTimeout(10_000) { downloads.entries.first { it.firstOrNull()?.phase == DownloadPhase.RUNNING }.first() }
@@ -61,7 +86,7 @@ class DownloadsTest {
         context.getSharedPreferences("kinara_downloads", 0).edit().clear().commit()
         val scope = CoroutineScope(SupervisorJob() + Dispatchers.Unconfined)
         var attempts = 0
-        val downloads = Downloads(context, { if (++attempts == 1) error("expired"); PreparedDownload("https://audio.bilivideo.com/fresh", "m4a") }, scope)
+        val downloads = Downloads(context, { if (++attempts == 1) error("expired"); PreparedDownload("https://audio.bilivideo.com/fresh", "m4a", song) }, scope)
         try {
             downloads.enqueue(song, "320").join()
             val failed = withTimeout(10_000) { downloads.entries.first { it.firstOrNull()?.phase == DownloadPhase.FAILED }.first() }
@@ -81,7 +106,7 @@ class DownloadsTest {
             downloads.enqueue(song, "320").join()
             val entry = downloads.entries.value.first()
             downloads.cancel(entry.key).join()
-            gate.complete(PreparedDownload("https://audio.bilivideo.com/late", "m4a"))
+            gate.complete(PreparedDownload("https://audio.bilivideo.com/late", "m4a", song))
             assertEquals(DownloadPhase.CANCELLED, downloads.entries.value.first().phase)
             assertEquals(0, shadowOf(context.getSystemService(DownloadManager::class.java)).requestCount)
         } finally { scope.cancel() }

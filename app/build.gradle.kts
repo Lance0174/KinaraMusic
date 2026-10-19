@@ -56,8 +56,8 @@ android {
         applicationId = "com.kinara.music"
         minSdk = 24
         targetSdk = 34
-        versionCode = 8
-        versionName = "1.3.0"
+        versionCode = 9
+        versionName = "1.3.1"
         // Release artifacts may carry locally supplied Solara settings; the public source defaults to empty.
         buildConfigField("String", "SOLARA_BASE_URL", buildConfigString(solaraBuildUrl))
         buildConfigField("String", "SOLARA_SECRET", buildConfigString(solaraBuildSecret))
@@ -187,6 +187,7 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer:1.4.0")
     implementation("androidx.media3:media3-session:1.4.0")
     implementation("androidx.media3:media3-common:1.4.0")
+    implementation("androidx.media3:media3-datasource-okhttp:1.4.0")
 
     // 封面加载（领导批示 D4：引入 Coil；2.7.0 已在本机依赖缓存）
     implementation("io.coil-kt:coil-compose:2.7.0")
@@ -197,6 +198,7 @@ dependencies {
 
     // 单元测试：纯 JVM 可离线运行，不进 APK（教训 E004：不引入缓存中没有的测试依赖）
     testImplementation("junit:junit:4.13.2")
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
     testImplementation("org.robolectric:robolectric:4.14.1")
     testImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-test-manifest")

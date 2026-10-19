@@ -53,7 +53,7 @@ object GdSource {
         val urlId = parts.getOrNull(1) ?: parts.firstOrNull() ?: return ResolvedUrl(ResolveStage.NO_RESULT, errorMessage = "id 缺失")
         val src = parts.getOrNull(3) ?: "netease"
         val brParam = if (br == "flac") "999" else br
-        val u = "$BASE?types=url&source=$src&id=${OnlineTransport.enc(urlId)}&br=$brParam"
+        val u = "$BASE?types=url&source=${OnlineTransport.enc(src)}&id=${OnlineTransport.enc(urlId)}&br=${OnlineTransport.enc(brParam)}"
         val resp = OnlineTransport.getText(u)
         val url = JSONObject(resp.body).optString("url")
         if (resp.code == 200 && url.startsWith("http")) ResolvedUrl(ResolveStage.OK, url, viaProxy = true)

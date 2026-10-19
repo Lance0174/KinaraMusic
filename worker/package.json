@@ -4,8 +4,8 @@
   "scripts": {
     "test": "node --test worker.test.mjs"
   },
-  "dependencies": {
-    "@cloudflare/workerd-windows-64": "^1.20261001.1",
-    "wrangler": "^3.114.17"
+  "engines": { "node": ">=22" },
+  "devDependencies": {
+    "wrangler": "4.151.2"
   }
 }

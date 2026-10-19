@@ -19,7 +19,7 @@ import android.util.LruCache
 import androidx.compose.runtime.remember
 import coil.request.ImageRequest
 import coil.request.CachePolicy
-import com.kinara.music.data.NetworkState
+import com.kinara.music.data.safeCoverUrl
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -68,9 +68,11 @@ fun KinaraArtwork(
             rememberLocalArtwork(track)
         } else null
         // A matched network image fills missing local artwork; embedded album art keeps priority.
-        val remoteUrl = track?.coverUrl
+        val remoteUrl = safeCoverUrl(track?.coverUrl)
         val context = LocalContext.current
-        val request = remember(remoteUrl, context) { ImageRequest.Builder(context).data(remoteUrl).build() }
+        val online = LocalArtworkOnline.current
+        val request = remember(remoteUrl, context, online) { ImageRequest.Builder(context).data(remoteUrl)
+            .networkCachePolicy(if (online) CachePolicy.ENABLED else CachePolicy.DISABLED).build() }
 
         ArtworkPlaceholder(track, Modifier.fillMaxSize())
         when {
@@ -130,14 +132,15 @@ private fun rememberLocalArtwork(track: Track): ImageBitmap? {
 @Composable
 fun rememberArtworkColors(track: Track?): List<Color> {
     val ctx = LocalContext.current.applicationContext
-    val colors by produceState<List<Color>>(emptyList(), track?.mediaId, track?.coverUrl) {
+    val online = LocalArtworkOnline.current
+    val colors by produceState<List<Color>>(emptyList(), track?.mediaId, track?.coverUrl, online) {
         value = emptyList()
         value = withContext(Dispatchers.IO) {
             val bitmap = if (track?.isLocal == true) extractLocalArtwork(ctx, track) else {
-                track?.coverUrl?.let { url ->
+                safeCoverUrl(track?.coverUrl)?.let { url ->
                     val result = coil.Coil.imageLoader(ctx).execute(ImageRequest.Builder(ctx)
                         .data(url).size(64).allowHardware(false)
-                        .networkCachePolicy(if (NetworkState.isOnline(ctx)) CachePolicy.ENABLED else CachePolicy.DISABLED)
+                        .networkCachePolicy(if (online) CachePolicy.ENABLED else CachePolicy.DISABLED)
                         .build())
                     (result.drawable as? android.graphics.drawable.BitmapDrawable)?.bitmap
                 }

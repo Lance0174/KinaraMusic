@@ -22,7 +22,8 @@ object SolaraSource {
     private fun authCookie(secret: String): String =
         "auth=" + Base64.encodeToString(secret.toByteArray(Charsets.UTF_8), Base64.NO_WRAP)
 
-    private fun base(url: String) = url.trimEnd('/')
+    private fun base(url: String): String = BiliWorkerClient.normalizeBase(url)
+        ?: throw TransportException(ResolveStage.TRANSPORT, "服务地址必须是 HTTPS 域名，不能包含路径、参数或凭据")
 
     suspend fun search(keyword: String, baseUrl: String, secret: String): OnlineResult {
         val t0 = System.currentTimeMillis()
@@ -61,7 +62,7 @@ object SolaraSource {
         val urlId = parts.getOrNull(1) ?: parts.firstOrNull() ?: return ResolvedUrl(ResolveStage.NO_RESULT, errorMessage = "id 缺失")
         val src = parts.getOrNull(4) ?: "netease"
         val brParam = if (br == "flac") "999" else br
-        val u = "${base(baseUrl)}/proxy?types=url&source=$src&id=${OnlineTransport.enc(urlId)}&br=$brParam&nocache=true"
+        val u = "${base(baseUrl)}/proxy?types=url&source=${OnlineTransport.enc(src)}&id=${OnlineTransport.enc(urlId)}&br=${OnlineTransport.enc(brParam)}&nocache=true"
         val resp = OnlineTransport.getText(u, headers = mapOf("Cookie" to authCookie(secret)))
         val url = JSONObject(resp.body).optString("url")
         if (resp.code == 200 && url.startsWith("http")) ResolvedUrl(ResolveStage.OK, url, viaProxy = true)
@@ -76,7 +77,7 @@ object SolaraSource {
         val parts = compoundId.split("|")
         val lyricId = parts.getOrNull(2) ?: parts.firstOrNull() ?: return null
         val src = parts.getOrNull(4) ?: "netease"
-        val u = "${base(baseUrl)}/proxy?types=lyric&source=$src&id=${OnlineTransport.enc(lyricId)}"
+        val u = "${base(baseUrl)}/proxy?types=lyric&source=${OnlineTransport.enc(src)}&id=${OnlineTransport.enc(lyricId)}"
         val resp = OnlineTransport.getText(u, headers = mapOf("Cookie" to authCookie(secret)))
         JSONObject(resp.body).optString("lyric").takeIf { it.isNotBlank() && it != "暂无歌词" }
     } catch (e: Exception) {

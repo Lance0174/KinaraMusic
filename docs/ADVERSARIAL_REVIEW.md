@@ -15,7 +15,7 @@
 
 ### 播放地址安全
 
-`AudioResolver.audioCandidates()` 现在要求 HTTPS/HTTP、无用户信息、默认端口，并执行精确的官方音频域名后缀和两个已知 B 站 Worker 主机白名单。恶意相似域名、任意外部域名、非标准端口和本地协议都会被拒绝；HTTP 只保留已知确实需要明文回退的官方域名，且始终先尝试 HTTPS。
+`AudioResolver.audioCandidates()` 要求 HTTPS/HTTP、无用户信息/片段、协议对应的默认端口，并执行官方音频域名后缀和当前 APK 配置的 B站 Worker 主机白名单。播放器与 Coil 在每次连接前验证重定向目标，禁止 HTTPS 降级，不向媒体请求转发 Cookie/Authorization。系统 DownloadManager 的后续请求由系统管理，应用不能保证它内部每一跳都遵守同一策略。
 
 ### 歌词与回退音源同步
 
@@ -40,6 +40,8 @@
 
 ## 验证
 
+以下是首轮基线结果，不能用于证明后续改动通过。第二轮结果与证据另见下节。
+
 - Android `:app:testDebugUnitTest`：207 项通过，0 失败，0 错误。
 - Android `:app:lintDebug`：通过；仅保留现有 Kotlin/Compose 警告，无 lint 错误。
 - Android `:app:assembleRelease`：通过；发布签名来自仓库外配置。
@@ -47,6 +49,24 @@
 - Folia `npm test`：1 项通过。
 - Folia `npm run test:browser`：3 项通过，覆盖 WebGL、时钟先到、暂停、换歌、空歌词和上下文丢失。
 - 未执行真机音频输出、厂商后台策略、蓝牙和 B 站账号登录后的端到端播放验收；这些保留为设备验收项。
+
+## 第二轮：全仓库与恶意植入排查
+
+检查范围、上游比对、依赖审计结果及未覆盖项见 [供应链复审](SUPPLY_CHAIN_REVIEW.md)。在已检查范围内未发现可确认的恶意植入，但发现并修复了重定向校验缺口、文本请求取消竞态、外部媒体控制器权限过宽、下载换源身份丢失、B站备用 CDN 中断、设置凭据进入备份、非持久授权导入无大小上限等问题。
+
+Worker 开发依赖从 7 项已知漏洞更新到 0；Folia 81 个原文件哈希与上游固定提交全部吻合，使用官方 npm 包重新构建的脚本与原资源逐字节一致。Gradle wrapper 原来属于官方旧版本，本轮换成与分发版本一致的官方 8.9 wrapper 并增加分发校验；未把版本差异误报为后门。
+
+本轮最终验证（1.3.1 / versionCode 9）：
+
+- 关闭 Gradle 构建缓存与 Kotlin 增量编译后执行 `:app:clean :app:testDebugUnitTest :app:lintDebug :app:assembleRelease -PciUnsigned=true`，使用严格依赖摘要校验：通过，89 个任务中 87 个实际执行。
+- Android 226 项测试通过，0 失败、0 错误、0 跳过；包括实际 HTTP 重定向链、多跳取消、外部控制器权限、换源下载身份及导入上限测试。
+- Debug Lint、Release Lint Vital、R8 压缩与资源收缩、未签名 Release 打包通过。保留既有未使用参数和测试文件可空接收器编译警告，不冒充零警告。
+- 公共 Release 的 `SOLARA_BASE_URL`、`SOLARA_SECRET`、`BILI_WORKER_BASES` 验证为空；本机构建仍可按外部配置注入，测试没有公开本机私密配置。
+- Worker 13/13；Folia Node 1/1；Folia 浏览器/WebGL 3/3；Wrangler dry-run 打包全部通过。未部署线上 Worker，也未发布 GitHub Release。
+- Folia 资源经官方依赖重建保持一致；新增换行规则使 Windows 和 CI 的源码摘要一致。
+- 805 项 Gradle 摘要全部匹配官方文件；449 个 Maven 包版本的公告查询命中 16 个构建/测试包版本，均不在 `releaseRuntimeClasspath` 中。Kotlin 缓存风险已限制复用，完整工具链升级尚未完成；详见依赖公告记录和后续 Issue。
+
+Windows 本机 JDK 访问 Maven 出现 TLS 失败，依赖通过仅访问官方 HTTPS 仓库的临时本地缓存核验并下载。最终干净构建以离线方式使用这些已核验依赖，公开 CI 直接使用官方仓库。
 
 ## 发布前检查
 

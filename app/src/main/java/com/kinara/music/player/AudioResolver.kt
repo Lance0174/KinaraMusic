@@ -4,7 +4,7 @@ package com.kinara.music.player
 import android.content.Context
 import android.net.Uri
 import androidx.media3.datasource.*
-import com.kinara.music.BuildConfig
+import androidx.media3.datasource.okhttp.OkHttpDataSource
 import com.kinara.music.account.BiliApi
 import com.kinara.music.account.BiliSession
 import com.kinara.music.data.*
@@ -29,13 +29,25 @@ private fun allowedAudioHost(host: String): Boolean = host in BiliWorkerClient.B
 fun audioCandidates(value: String): List<String> {
     val url = runCatching { URI(value) }.getOrNull() ?: throw IOException("音频地址无效")
     val host = url.host?.lowercase() ?: throw IOException("音频地址无效")
-    if (url.rawUserInfo != null || url.scheme !in listOf("http", "https") ||
-        url.port !in listOf(-1, 80, 443) || !allowedAudioHost(host)) throw IOException("音频地址不受信任")
+    if (url.rawUserInfo != null || url.rawFragment != null || url.scheme !in listOf("http", "https") ||
+        (url.port != -1 && url.port != if (url.scheme == "https") 443 else 80) || !allowedAudioHost(host)) throw IOException("音频地址不受信任")
     if (url.scheme == "https") return listOf(value)
-    val upgraded = "https" + value.substring(value.indexOf(':'))
+    val upgraded = "https://$host" + url.rawPath.orEmpty() + (url.rawQuery?.let { "?$it" } ?: "")
     val httpAllowed = listOf("music.126.net", "kuwo.cn", "kugou.com", "qq.com", "gtimg.com")
         .any { host == it || host.endsWith(".$it") }
     return if (httpAllowed) listOf(upgraded, value) else listOf(upgraded)
+}
+
+internal fun resolvedAudioCandidates(result: ResolvedUrl): List<String> {
+    val primary = result.url?.takeIf { result.stage == ResolveStage.OK && it.isNotBlank() }
+        ?: throw AudioResolutionException(sourceErrorText(result.errorMessage))
+    return (audioCandidates(primary) + result.backupUrls.flatMap {
+        runCatching { audioCandidates(it) }.getOrDefault(emptyList())
+    }).distinct()
+}
+
+private val audioHttpClient by lazy {
+    mediaHttpClient({ runCatching { it in audioCandidates(it) }.getOrDefault(false) }, BiliApi::playbackHeaders)
 }
 
 fun interface AudioUrlAccess { suspend fun resolve(track: Track): List<String> }
@@ -54,17 +66,20 @@ class AudioResolver(private val context: Context) : AudioUrlAccess {
         return "${key.platform}:${key.id}:${key.bitrate}:${settings.sources.hashCode()}:${settings.solaraBaseUrl}:${settings.solaraSecret.hashCode()}:${BiliSession.revision}"
     }
 
-    fun prime(track: Track, result: ResolvedUrl) {
-        if (result.stage != ResolveStage.OK || result.url.isNullOrBlank()) return
-        val values = (listOf(result.url) + result.backupUrls).flatMap(::audioCandidates).distinct()
+    fun prime(track: Track, result: ResolvedUrl): Boolean {
+        val values = runCatching { resolvedAudioCandidates(result) }.getOrNull() ?: return false
         synchronized(urls) { urls[cacheId(track, prefs.settings())] = Entry(android.os.SystemClock.elapsedRealtime(), values) }
+        return true
     }
 
     suspend fun next(original: Track, failed: Track): Track? {
         if (!NetworkState.isOnline(context)) return null
-        val (result, track) = playback.resolveNextForPlay(original, failed, prefs.settings()) ?: return null
-        prime(track, result)
-        return track
+        var cursor = failed
+        while (true) {
+            val (result, track) = playback.resolveNextForPlay(original, cursor, prefs.settings()) ?: return null
+            if (prime(track, result)) return track
+            cursor = track
+        }
     }
 
     override suspend fun resolve(track: Track): List<String> {
@@ -76,9 +91,7 @@ class AudioResolver(private val context: Context) : AudioUrlAccess {
         val now = android.os.SystemClock.elapsedRealtime()
         synchronized(urls) { urls[id] }?.takeIf { now - it.at in 0 until 120_000 }?.let { return it.urls }
         val result = playback.resolveForPlay(track, settings).first
-        val raw = result.url?.takeIf { result.stage == ResolveStage.OK && it.isNotBlank() }
-            ?: throw AudioResolutionException(sourceErrorText(result.errorMessage))
-        val choices = (listOf(raw) + result.backupUrls).flatMap(::audioCandidates).distinct()
+        val choices = resolvedAudioCandidates(result)
         synchronized(urls) { urls[id] = Entry(now, choices) }
         return choices
     }
@@ -98,8 +111,7 @@ class ResolvedAudioSource(private val context: Context, private val resolver: Au
         val candidates = if (track == null) listOf(spec.uri.toString()) else runBlocking { resolver.resolve(track) }
         var failure: IOException? = null
         for (candidate in candidates) {
-            val http = DefaultHttpDataSource.Factory().setUserAgent(AUDIO_USER_AGENT)
-                .setConnectTimeoutMs(12_000).setReadTimeoutMs(15_000)
+            val http = OkHttpDataSource.Factory(audioHttpClient).setUserAgent(AUDIO_USER_AGENT)
                 .setContentTypePredicate { it == null || (!it.contains("text/html", true) && !it.contains("json", true)) }
             val source = sourceFactory?.invoke() ?: DefaultDataSource.Factory(context, http).createDataSource()
             listeners.forEach(source::addTransferListener)

@@ -10,6 +10,8 @@
  */
 package com.kinara.music.online
 
+import com.kinara.music.data.safeCoverUrl
+
 data class OnlineTrack(
     val platform: String,   // netease / kuwo / kugou / qq / bilibili / solara
     val id: String,
@@ -49,5 +51,5 @@ fun OnlineTrack.toTrack(bitrate: String): com.kinara.music.data.Track =
         durationMs = durationMs,
         source = if (matched) "gd" else platform,
         onlineKey = com.kinara.music.data.OnlineKey(platform, id, bitrate),
-        coverUrl = picUrl,
+        coverUrl = safeCoverUrl(picUrl),
     )

@@ -17,18 +17,18 @@ object BiliWorkerClient {
     /** The current APK's configured bases. Invalid or non-HTTPS values are ignored. */
     val BASES: List<String>
         get() = BuildConfig.BILI_WORKER_BASES.split(',')
-            .mapNotNull(::validBase)
+            .mapNotNull(::normalizeBase)
             .distinct()
 
-    private fun validBase(raw: String): String? = runCatching {
-        val value = raw.trim().trimEnd('/')
+    internal fun normalizeBase(raw: String): String? = runCatching {
+        val value = raw.trim()
         if (value.isBlank()) return@runCatching null
         val uri = URI(value)
         value.takeIf {
             uri.scheme.equals("https", true) && uri.rawUserInfo == null &&
                 uri.port in listOf(-1, 443) && uri.rawQuery == null &&
-                uri.rawFragment == null && !uri.host.isNullOrBlank()
-        }
+                uri.rawFragment == null && uri.rawPath in listOf("", "/") && !uri.host.isNullOrBlank()
+        }?.removeSuffix("/")
     }.getOrNull()
 
     /** HTTP 故障也会回退；返回成功域名，解析与音频请求使用同一入口。 */

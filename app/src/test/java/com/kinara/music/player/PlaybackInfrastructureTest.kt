@@ -108,6 +108,22 @@ class PlaybackInfrastructureTest {
         assertThrows(java.io.IOException::class.java) { audioCandidates("https://m10.music.126.net:8443/song") }
         assertThrows(java.io.IOException::class.java) { audioCandidates("file:///private/audio") }
         assertThrows(java.io.IOException::class.java) { audioCandidates("https://user:password@example.com/audio") }
+        assertThrows(java.io.IOException::class.java) { audioCandidates("https://m10.music.126.net:80/song") }
+        assertEquals(listOf("https://m10.music.126.net/song", "http://m10.music.126.net:80/song"), audioCandidates("http://m10.music.126.net:80/song"))
+    }
+    @Test fun untrustedBackupCannotDiscardAValidPrimary() {
+        val valid = "https://m10.music.126.net/song"
+        val result = com.kinara.music.online.ResolvedUrl(com.kinara.music.online.ResolveStage.OK, valid,
+            backupUrls = listOf("https://untrusted.test/song", valid))
+        assertEquals(listOf(valid), resolvedAudioCandidates(result))
+        assertThrows(java.io.IOException::class.java) { resolvedAudioCandidates(result.copy(url = "https://untrusted.test/song")) }
+    }
+    @Test fun externalControllersCannotInjectMediaButCanOperatePlayback() {
+        val commands = externalPlayerCommands()
+        assertFalse(commands.contains(androidx.media3.common.Player.COMMAND_SET_MEDIA_ITEM))
+        assertFalse(commands.contains(androidx.media3.common.Player.COMMAND_CHANGE_MEDIA_ITEMS))
+        assertTrue(commands.contains(androidx.media3.common.Player.COMMAND_PLAY_PAUSE))
+        assertTrue(commands.contains(androidx.media3.common.Player.COMMAND_SEEK_IN_CURRENT_MEDIA_ITEM))
     }
     @Test fun timerRunsWithoutActivityAndCancelRemovesPendingPause() {
         var pauses = 0

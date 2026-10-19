@@ -2,7 +2,7 @@
 
 原生 Android 音乐客户端，Kotlin / Jetpack Compose / Media3。支持本地音乐、多来源搜索、本机收藏和歌单。默认外观为液态玻璃，Android 12 及以上使用真实背景模糊。
 
-当前版本 **1.3.0 / versionCode 8**。支持系统文件导入、便携歌单 JSON、播放缓存、系统后台下载、定时关闭和播放诊断。工业主题以《明日方舟：终末地》的工业黄、黑灰、切角与标签字体为视觉方向，不使用游戏美术资源。
+当前版本 **1.3.1 / versionCode 9**。支持系统文件导入、便携歌单 JSON、播放缓存、系统后台下载、定时关闭和播放诊断。工业主题以《明日方舟：终末地》的工业黄、黑灰、切角与标签字体为视觉方向，不使用游戏美术资源。
 
 播放页保留整页封面、歌曲信息、细进度条和五键控制区。封面与歌词左右滑动切换，底部两个入口也可轻点或横滑。歌词样式在**设置 → 歌词与歌曲信息 → 歌词视觉模式**选择「经典」「逐字辉光」「Folia 流光」，不再把渲染器列成第三个页面。
 
@@ -20,7 +20,7 @@ $env:JAVA_HOME='<path-to-jdk-17>'
 node --test worker/worker.test.mjs
 ```
 
-修改 Folia 渲染源码时，先在 `visualizer/` 执行 `npm ci`、`npm run build`、`npm test`、`npm run test:browser`。Android 的 `verifyFoliaBundle` 会核验源码和打包资源 SHA256；未改渲染器时无需重新安装 npm。跨平台浏览器测试与依赖说明见 [visualizer/README.md](visualizer/README.md)。
+修改 Folia 渲染源码时，先在 `visualizer/` 执行 `npm ci --ignore-scripts`、`npm run build`、`npm test`、`npm run test:browser`。Android 的 `verifyFoliaBundle` 会核验源码和打包资源 SHA256；未改渲染器时无需重新安装 npm。跨平台浏览器测试与依赖说明见 [visualizer/README.md](visualizer/README.md)。
 
 SDK、发布签名和其他本机路径来自未提交的 `local.properties` 或外部属性文件；正式安装包只包含 arm64-v8a。Release 缺少签名配置会明确失败，不会自动采用 debug 密钥；Debug 和显式 `-PciUnsigned=true` 的 CI 构建不要求发布密钥。
 
@@ -90,14 +90,16 @@ Android 10+ 下载交给系统 DownloadManager，保存至公共 `Music/Kinara`�
 
 ## 自动构建
 
-`.github/workflows/android.yml` 提供 GitHub Actions 校验工作流，执行 Android 测试、Lint、Release 构建、Worker 测试和 Folia 浏览器测试，上传报告与 APK。工作流默认使用 `-PciUnsigned=true` 生成未签名包，避免 CI 临时 debug 密钥冒充本地升级签名；发布前使用上述固定密钥签名。密钥与密码均不上传 CI。本轮未推送仓库或发布 GitHub Release。
+`.github/workflows/android.yml` 提供 GitHub Actions 校验工作流，执行 Android 测试、Lint、Release 构建、Worker 测试和 Folia 浏览器测试，上传报告与 APK。工作流默认使用 `-PciUnsigned=true` 生成未签名包，避免 CI 临时 debug 密钥冒充本地升级签名；发布前使用上述固定密钥签名。密钥与密码均不上传 CI。公开仓库与审查跟踪见 [KinaraMusic](https://github.com/Lance0174/KinaraMusic) 和 [Issue #1](https://github.com/Lance0174/KinaraMusic/issues/1)。
 
 ## 参考与许可
 
-1.3.0 直接集成 [Folia Major](https://github.com/chthollyphile/folia-major) 0.7.20 的 Lumiere 渲染器及其实际依赖；并保留已有原生辉光样式。上游为 AGPL-3.0，版权与原始文件哈希保存在 `visualizer/vendor/folia/`。Kinara 原有代码保留 GPL-3.0，桥接代码为 AGPL-3.0，组合分发遵守 GPLv3 第 13 条及适用的 AGPL 要求。APK 随附完整对应源码、锁文件、构建脚本和许可说明，见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。本次只集成流光，不包含 Folia 全部主题或桌面应用。
+1.3.0 直接集成 [Folia Major](https://github.com/chthollyphile/folia-major) 0.7.20 的 Lumiere 渲染器及其实际依赖；并保留已有原生辉光样式。上游为 AGPL-3.0，版权与原始文件哈希保存在 `visualizer/vendor/folia/`。Kinara 原有代码保留 GPL-3.0，桥接代码为 AGPL-3.0，组合分发遵守 GPLv3 第 13 条及适用的 AGPL 要求。APK 内含许可说明；分发 APK 时应同时提供对应版本的完整源码归档、锁文件和构建脚本，见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。本次只集成流光，不包含 Folia 全部主题或桌面应用。
 
 此次交互研究阅读了 [NeriPlayer](https://github.com/cwuom/NeriPlayer)、[Metrolist](https://github.com/MetrolistGroup/Metrolist) 与 [Auxio](https://github.com/OxygenCobalt/Auxio) 的源码。借鉴音乐库分类、浮动播放条、曲目菜单与账号模块组织；未移植竞品代码或美术素材。具体路径、下载快照与观察记录见外部开发报告目录。
 
 1.1.0 对照 [Lance0174/Solara 发布页](https://github.com/Lance0174/Solara/releases) 中 v1.7.0 至 android-v1.8.2 的 Android 功能与缺陷，以及该标签的 Android README。按 Kinara 的架构独立实现，未移植其 CC BY-NC-SA 源码或美术资源；Solara 网站登录同步和 Docker 启动脚本不属于本项目的 Android 登录链路。
 
 Kinara 源码保留 GPL-3.0 版权声明。新增 QR 编码依赖 ZXing 3.5.3，Apache-2.0 许可随 APK 的 `assets/licenses` 提供。完整依赖由 Gradle 文件定义。
+
+全仓库、恶意植入与供应链检查的范围、证据和未覆盖项见 [安全复审记录](docs/SUPPLY_CHAIN_REVIEW.md)。Worker 开发/部署工具要求 Node.js 22+，在 `worker/` 执行 `npm ci --ignore-scripts` 后使用已锁定的 Wrangler；不要调用未指定版本的远程部署工具。

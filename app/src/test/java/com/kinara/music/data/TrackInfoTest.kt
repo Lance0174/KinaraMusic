@@ -58,9 +58,9 @@ class TrackInfoTest {
         val repository = TrackInfoRepository(directory, { _, _ -> error("must not fetch") })
         repository.sync(original, KinaraSettings(autoTrackInfo = false), true) { fail("No cached data") }
         repository.sync(original, KinaraSettings(), false) { fail("No cached data") }
-        var updated = original.copy(coverUrl = "https://example.org/original.jpg")
+        var updated = original.copy(coverUrl = "https://p1.music.126.net/original.jpg")
         TrackInfoRepository(directory, { _, _ -> info.copy(picUrl = "file:///private") }).sync(updated, KinaraSettings(), true) { updated = it }
-        assertEquals("https://example.org/original.jpg", updated.coverUrl)
+        assertEquals("https://p1.music.126.net/original.jpg", updated.coverUrl)
     }
 
     @Test fun cancelledFetchCannotPublishItsLateMetadata() = runTest {
@@ -78,18 +78,26 @@ class TrackInfoTest {
             .setMediaMetadata(MediaMetadata.Builder().setExtras(Bundle().apply { putString("kinara.track", encodeTrackLine(original)) }).build()).build()
         val actual = original.copy(onlineKey = OnlineKey("qq", "mid"), source = "qq")
         val fallback = fallbackMediaItem(selected, actual)
-        val updated = withDisplayMetadata(fallback, original.copy(album = "Album", coverUrl = "https://example.org/art.jpg"))
+        val updated = withDisplayMetadata(fallback, original.copy(album = "Album", coverUrl = "https://y.gtimg.cn/art.jpg"))
         assertEquals(fallback.localConfiguration, updated.localConfiguration)
         assertEquals(selected.mediaId, updated.mediaId)
         assertEquals("qq", updated.mediaMetadata.extras!!.getString("kinara.playbackSource"))
         assertEquals(actual, updated.mediaMetadata.extras!!.getString("kinara.actualTrack")?.let(::decodeTrackLine))
         assertEquals(original.onlineKey, updated.mediaMetadata.extras!!.getString("kinara.track")?.let(::decodeTrackLine)?.onlineKey)
-        assertEquals("https://example.org/art.jpg", updated.mediaMetadata.artworkUri.toString())
+        assertEquals("https://y.gtimg.cn/art.jpg", updated.mediaMetadata.artworkUri.toString())
         val source = androidx.media3.exoplayer.source.ProgressiveMediaSource.Factory(
             androidx.media3.datasource.DataSource.Factory { error("Metadata update must not open audio") }).createMediaSource(fallback)
         assertTrue("Media3 must accept an in-place source update", source.canUpdateMediaItem(updated))
         source.updateMediaItem(updated)
         assertEquals(updated, source.mediaItem)
+    }
+
+    @Test fun coverUrlsAreRestrictedToKnownPlatformCdnHosts() {
+        assertEquals("https://p1.music.126.net/art.jpg", safeCoverUrl("http://p1.music.126.net/art.jpg"))
+        assertEquals("https://i0.hdslb.com/bfs/archive/art.jpg", safeCoverUrl("//i0.hdslb.com/bfs/archive/art.jpg"))
+        assertNull(safeCoverUrl("https://example.org/art.jpg"))
+        assertNull(safeCoverUrl("https://user:password@p1.music.126.net/art.jpg"))
+        assertNull(safeCoverUrl("https://music.126.net.evil.test/art.jpg"))
     }
 
     @Test fun lyricAndMetadataPreferencesRoundTripAndRejectInvalidValues() {
