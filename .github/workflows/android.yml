@@ -7,7 +7,7 @@ permissions:
   contents: read
 jobs:
   android:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -24,6 +24,8 @@ jobs:
           cache: npm
           cache-dependency-path: visualizer/package-lock.json
       - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3
+        with:
+          packages: platform-tools
       - name: Install Android SDK
         run: sdkmanager 'platforms;android-34' 'build-tools;34.0.0'
       - name: Tests, Lint and unsigned release

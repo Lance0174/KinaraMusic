@@ -64,6 +64,7 @@ Worker 开发依赖从 7 项已知漏洞更新到 0；Folia 81 个原文件哈�
 - 公共 Release 的 `SOLARA_BASE_URL`、`SOLARA_SECRET`、`BILI_WORKER_BASES` 验证为空；本机构建仍可按外部配置注入，测试没有公开本机私密配置。
 - Worker 13/13；Folia Node 1/1；Folia 浏览器/WebGL 3/3；Wrangler dry-run 打包全部通过。未部署线上 Worker，也未发布 GitHub Release。
 - Folia 资源经官方依赖重建保持一致；新增换行规则使 Windows 和 CI 的源码摘要一致。
+- 远端 SDK 初始化曾因 setup-android 的默认旧 `tools` 包已不存在而失败；已显式只安装 `platform-tools`，并固定 Ubuntu 24.04 避免 runner 镜像迁移改变验证环境。
 - 805 项 Gradle 摘要全部匹配官方文件；449 个 Maven 包版本的公告查询命中 16 个构建/测试包版本，均不在 `releaseRuntimeClasspath` 中。Kotlin 缓存风险已限制复用，完整工具链升级尚未完成；详见依赖公告记录和后续 Issue。
 
 Windows 本机 JDK 访问 Maven 出现 TLS 失败，依赖通过仅访问官方 HTTPS 仓库的临时本地缓存核验并下载。最终干净构建以离线方式使用这些已核验依赖，公开 CI 直接使用官方仓库。
