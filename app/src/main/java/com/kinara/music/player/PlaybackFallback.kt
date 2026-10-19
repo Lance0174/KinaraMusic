@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.media3.common.MediaItem
 import com.kinara.music.data.Track
 import com.kinara.music.online.OnlineMediaUri
+import com.kinara.music.online.PlaybackAttempts
 import kotlinx.coroutines.*
 
 /** Replacement keeps the library identity but gives Media3 a new URI, extractor and byte cache. */
@@ -18,19 +19,29 @@ fun fallbackMediaItem(original: MediaItem, actual: Track): MediaItem = original.
 
 /** Main-thread owner. Changing selection cancels work and rejects even a late, uncancellable result. */
 class PlaybackFallback(private val scope: CoroutineScope,
-    private val next: suspend (Track, Track) -> Track?) {
+    private val next: suspend (Track, Track, PlaybackAttempts) -> Track?) {
     private var generation = 0L
     private var pending: Job? = null
-    fun reset() { generation++; pending?.cancel(); pending = null }
-    fun start(original: Track, failed: Track, stillSelected: () -> Boolean, apply: (Track) -> Unit) {
+    private var attempts = PlaybackAttempts()
+    fun reset() { generation++; pending?.cancel(); pending = null; attempts = PlaybackAttempts() }
+    fun start(original: Track, failed: Track, stillSelected: () -> Boolean,
+        exhausted: () -> Unit = {}, apply: (Track) -> Unit) {
         if (pending?.isActive == true) return
         val token = generation
-        pending = scope.launch {
-            val candidate = try { next(original, failed) } catch (e: Exception) {
+        val currentAttempts = attempts
+        val job = scope.launch(start = CoroutineStart.LAZY) {
+            val candidate = try { next(original, failed, currentAttempts) } catch (e: Exception) {
                 if (e is CancellationException) throw e
                 null
             }
-            if (candidate != null && token == generation && stillSelected()) apply(candidate)
+            if (token == generation) {
+                pending = null
+                if (stillSelected()) {
+                    if (candidate == null) exhausted() else apply(candidate)
+                }
+            }
         }
+        pending = job
+        job.start()
     }
 }

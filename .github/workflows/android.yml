@@ -29,7 +29,9 @@ jobs:
       - name: Install Android SDK
         run: sdkmanager 'platforms;android-34' 'build-tools;34.0.0'
       - name: Tests, Lint and unsigned release
-        run: bash ./gradlew --console=plain testDebugUnitTest lintDebug assembleRelease -PciUnsigned=true
+        run: >-
+          bash ./gradlew --console=plain testDebugUnitTest lintDebug assembleRelease -PciUnsigned=true
+          -PkinaraSolaraBaseUrl= -PkinaraSolaraSecret= -PkinaraBiliWorkerBases= -PkinaraBiliWorkerToken=
       - name: Worker tests and dependency audit
         run: |
           node --test worker/worker.test.mjs

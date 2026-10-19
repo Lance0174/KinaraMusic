@@ -16,7 +16,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kinara.music.MainViewModel
-import com.kinara.music.account.BiliAccountViewModel
 import com.kinara.music.data.NetworkState
 import com.kinara.music.data.Track
 import com.kinara.music.data.withLyricOffset
@@ -32,7 +31,7 @@ enum class LibrarySection(val label: String) { SONGS("本地"), FAVORITES("收�
 /** Routing and state collection belong here; Activity only owns platform permissions/lifecycle. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun KinaraApp(vm: MainViewModel, playerVm: PlayerViewModel, accountVm: BiliAccountViewModel,
+fun KinaraApp(vm: MainViewModel, playerVm: PlayerViewModel,
     libraryState: LibraryUiState, onRequestPermission: () -> Unit, onRefreshLibrary: () -> Unit) {
     val settings by vm.settings.collectAsStateWithLifecycle()
     val player by playerVm.ui.collectAsStateWithLifecycle()
@@ -43,8 +42,6 @@ fun KinaraApp(vm: MainViewModel, playerVm: PlayerViewModel, accountVm: BiliAccou
     val storedPlaylists by playerVm.playlists.collectAsStateWithLifecycle()
     val playlists = remember(storedPlaylists, favorites) { listOf(com.kinara.music.data.Playlist(com.kinara.music.data.LibraryRepository.FAVORITES, "我喜欢", 0, favorites)) + storedPlaylists }
     val lyricContent by vm.lyrics.collectAsStateWithLifecycle()
-    val account by accountVm.account.collectAsStateWithLifecycle()
-    val login by accountVm.login.collectAsStateWithLifecycle()
     val favoriteIds = remember(favorites) { favorites.map { it.mediaId }.toSet() }
     val context = LocalContext.current
     val files = rememberLibraryFiles(playerVm.library)
@@ -62,7 +59,6 @@ fun KinaraApp(vm: MainViewModel, playerVm: PlayerViewModel, accountVm: BiliAccou
     var showTimer by remember { mutableStateOf(false) }
     var showDiagnostics by remember { mutableStateOf(false) }
     val savedScreens = rememberSaveableStateHolder()
-    var lastAccount by remember { mutableStateOf(account) }
 
     DisposableEffect(context) {
         val manager = context.getSystemService(android.net.ConnectivityManager::class.java)
@@ -85,15 +81,11 @@ fun KinaraApp(vm: MainViewModel, playerVm: PlayerViewModel, accountVm: BiliAccou
     LaunchedEffect(player.current?.mediaId, lyricTrack?.onlineKey?.platform, lyricTrack?.onlineKey?.id, isOnline, settings.sources) {
         vm.loadLyric(lyricTrack)
     }
-    LaunchedEffect(account) {
-        if (lastAccount != account && onlineQuery.isNotBlank() && settings.sources.bilibili) vm.searchOnline(onlineQuery)
-        lastAccount = account
-    }
     // Restoring text after process recreation must also restore its results.
     LaunchedEffect(Unit) { if (onlineQuery.isNotBlank() && online.keyword != onlineQuery) vm.searchOnline(onlineQuery) }
     BackHandler(showPlayer) { showPlayer = false }
     BackHandler(!showPlayer && imports.title.isNotBlank()) { vm.closeImport() }
-    BackHandler(!showPlayer && route != KinaraNav.LIBRARY && !login.visible) { route = KinaraNav.LIBRARY }
+    BackHandler(!showPlayer && route != KinaraNav.LIBRARY) { route = KinaraNav.LIBRARY }
 
     CompositionLocalProvider(com.kinara.music.player.LocalPlayerProgress provides progress, LocalArtworkOnline provides isOnline) {
     if (showPlayer && player.current != null) PlayerBackdrop(emptyList()) {
@@ -158,14 +150,13 @@ fun KinaraApp(vm: MainViewModel, playerVm: PlayerViewModel, accountVm: BiliAccou
                             onOpenSettings = { route = KinaraNav.SETTINGS })
                     }
                     KinaraNav.SETTINGS -> SettingsScreen(settings, vm::setTheme, { vm.setDarkMode(KinaraDarkMode.valueOf(it)) }, vm::setSource,
-                        account, accountVm::openLogin, accountVm::logout, vm::setBitrate, vm::setCacheLimit, { showDiagnostics = true },
+                        vm::setBitrate, vm::setCacheLimit, { showDiagnostics = true },
                         onPreferences = vm::update)
                 }
             }
         }
     }
     }
-    BiliLoginDialog(login, accountVm::openLogin, accountVm::closeLogin)
     if (showTimer) SleepTimerDialog({ showTimer = false }, playerVm::setSleepTimer)
     if (showDiagnostics) DiagnosticsDialog { showDiagnostics = false }
     downloadTrack?.let { track -> DownloadQualityDialog(track, settings.preferredBitrate, { downloadTrack = null }) { bitrate ->

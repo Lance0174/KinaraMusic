@@ -49,6 +49,34 @@ class PlaybackService : MediaSessionService() {
         val fallback = PlaybackFallback(scope, resolver::next)
         var selection = 0L
         var replacementUri: String? = null
+        val unavailableQueue = UnavailableQueue()
+        var automaticAdvance: Pair<Int, String>? = null
+        var internalSeek: Triple<Int, String, Long>? = null
+        var stablePlayback: Job? = null
+        fun seek(index: Int, position: Long) {
+            // Media3 queues listener callbacks during an existing event dispatch. Keep the target
+            // until its callback arrives; a boolean around seekTo() is already false at that point.
+            internalSeek = Triple(index, player.getMediaItemAt(index).mediaId, position)
+            player.seekTo(index, position)
+        }
+        fun skipUnavailable() {
+            val timeline = player.currentTimeline
+            val next = unavailableQueue.next(player.currentMediaItemIndex, player.mediaItemCount,
+                { player.getMediaItemAt(it).mediaId }, { index ->
+                    timeline.getNextWindowIndex(index,
+                        if (player.repeatMode == Player.REPEAT_MODE_ONE) Player.REPEAT_MODE_ALL else player.repeatMode,
+                        player.shuffleModeEnabled)
+                })
+            if (next == null) {
+                PlaybackDiagnostics.record(PlaybackDiagnostics.Event.EXHAUSTED, player.mediaItemCount)
+                player.pause()
+                return
+            }
+            PlaybackDiagnostics.record(PlaybackDiagnostics.Event.SKIP, next)
+            automaticAdvance = next to player.getMediaItemAt(next).mediaId
+            seek(next, 0)
+            player.prepare()
+        }
         player.addListener(object : Player.Listener {
             override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
                 if (reason == Player.MEDIA_ITEM_TRANSITION_REASON_PLAYLIST_CHANGED && replacementUri != null &&
@@ -59,17 +87,43 @@ class PlaybackService : MediaSessionService() {
                 replacementUri = null
                 selection++
                 fallback.reset()
+                stablePlayback?.cancel()
+                val advanced = reason == Player.MEDIA_ITEM_TRANSITION_REASON_SEEK &&
+                    automaticAdvance == (player.currentMediaItemIndex to mediaItem?.mediaId)
+                automaticAdvance = null
+                if (!advanced) unavailableQueue.reset()
                 retry.select(mediaItem?.mediaId)
                 if (reason == Player.MEDIA_ITEM_TRANSITION_REASON_AUTO || reason == Player.MEDIA_ITEM_TRANSITION_REASON_REPEAT) timer?.trackEnded()
             }
+            override fun onPositionDiscontinuity(oldPosition: Player.PositionInfo, newPosition: Player.PositionInfo, reason: Int) {
+                if (reason != Player.DISCONTINUITY_REASON_SEEK) return
+                val expected = internalSeek
+                internalSeek = null
+                val ours = expected != null && expected.first == newPosition.mediaItemIndex &&
+                    expected.second == newPosition.mediaItem?.mediaId && expected.third == newPosition.positionMs
+                if (!ours) {
+                    selection++
+                    fallback.reset()
+                    unavailableQueue.reset()
+                    retry.select(player.currentMediaItem?.mediaId)
+                }
+            }
             override fun onPlaybackStateChanged(state: Int) {
                 PlaybackDiagnostics.record(PlaybackDiagnostics.Event.STATE, state)
-                if (state == Player.STATE_IDLE && player.playerError == null) fallback.reset()
+                if (state == Player.STATE_IDLE && player.playbackState == Player.STATE_IDLE && player.playerError == null) fallback.reset()
                 if (state == Player.STATE_ENDED) timer?.trackEnded()
             }
-            override fun onIsPlayingChanged(isPlaying: Boolean) = PlaybackDiagnostics.record(PlaybackDiagnostics.Event.PLAYING, if (isPlaying) 1 else 0)
+            override fun onIsPlayingChanged(isPlaying: Boolean) {
+                PlaybackDiagnostics.record(PlaybackDiagnostics.Event.PLAYING, if (isPlaying) 1 else 0)
+                stablePlayback?.cancel()
+                if (isPlaying) stablePlayback = scope.launch {
+                    delay(5000)
+                    if (player.isPlaying) unavailableQueue.reset()
+                }
+            }
             override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
                 PlaybackDiagnostics.record(PlaybackDiagnostics.Event.PLAY_WHEN_READY, reason * 10 + if (playWhenReady) 1 else 0)
+                if (!playWhenReady) fallback.reset()
             }
             override fun onPlaybackSuppressionReasonChanged(reason: Int) = PlaybackDiagnostics.record(PlaybackDiagnostics.Event.SUPPRESSION, reason)
             override fun onVolumeChanged(volume: Float) = PlaybackDiagnostics.record(PlaybackDiagnostics.Event.PLAYER_VOLUME, volume)
@@ -77,8 +131,9 @@ class PlaybackService : MediaSessionService() {
             override fun onPlayerError(error: PlaybackException) {
                 PlaybackDiagnostics.record(PlaybackDiagnostics.Event.ERROR, error.errorCode)
                 val item = player.currentMediaItem ?: return
-                val failed = item.localConfiguration?.uri?.toString()?.let(OnlineMediaUri::decode) ?: return
                 if (!player.playWhenReady || error.errorCode !in 2000..4999) return
+                val failed = item.localConfiguration?.uri?.toString()?.let(OnlineMediaUri::decode)
+                if (failed == null) { skipUnavailable(); return }
                 val causes = generateSequence<Throwable>(error) { it.cause }.toList()
                 val unavailable = causes.any { it is AudioResolutionException ||
                     (it is androidx.media3.datasource.HttpDataSource.InvalidResponseCodeException && it.responseCode in 400..499) }
@@ -89,7 +144,7 @@ class PlaybackService : MediaSessionService() {
                     handler.post {
                         if (generation == selection && player.currentMediaItem?.mediaId == item.mediaId && player.playWhenReady) {
                             PlaybackDiagnostics.record(PlaybackDiagnostics.Event.RETRY, 1)
-                            player.seekTo(position); player.prepare()
+                            seek(player.currentMediaItemIndex, position); player.prepare()
                         }
                     }
                     return
@@ -101,7 +156,7 @@ class PlaybackService : MediaSessionService() {
                     generation == selection && player.currentMediaItemIndex == index &&
                         player.currentMediaItem?.mediaId == item.mediaId &&
                         player.currentMediaItem?.localConfiguration == item.localConfiguration && player.playWhenReady
-                }) { actual ->
+                }, exhausted = ::skipUnavailable) { actual ->
                     val position = player.currentPosition.coerceAtLeast(0)
                     val replacement = fallbackMediaItem(player.currentMediaItem ?: item, actual)
                     PlaybackDiagnostics.record(PlaybackDiagnostics.Event.FALLBACK, com.kinara.music.online.sourceRank(actual.source))
@@ -109,7 +164,7 @@ class PlaybackService : MediaSessionService() {
                     retry.select(item.mediaId)
                     player.replaceMediaItem(index, replacement)
                     // Use a time position in the new extractor, never the previous file's byte offset.
-                    player.seekTo(index, position)
+                    seek(index, position)
                     player.prepare()
                 }
             }
@@ -132,7 +187,7 @@ class PlaybackService : MediaSessionService() {
                 if (controller.uid != applicationInfo.uid) return Futures.immediateFuture(SessionResult(SessionError.ERROR_PERMISSION_DENIED))
                 when (customCommand.customAction) {
                     SleepTimer.COMMAND -> timer?.set(args.getInt("minutes"), args.getBoolean("afterTrack"))
-                    RETRY_COMMAND -> { fallback.reset(); resolver.invalidate(); retry.select(player.currentMediaItem?.mediaId); player.prepare(); player.play() }
+                    RETRY_COMMAND -> { selection++; fallback.reset(); unavailableQueue.reset(); resolver.invalidate(); retry.select(player.currentMediaItem?.mediaId); player.prepare(); player.play() }
                     else -> return Futures.immediateFuture(SessionResult(SessionError.ERROR_NOT_SUPPORTED))
                 }
                 return Futures.immediateFuture(SessionResult(SessionResult.RESULT_SUCCESS))

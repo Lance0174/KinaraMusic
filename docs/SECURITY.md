@@ -4,19 +4,19 @@
 
 The public repository contains protocol code and non-secret public endpoints. It must not contain Cloudflare API tokens, Bilibili cookies, Solara secrets, signing keys, APKs, or machine-specific configuration. Copy `local.properties.example` to `local.properties` for a local build and keep the copy untracked.
 
-Solara and anonymous Bilibili Worker access are disabled when their build-time configuration is absent. Local builds may inject `kinara.solaraBaseUrl`, `kinara.solaraSecret`, and comma-separated `kinara.biliWorkerBases` through Gradle properties, `local.properties`, or environment variables. A configured APK necessarily contains its own local source configuration; do not redistribute that APK as a public source artifact. Remote builders must provide their own endpoints and credentials.
+Public builds enable free public sources without private configuration. Solara and private Bilibili Worker access are disabled when their configuration is absent. Local builds may inject `kinara.solaraBaseUrl`, `kinara.solaraSecret`, comma-separated `kinara.biliWorkerBases`, and `kinara.biliWorkerToken` through Gradle properties, `local.properties`, or environment variables. The last value is a service access key, never a Bilibili Cookie. A configured APK contains its private service configuration; do not redistribute that APK as a public artifact. GitHub CI explicitly empties all four settings.
 
 ## Network rules
 
 - Text APIs go through `OnlineTransport`, which runs on `Dispatchers.IO`, limits responses to 2 MiB, closes the active connection on cancellation, and only follows default-port redirects on the same host without an HTTPS downgrade.
-- Player and Coil requests use a separate OkHttp client with automatic redirects disabled. Every hop is validated before connecting. Audio candidates are restricted to provider CDN suffixes and the Bilibili Worker hosts configured in the current APK. Credentials and cookies are stripped from media requests.
+- Player and Coil requests use a separate OkHttp client with automatic redirects disabled. Every hop is validated before connecting. Audio candidates are restricted to provider CDN suffixes and configured Bilibili Worker hosts. Cookie, Authorization, and the previous target's service key are stripped; a service key is attached only to its configured HTTPS origin and API path. Signed streams use a short-lived, recording-scoped HMAC ticket instead, including for system downloads.
 - The Worker accepts BVIDs rather than caller-provided upstream URLs, validates audio CDN redirects, preserves range semantics, and returns an explicit error for upstream challenges.
 - Cover URLs are upgraded to HTTPS, restricted to provider image domains, and rejected when they contain credentials, fragments or non-default ports. Offline artwork requests explicitly disable the network.
 - The platform DownloadManager performs its own network requests after the application has checked the URL and audio header; the application cannot enforce its per-hop network policy inside that system service. A completed download is checked again before it is exposed as audio.
 
 ## Storage and controllers
 
-The settings file may contain locally configured Solara credentials, so it is excluded from both cloud backup and device transfer. Bilibili credentials use Android Keystore encryption and `noBackupFilesDir`. Library data remains eligible for backup; settings must be reconfigured after migration.
+The settings file may contain locally configured Solara credentials, so it is excluded from both cloud backup and device transfer. Bilibili account cookies exist only in the private Cloudflare Worker's Secret, not in Android storage or APKs. The application has no QR login flow and removes old encrypted session files and the old Keystore key on upgrade. The Worker refuses unauthenticated private requests, sends account cookies only to the official API, and does not forward them to clients or audio CDNs. Library data remains eligible for backup; settings must be reconfigured after migration.
 
 External MediaSession controllers retain playback/seek controls but cannot replace or mutate the queue. Downloads retain the actual recording's online ID after source fallback, while preserving the original request for retry and deduplication. Private copies from non-persistable file providers are limited to 512 MiB and support cancellation between read chunks.
 

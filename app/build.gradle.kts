@@ -24,6 +24,7 @@ fun buildConfigString(value: String): String = "\"" + value
 val solaraBuildUrl = privateBuildSetting("kinaraSolaraBaseUrl", "kinara.solaraBaseUrl", "KINARA_SOLARA_BASE_URL")
 val solaraBuildSecret = privateBuildSetting("kinaraSolaraSecret", "kinara.solaraSecret", "KINARA_SOLARA_SECRET")
 val biliWorkerBuildBases = privateBuildSetting("kinaraBiliWorkerBases", "kinara.biliWorkerBases", "KINARA_BILI_WORKER_BASES")
+val biliWorkerBuildToken = privateBuildSetting("kinaraBiliWorkerToken", "kinara.biliWorkerToken", "KINARA_BILI_WORKER_TOKEN")
 // Keep credentials outside source archives; a missing release key must never fall back to debug.
 val signingSettingsPath = providers.gradleProperty("kinaraSigningProperties").orNull
     ?: providers.environmentVariable("KINARA_SIGNING_PROPERTIES").orNull
@@ -56,8 +57,8 @@ android {
         applicationId = "com.kinara.music"
         minSdk = 24
         targetSdk = 34
-        versionCode = 10
-        versionName = "1.4.0"
+        versionCode = 11
+        versionName = "1.4.1"
         val updateRepository = providers.gradleProperty("kinaraUpdateRepository").getOrElse("Lance0174/KinaraMusic")
         require(Regex("[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+").matches(updateRepository)) { "Invalid update repository" }
         buildConfigField("String", "UPDATE_REPOSITORY", buildConfigString(updateRepository))
@@ -66,6 +67,7 @@ android {
         buildConfigField("String", "SOLARA_SECRET", buildConfigString(solaraBuildSecret))
         // A public checkout has no Bilibili proxy. Local builds may provide comma-separated HTTPS bases.
         buildConfigField("String", "BILI_WORKER_BASES", buildConfigString(biliWorkerBuildBases))
+        buildConfigField("String", "BILI_WORKER_TOKEN", buildConfigString(biliWorkerBuildToken))
         // 只保留中英文资源，去掉其它语言的 Compose/AndroidX 字符串，减小体积
         resourceConfigurations += listOf("en", "zh")
     }
@@ -194,8 +196,6 @@ dependencies {
 
     // 封面加载（领导批示 D4：引入 Coil；2.7.0 已在本机依赖缓存）
     implementation("io.coil-kt:coil-compose:2.7.0")
-    // 只在本机生成官方登录二维码；不向第三方二维码服务发送登录链接。
-    implementation("com.google.zxing:core:3.5.3")
 
     // 液态玻璃使用 Compose GraphicsLayer + Android 12 RenderEffect，无额外渲染依赖。
 

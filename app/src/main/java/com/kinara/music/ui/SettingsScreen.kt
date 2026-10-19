@@ -18,7 +18,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kinara.music.BuildConfig
-import com.kinara.music.account.BiliSession
 import com.kinara.music.data.KinaraSettings
 import com.kinara.music.data.LyricRenderer
 import com.kinara.music.data.LumiereQuality
@@ -32,37 +31,13 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SettingsScreen(settings: KinaraSettings, onTheme: (KinaraThemeKind) -> Unit, onDark: (String) -> Unit,
-    onSource: (String, Boolean) -> Unit, biliAccount: BiliSession.Account? = null,
-    onBiliLogin: () -> Unit = {}, onBiliLogout: () -> Unit = {}, onBitrate: (String) -> Unit = {},
+    onSource: (String, Boolean) -> Unit, onBitrate: (String) -> Unit = {},
     onCacheLimit: (Int) -> Unit = {}, onDiagnostics: () -> Unit = {},
     onPreferences: ((KinaraSettings) -> KinaraSettings) -> Unit = {}) {
     val c = LocalKinaraTheme.current.colors
-    var confirmLogout by remember { mutableStateOf(false) }
     var licenses by remember { mutableStateOf(false) }
     Column(Modifier.fillMaxSize().testTag("settings_scroll").verticalScroll(rememberScrollState()).padding(horizontal = 20.dp)
         .padding(bottom = LocalDockInset.current), verticalArrangement = Arrangement.spacedBy(20.dp)) {
-        KinaraGlassPanel(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(28.dp)) {
-            Column(Modifier.padding(20.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Box(Modifier.size(48.dp).background(c.accent.copy(alpha = 0.1f), RoundedCornerShape(16.dp)), contentAlignment = Alignment.Center) {
-                        KinaraIcon(Glyph.USER, tint = c.accent)
-                    }
-                    Spacer(Modifier.width(14.dp))
-                    Column(Modifier.weight(1f)) {
-                        Text(biliAccount?.name ?: "连接哔哩哔哩", color = c.text, fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
-                        Text(if (biliAccount == null) "登录后搜索与收听" else "哔哩哔哩 · 登录已保存", color = c.textDim, fontSize = 13.sp)
-                    }
-                }
-                Spacer(Modifier.height(16.dp))
-                if (biliAccount == null) Button(onBiliLogin, Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text("扫码登录") }
-                else Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                    TextButton(onBiliLogin) { Text("重新登录") }
-                    TextButton({ confirmLogout = true }) { Text("退出登录", color = c.textDim) }
-                }
-                Spacer(Modifier.height(6.dp))
-                Text("登录信息加密保存在本机", color = c.textDim, fontSize = 12.sp)
-            }
-        }
         SettingsSection("外观") {
             Text("主题", fontSize = 14.sp, color = c.textDim)
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -77,12 +52,13 @@ fun SettingsScreen(settings: KinaraSettings, onTheme: (KinaraThemeKind) -> Unit,
             }
         }
         SettingsSection("音乐来源") {
+            Text("搜索会合并各来源的歌曲；播放失败时自动尝试其他来源。", color = c.textDim, fontSize = 12.sp)
             SourceRow("netease", "网易云音乐", settings.sources.netease, onSource)
             SourceRow("kuwo", "酷我音乐", settings.sources.kuwo, onSource)
             SourceRow("kugou", "酷狗音乐", settings.sources.kugou, onSource, "播放可使用聚合匹配")
             SourceRow("qq", "QQ音乐", settings.sources.qq, onSource, "播放可使用聚合匹配")
             SourceRow("bilibili", "哔哩哔哩", settings.sources.bilibili, onSource)
-            SourceRow("solara", "Solara", settings.sources.solara, onSource, "默认关闭；需由外部配置服务地址和凭据")
+            SourceRow("solara", "Solara", settings.sources.solara, onSource, if (settings.solaraBaseUrl.isNotBlank()) "已配置服务" else "需由部署者配置服务地址和凭据")
             HorizontalDivider(color = c.textDim.copy(alpha = 0.12f), modifier = Modifier.padding(vertical = 6.dp))
             SourceRow("gdFallback", "聚合补充", settings.sources.gdFallback, onSource, "为部分来源匹配同名、同艺术家的音频")
         }
@@ -165,10 +141,7 @@ fun SettingsScreen(settings: KinaraSettings, onTheme: (KinaraThemeKind) -> Unit,
             }
         }, confirmButton = { TextButton({ licenses = false }) { Text("关闭") } })
     }
-    if (confirmLogout) AlertDialog(onDismissRequest = { confirmLogout = false }, title = { Text("退出哔哩哔哩？") },
-        text = { Text("将清除这台设备上的登录信息。你的音乐库和歌单会保留。") },
-        confirmButton = { TextButton({ onBiliLogout(); confirmLogout = false }) { Text("退出登录") } },
-        dismissButton = { TextButton({ confirmLogout = false }) { Text("取消") } })
+
 }
 
 @Composable

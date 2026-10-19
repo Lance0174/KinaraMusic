@@ -41,7 +41,7 @@ class PlaybackFallbackTest {
 
     @Test fun changingSelectionRejectsLateUncancellableFallback() = runTest {
         var applied = false
-        val coordinator = PlaybackFallback(backgroundScope) { _, _ -> withContext(NonCancellable) { delay(100); next } }
+        val coordinator = PlaybackFallback(backgroundScope) { _, _, _ -> withContext(NonCancellable) { delay(100); next } }
         coordinator.start(original, original, { true }) { applied = true }
         runCurrent(); coordinator.reset(); advanceTimeBy(101); runCurrent()
         assertFalse(applied)
@@ -49,7 +49,7 @@ class PlaybackFallbackTest {
 
     @Test fun pauseSuppressesPendingFallbackAndDuplicateErrorsStartOnlyOneSearch() = runTest {
         var calls = 0; var playing = true; var applied = false
-        val coordinator = PlaybackFallback(backgroundScope) { _, _ -> calls++; delay(100); next }
+        val coordinator = PlaybackFallback(backgroundScope) { _, _, _ -> calls++; delay(100); next }
         repeat(2) { coordinator.start(original, original, { playing }) { applied = true } }
         runCurrent(); playing = false; advanceTimeBy(101); runCurrent()
         assertEquals(1, calls); assertFalse(applied)
@@ -57,12 +57,23 @@ class PlaybackFallbackTest {
 
     @Test fun successfulFallbackAppliesOnceAndExhaustionDoesNotRestartTheSearch() = runTest {
         var calls = 0; var applications = 0
-        val coordinator = PlaybackFallback(backgroundScope) { _, _ -> calls++; if (calls == 1) next else null }
+        val coordinator = PlaybackFallback(backgroundScope) { _, _, _ -> calls++; if (calls == 1) next else null }
         coordinator.start(original, original, { true }) { applications++ }
         runCurrent()
         coordinator.start(original, next, { true }) { applications++ }
         runCurrent()
         assertEquals(2, calls); assertEquals(1, applications)
+    }
+
+    @Test fun exhaustionAdvancesOnlyTheCurrentSelectionAndPauseCancelsLateExhaustion() = runTest {
+        var exhausted = 0
+        val coordinator = PlaybackFallback(backgroundScope) { _, _, _ -> delay(100); null }
+        coordinator.start(original, original, { true }, { exhausted++ }) { fail("No replacement expected") }
+        advanceTimeBy(101); runCurrent()
+        assertEquals(1, exhausted)
+        coordinator.start(original, original, { true }, { exhausted++ }) { fail("No replacement expected") }
+        runCurrent(); coordinator.reset(); advanceTimeBy(101); runCurrent()
+        assertEquals(1, exhausted)
     }
 
     @Test fun unavailableCdnClosesBeforeBackupAndPreservesRangeWithoutSendingCookies() {

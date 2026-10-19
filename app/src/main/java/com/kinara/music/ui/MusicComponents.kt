@@ -73,7 +73,8 @@ fun SearchField(value: String, onValueChange: (String) -> Unit, placeholder: Str
 
 @Composable
 fun TrackRow(track: Track, active: Boolean = false, favorite: Boolean = false, onClick: () -> Unit,
-             onFavorite: (() -> Unit)? = null, onAdd: (() -> Unit)? = null, onRemove: (() -> Unit)? = null) {
+             onFavorite: (() -> Unit)? = null, onAdd: (() -> Unit)? = null, onRemove: (() -> Unit)? = null,
+             showSource: Boolean = true) {
     val c = LocalKinaraTheme.current.colors
     var menu by remember(track.mediaId) { mutableStateOf(false) }
     Row(Modifier.fillMaxWidth().clip(kinaraShape(16.dp))
@@ -87,7 +88,8 @@ fun TrackRow(track: Track, active: Boolean = false, favorite: Boolean = false, o
             Spacer(Modifier.height(4.dp))
             Text(buildString {
                 append(track.artist.ifBlank { "未知艺术家" })
-                if (track.onlineKey != null) append(" · ${sourceLabel(track.source)}")
+                if (track.onlineKey != null && showSource) append(" · ${sourceLabel(track.source)}")
+                else if (track.album.isNotBlank() && !showSource) append(" · ${track.album}")
                 else if (track.durationMs > 0) append(" · ${formatMs(track.durationMs)}")
             }, color = c.textDim, fontSize = 13.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }

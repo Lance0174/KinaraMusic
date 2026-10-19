@@ -48,6 +48,7 @@ fun audioExtension(bytes: ByteArray): String? {
 private suspend fun probeDownload(context: Context, track: Track): PreparedDownload {
     val resolver = AudioResolver(context)
     var candidate = track
+    val attempts = com.kinara.music.online.PlaybackAttempts()
     while (true) {
     val source = ResolvedAudioSource(context, resolver)
     try {
@@ -60,7 +61,7 @@ private suspend fun probeDownload(context: Context, track: Track): PreparedDownl
     } catch (e: Exception) {
         if (e is CancellationException) throw e
         source.close()
-        candidate = resolver.next(track, candidate) ?: throw e
+        candidate = resolver.next(track, candidate, attempts) ?: throw e
     } finally { source.close() }
     }
 }

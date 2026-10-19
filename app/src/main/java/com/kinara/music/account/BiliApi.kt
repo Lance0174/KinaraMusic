@@ -1,6 +1,6 @@
 /* Kinara — Copyright (C) 2026 Kinara contributors. GPL-3.0.
  * Protocol reference: https://github.com/SocialSisterYi/bilibili-API-collect
- * Direct official login. Personal cookies never reach the shared Worker or audio CDN.
+ * Anonymous official API. Account credentials are held only by the private Cloudflare Worker.
  */
 package com.kinara.music.account
 
@@ -19,45 +19,12 @@ import java.security.MessageDigest
 internal typealias BiliRequest = suspend (String, Map<String, String>) -> OnlineTransport.TransportResponse
 class BiliApiException(val code: Int, message: String) : IOException(message)
 
-class BiliApi internal constructor(private val request: BiliRequest, private val sessionCookie: suspend () -> String) : BiliLoginClient {
-    constructor() : this({ url, headers -> OnlineTransport.getText(url, headers, followRedirects = false) }, { BiliSession.cookie() })
-    data class Qr(val key: String, val url: String)
-    // No generated toString containing credentials.
-    class Poll(val code: Int, val cookie: String = "")
-    private val qrCookies = linkedMapOf<String, String>()
+class BiliApi internal constructor(private val request: BiliRequest) {
+    constructor() : this({ url, headers -> OnlineTransport.getText(url, headers, followRedirects = false) })
     private val keyLock = Mutex()
     private var wbi: Pair<Long, String>? = null
     private var guest = ""
     private val guestLock = Mutex()
-
-    override suspend fun generateQr(): Qr {
-        qrCookies.clear()
-        val response = get("https://passport.bilibili.com/x/passport-login/web/qrcode/generate", "")
-        rememberCookies(response)
-        val data = data(response)
-        val url = data.optString("url")
-        val uri = runCatching { URI(url) }.getOrNull()
-        require(uri?.scheme == "https" && uri.userInfo == null && uri.port in listOf(-1, 443) && uri.host in setOf("passport.bilibili.com", "account.bilibili.com")) { "二维码地址无效" }
-        val key = data.optString("qrcode_key")
-        require(key.isNotBlank()) { "二维码生成失败" }
-        return Qr(key, url)
-    }
-
-    override suspend fun pollQr(key: String): Poll {
-        val response = get("https://passport.bilibili.com/x/passport-login/web/qrcode/poll?qrcode_key=${encode(key)}",
-            qrCookies.entries.joinToString("; ") { "${it.key}=${it.value}" })
-        rememberCookies(response)
-        val code = data(response).optInt("code", -1)
-        val cookie = if (code == 0) qrCookies.entries.joinToString("; ") { "${it.key}=${it.value}" } else ""
-        if (code == 0 && qrCookies["SESSDATA"].isNullOrBlank()) throw IOException("登录响应不完整，请刷新二维码")
-        return Poll(code, cookie)
-    }
-
-    override suspend fun account(cookie: String): BiliSession.Account {
-        val nav = data(get("https://api.bilibili.com/x/web-interface/nav", cookie))
-        if (!nav.optBoolean("isLogin")) throw IOException("登录已失效，请重新扫码")
-        return BiliSession.Account(nav.optString("uname").ifBlank { "B站用户" }, nav.optLong("mid").toString())
-    }
 
     suspend fun search(keyword: String): List<OnlineTrack> {
         val result = withApiCookie { cookie -> signedData("/x/web-interface/wbi/search/type",
@@ -98,7 +65,7 @@ class BiliApi internal constructor(private val request: BiliRequest, private val
         }
     }
 
-    private suspend fun apiCookie(personal: Boolean = true): String {
+    private suspend fun apiCookie(): String {
         // Get actual guest device identifiers; never fabricate them.
         guestLock.withLock {
         if (guest.isBlank()) {
@@ -110,20 +77,10 @@ class BiliApi internal constructor(private val request: BiliRequest, private val
             } catch (e: Exception) { if (e is CancellationException) throw e }
         }
         }
-        val cookies = linkedMapOf<String, String>()
-        for (raw in listOf(guest, if (personal) sessionCookie() else "")) raw.split(';').forEach { part ->
-            val pair = part.trim().split('=', limit = 2)
-            if (pair.size == 2 && pair[1].none { it == '\r' || it == '\n' }) cookies[pair[0]] = pair[1]
-        }
-        return cookies.entries.joinToString("; ") { "${it.key}=${it.value}" }
+        return guest
     }
 
-    private suspend fun <T> withApiCookie(block: suspend (String) -> T): T = try { block(apiCookie()) }
-    catch (e: BiliApiException) {
-        // Expired credentials must not prevent public playback; permissions and risk control stay errors.
-        if (e.code != -101 || sessionCookie().isBlank()) throw e
-        block(apiCookie(personal = false))
-    }
+    private suspend fun <T> withApiCookie(block: suspend (String) -> T): T = block(apiCookie())
 
     private suspend fun signedData(path: String, parameters: Map<String, String>, cookie: String): JSONObject = try {
         data(get(signed(path, parameters, cookie), cookie))
@@ -148,22 +105,11 @@ class BiliApi internal constructor(private val request: BiliRequest, private val
 
     private suspend fun get(url: String, cookie: String): OnlineTransport.TransportResponse {
         val uri = URI(url)
-        require(uri.scheme == "https" && uri.host in setOf("api.bilibili.com", "passport.bilibili.com"))
+        require(uri.scheme == "https" && uri.host == "api.bilibili.com")
         val headers = mapOf("User-Agent" to USER_AGENT, "Referer" to "https://www.bilibili.com/", "Accept" to "application/json") +
             if (cookie.isNotBlank()) mapOf("Cookie" to cookie) else emptyMap()
         return try { request(url, headers) }
         catch (e: Exception) { if (e is CancellationException) throw e; throw IOException("B站连接失败，请检查网络后重试") }
-    }
-
-    private fun rememberCookies(response: OnlineTransport.TransportResponse) {
-        response.headers.entries.filter { it.key.equals("Set-Cookie", true) }.flatMap { it.value }.forEach { header ->
-            val pair = header.substringBefore(';').split('=', limit = 2)
-            if (pair.size == 2 && pair[0].trim() in COOKIE_NAMES && pair[1].none { it == '\r' || it == '\n' }) {
-                val name = pair[0].trim()
-                if (pair[1].isBlank() || header.contains("Max-Age=0", true)) qrCookies.remove(name)
-                else qrCookies[name] = pair[1]
-            }
-        }
     }
 
     private fun json(response: OnlineTransport.TransportResponse): JSONObject {
@@ -174,7 +120,7 @@ class BiliApi internal constructor(private val request: BiliRequest, private val
         val root = json(response)
         val code = root.optInt("code", -1)
         if (code != 0) throw BiliApiException(code, when (code) {
-            -101 -> "B站登录已失效，请重新扫码"
+            -101 -> "B站接口暂时不可用"
             -352, -412 -> "B站暂时限制了当前网络，请稍后重试"
             -404, 62002 -> "视频不存在或已被删除"
             -10403, 6002003 -> "此视频需要额外播放权限"
@@ -187,7 +133,6 @@ class BiliApi internal constructor(private val request: BiliRequest, private val
 
     companion object {
         const val USER_AGENT = "Mozilla/5.0 (Linux; Android 12) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Mobile Safari/537.36"
-        private val COOKIE_NAMES = setOf("SESSDATA", "bili_jct", "DedeUserID", "DedeUserID__ckMd5", "sid", "buvid3", "buvid4")
         val shared = BiliApi()
         fun trustedAudioUrl(url: String): Boolean = runCatching { URI(url).let {
             it.scheme == "https" && it.userInfo == null && it.port in listOf(-1, 443) &&

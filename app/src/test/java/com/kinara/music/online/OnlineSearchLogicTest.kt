@@ -10,6 +10,19 @@ import org.junit.Test
 
 class OnlineSearchLogicTest {
 
+    @Test fun `same recording merges by source priority while covers and other versions stay separate`() {
+        val song = OnlineTrack("netease", "n", "Song", "Singer", "Album", 200000)
+        val qq = song.copy(platform = "qq", id = "q", picUrl = "https://y.gtimg.cn/art.jpg")
+        val live = qq.copy(id = "live", title = "Song Live")
+        val cover = qq.copy(id = "cover", artist = "Someone else")
+        val long = qq.copy(id = "long", durationMs = 230000)
+        val results = listOf(OnlineResult("qq", listOf(qq, live, cover, long)), OnlineResult("netease", listOf(song)))
+        val state = OnlineSearchState(results = results)
+        assertEquals(listOf("n", "live", "cover", "long"), state.displayTracks.map { it.id })
+        assertEquals(qq.picUrl, state.displayTracks.first().picUrl)
+        assertEquals("q", state.tracksFrom(listOf("qq")).first().id)
+    }
+
     @Test fun `response arrival order never changes platform priority`() {
         var state = OnlineSearchState(keyword = "song")
         val reversed = listOf("other", "gd", "solara", "bilibili", "kuwo", "kugou", "qq", "netease")
@@ -18,16 +31,8 @@ class OnlineSearchLogicTest {
         assertEquals(listOf("1", "2"), state.displayTracks.filter { it.platform == "qq" }.map { it.id })
     }
 
-    @Test fun `failed selected platform shows next available result and gd remains selectable`() {
-        val state = OnlineSearchState(results = listOf(fail("qq"), fail("kugou"), ok("kuwo", 2), ok("gd", 1)))
-        assertEquals("kuwo", state.displayPlatform("qq", SOURCE_PRIORITY))
-        assertEquals("gd", state.displayPlatform("qq", listOf("qq", "gd")))
-        assertEquals("all", state.displayPlatform("all", SOURCE_PRIORITY))
-        assertEquals("qq", OnlineSearchState(results = listOf(ok("qq", 0))).displayPlatform("qq", SOURCE_PRIORITY))
-    }
-
     private fun ok(platform: String, n: Int) = OnlineResult(
-        platform, (1..n).map { OnlineTrack(platform, "$it", "t$it", "a", "al") },
+        platform, (1..n).map { OnlineTrack(platform, "$it", "$platform-t$it", "a", "al") },
     )
     private fun fail(platform: String, msg: String = "boom") = OnlineResult(platform, errorMessage = msg)
 

@@ -63,7 +63,7 @@ private fun PlayerTimeline(player: PlayerUiState, onSeek: (Long) -> Unit) {
     val shown = (if (dragging) dragged else progress?.positionMs ?: player.positionMs).coerceIn(0, duration)
     // A fixed, small status slot keeps errors/buffering from displacing the seek and play targets.
     Box(Modifier.fillMaxWidth().height(24.dp), contentAlignment = Alignment.BottomStart) {
-        Text(player.error ?: if (player.buffering) "正在加载音频…" else "", color = c.textDim,
+        Text(if (player.recovering) "正在尝试其他来源…" else player.error ?: if (player.buffering) "正在加载音频…" else "", color = c.textDim,
             fontSize = 11.sp, maxLines = 1, overflow = TextOverflow.Ellipsis,
             modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite })
     }
@@ -117,8 +117,8 @@ internal fun PlaybackControls(player: PlayerUiState, onToggle: () -> Unit, onPre
         val ink = if (theme.kind == KinaraThemeKind.INDUSTRIAL) c.accent else c.text
         IconButton(onToggle, Modifier.size(64.dp).clip(playShape)
             .background(ink.copy(alpha = 0.035f)).border(1.5.dp, ink.copy(alpha = 0.85f), playShape)) {
-            KinaraIcon(if (player.error != null) Glyph.REFRESH else if (player.playing) Glyph.PAUSE else Glyph.PLAY,
-                if (player.error != null) "重试播放" else if (player.playing) "暂停" else "播放", Modifier.size(29.dp), ink)
+            KinaraIcon(if (player.recovering || player.playing) Glyph.PAUSE else if (player.error != null) Glyph.REFRESH else Glyph.PLAY,
+                if (player.recovering || player.playing) "暂停" else if (player.error != null) "重试播放" else "播放", Modifier.size(29.dp), ink)
         }
         val canNext = player.currentIndex < player.queue.lastIndex
         IconButton(onNext, enabled = canNext) {

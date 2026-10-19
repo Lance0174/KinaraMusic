@@ -4,7 +4,7 @@
  *
  * B站 Worker 客户端。Worker 地址来自构建配置，不写入公开源码；
  * 本机构建可以提供逗号分隔的 HTTPS 地址，按配置顺序回退。
- * 全部失败按 TRANSPORT 处理（上层走"直连失败即跳过"降级，不阻塞其它源）。
+ * Cookie 仅由服务端保管；失败后由上层尝试公开请求及其他歌曲来源。
  */
 package com.kinara.music.online
 
@@ -19,6 +19,8 @@ object BiliWorkerClient {
         get() = BuildConfig.BILI_WORKER_BASES.split(',')
             .mapNotNull(::normalizeBase)
             .distinct()
+
+    fun headers(url: String): Map<String, String> = workerHeaders(url, BASES, BuildConfig.BILI_WORKER_TOKEN)
 
     internal fun normalizeBase(raw: String): String? = runCatching {
         val value = raw.trim()
@@ -38,7 +40,7 @@ object BiliWorkerClient {
         var failure: Exception? = null
         for (base in bases) {
             try {
-                val r = OnlineTransport.getText(base + path, timeoutMs = 12000)
+                val r = OnlineTransport.getText(base + path, headers(base + path), timeoutMs = 12000, followRedirects = false)
                 if (r.code != 200) {
                     val reason = runCatching { JSONObject(r.body).optString("error") }.getOrNull()
                     throw TransportException(ResolveStage.TRANSPORT, reason?.takeIf { it.isNotBlank() }
@@ -59,15 +61,19 @@ object BiliWorkerClient {
         return arr.objects().map { v ->
             OnlineTrack(platform = "bilibili", id = v.optString("bvid") + "|",
                 title = v.optString("title"), artist = v.optString("author").ifBlank { "B站UP主" },
-                album = "视频", durationMs = v.optLong("duration") * 1000)
+                album = "视频", durationMs = v.optLong("duration") * 1000,
+                picUrl = v.optString("pic").let { if (it.startsWith("//")) "https:$it" else it })
         }
     }
 
-    suspend fun resolve(bvid: String): ResolvedUrl {
+    suspend fun resolve(bvid: String, cid: String = "", bitrate: String = "320"): ResolvedUrl {
         return try {
-            val (base, j) = request("/bili/resolve?bvid=" + OnlineTransport.enc(bvid))
+            val query = "bvid=" + OnlineTransport.enc(bvid) +
+                (if (cid.isNotBlank()) "&cid=" + OnlineTransport.enc(cid) else "") + "&br=" + OnlineTransport.enc(bitrate)
+            val (base, j) = request("/bili/resolve?$query")
             val path = j.optString("streamPath")
-            if (path != "/bili/stream?bvid=" + OnlineTransport.enc(bvid)) {
+            val expected = "/bili/stream?$query"
+            if (path != expected && !path.matches(Regex(Regex.escape(expected) + "&expires=[0-9]{10}&ticket=[a-f0-9]{64}"))) {
                 throw TransportException(ResolveStage.TRANSPORT, "音频代理响应不完整")
             }
             ResolvedUrl(ResolveStage.OK, base + path, viaProxy = true)
@@ -77,3 +83,13 @@ object BiliWorkerClient {
         }
     }
 }
+
+/** Never send the private service key to a redirect, CDN, lookalike host or unrelated path. */
+internal fun workerHeaders(url: String, bases: List<String>, token: String): Map<String, String> = runCatching {
+    val uri = URI(url)
+    if (token.isBlank() || token.any { it == '\r' || it == '\n' } || uri.rawUserInfo != null || uri.rawFragment != null ||
+        uri.scheme != "https" || uri.port !in listOf(-1, 443) || !uri.path.startsWith("/bili/") ||
+        bases.none { URI(it).host.equals(uri.host, ignoreCase = true) } ||
+        (uri.path == "/bili/stream" && uri.rawQuery.orEmpty().contains("&ticket="))) emptyMap()
+    else mapOf("X-Kinara-Key" to token)
+}.getOrDefault(emptyMap())

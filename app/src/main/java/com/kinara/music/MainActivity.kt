@@ -24,7 +24,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.kinara.music.account.BiliAccountViewModel
 import com.kinara.music.data.LocalLibrary
 import com.kinara.music.player.PlayerViewModel
 import com.kinara.music.ui.KinaraApp
@@ -38,7 +37,6 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
     private val vm: MainViewModel by viewModels()
     private val playerVm: PlayerViewModel by viewModels()
-    private val accountVm: BiliAccountViewModel by viewModels()
     private var libraryState by mutableStateOf<LibraryUiState>(LibraryUiState.Loading)
     private var scan: Job? = null
     private val permission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
@@ -56,7 +54,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val settings by vm.settings.collectAsStateWithLifecycle()
             KinaraTheme(settings.theme, settings.darkMode) {
-                KinaraApp(vm, playerVm, accountVm, libraryState, ::requestAudio, ::refreshLibrary)
+                KinaraApp(vm, playerVm, libraryState, ::requestAudio, ::refreshLibrary)
             }
         }
     }

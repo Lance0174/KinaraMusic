@@ -1,5 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+// Workers Web Crypto supports the protocol's MD5 digest; Node Web Crypto does not.
+const nativeDigest = crypto.subtle.digest.bind(crypto.subtle);
+crypto.subtle.digest = (algorithm, data) => algorithm === 'MD5' ?
+  Promise.resolve(Uint8Array.from(createHash('md5').update(data).digest()).buffer) : nativeDigest(algorithm, data);
 let serial = 0;
 const BV = 'BV1xx411c7mD';
 async function worker(t, fetch) {
@@ -13,6 +18,10 @@ const req = (path, init) => new Request('https://kinara.example' + path, init);
 function upstream(url) {
   if (url === 'https://www.bilibili.com/') return new Response('', { headers: { 'set-cookie': 'buvid3=guest; Path=/' } });
   if (url.includes('/view?')) return json({ code: 0, data: { cid: 123 } });
+  if (url.endsWith('/nav')) return json({ code: 0, data: { wbi_img: {
+    img_url: 'https://i.test/7cd084941338484aae1ad9425b84077c.png',
+    sub_url: 'https://i.test/4932caff0ff746eab6f01bf08b70ac45.png',
+  } } });
   if (url.includes('/playurl?')) return json({ code: 0, data: { dash: { audio: [{ id: 30280, bandwidth: 192000, baseUrl: 'https://cn-test.bilivideo.com/audio.m4s' }] } } });
   throw new Error('unexpected upstream: ' + url);
 }
@@ -71,7 +80,7 @@ test('bounded retry can recover, strips tags and parses mm:ss duration', async t
   });
   const r = await w.fetch(req('/bili/search?kw=test'));
   assert.equal(r.status, 200);
-  assert.deepEqual((await r.json()).result[0], { bvid: BV, title: 'Song', author: '', duration: 249 });
+  assert.deepEqual((await r.json()).result[0], { bvid: BV, title: 'Song', author: '', pic: '', duration: 249 });
 });
 
 test('resolve binds to this Worker; streaming forwards Range/If-Range and preserves 206', async t => {
@@ -143,4 +152,64 @@ test('homepage warmup failure does not prevent a public API request', async t =>
   });
   const r = await w.fetch(req('/bili/search?kw=test'));
   assert.equal(r.status, 200); assert.deepEqual((await r.json()).result, []);
+});
+
+test('private session requires a service key before any upstream request', async t => {
+  const w = await worker(t, () => { throw new Error('must not fetch'); });
+  const env = { BILI_COOKIE: 'SESSDATA=fixture-only', KINARA_CLIENT_TOKEN: 'test-client' };
+  assert.equal((await w.fetch(req('/bili/search?kw=test'), env)).status, 401);
+  assert.equal((await w.fetch(req('/bili/search?kw=test', { headers: { 'X-Kinara-Key': 'wrong' } }), env)).status, 401);
+  assert.equal((await w.fetch(req('/bili/search?kw=test'), { BILI_COOKIE: env.BILI_COOKIE })).status, 503);
+});
+
+test('private cookie stays on official API and never appears in responses or CDN headers', async t => {
+  const env = { BILI_COOKIE: 'SESSDATA=fixture-only', KINARA_CLIENT_TOKEN: 'test-client' };
+  const w = await worker(t, async (url, init) => {
+    assert.equal(init.headers['X-Kinara-Key'], undefined);
+    if (url.startsWith('https://api.bilibili.com/')) {
+      assert.equal(init.headers.Cookie, env.BILI_COOKIE);
+      return upstream(url);
+    }
+    assert.equal(init.headers.Cookie, undefined);
+    assert.equal(init.headers.Authorization, undefined);
+    return new Response('audio', { headers: { 'Content-Type': 'audio/mp4', 'Set-Cookie': 'should=not-forward' } });
+  });
+  const options = { headers: { 'X-Kinara-Key': env.KINARA_CLIENT_TOKEN } };
+  const resolve = await w.fetch(req('/bili/resolve?bvid=' + BV + '&br=128'), env);
+  assert.equal(resolve.status, 401);
+  const result = await (await w.fetch(req('/bili/resolve?bvid=' + BV + '&br=128', options), env)).json();
+  assert.equal(JSON.stringify(result).includes('fixture-only'), false);
+  assert.ok(result.streamPath.includes('&br=128&expires='));
+  assert.ok(result.streamPath.includes('&ticket='));
+  // System downloads use a short-lived, recording-scoped ticket, never the long-lived service key.
+  assert.equal((await w.fetch(req(result.streamPath.replace(BV, 'BV1xx411c7mE')), env)).status, 401);
+  assert.equal((await w.fetch(req(result.streamPath.replace(/expires=\d+/, 'expires=1')), env)).status, 401);
+  assert.equal((await w.fetch(req(result.streamPath.replace('/bili/stream', '/bili/search')), env)).status, 401);
+  const response = await w.fetch(req(result.streamPath), env);
+  assert.equal(response.status, 200); assert.equal(await response.text(), 'audio');
+  assert.equal(response.headers.get('Set-Cookie'), null);
+});
+
+test('requested CID is verified and low quality selects an independent stream', async t => {
+  let selected = '';
+  const w = await worker(t, async url => {
+    if (url.includes('/playurl?')) {
+      assert.ok(url.includes('cid=123'));
+      return json({ code: 0, data: { dash: { audio: [
+        { id: 30280, bandwidth: 192000, baseUrl: 'https://high.bilivideo.com/audio' },
+        { id: 30216, bandwidth: 64000, baseUrl: 'https://low.bilivideo.com/audio' },
+      ] } } });
+    }
+    if (url.includes('.bilivideo.com')) { selected = url; return new Response('audio'); }
+    return upstream(url);
+  });
+  assert.equal((await w.fetch(req('/bili/stream?bvid=' + BV + '&cid=999'))).status, 404);
+  assert.equal((await w.fetch(req('/bili/stream?bvid=' + BV + '&cid=123&br=128'))).status, 200);
+  assert.equal(selected, 'https://low.bilivideo.com/audio');
+});
+
+test('WBI official signing example matches without leaking cookie into query', async () => {
+  const { wbiQuery } = await import('./worker.js');
+  assert.equal(await wbiQuery({ foo: '114', bar: '514', baz: '1919810' }, 'ea1db124af3c7062474693fa704f4ff8', 1702204169),
+    'bar=514&baz=1919810&foo=114&wts=1702204169&w_rid=6149fdadf571698ca7e6a567265cd0ee');
 });

@@ -57,6 +57,7 @@ data class PlayerUiState(
     val playbackSource: String? = null,
     val playbackBitrate: String? = null,
     val actualTrack: Track? = null,
+    val recovering: Boolean = false,
 ) {
     val current: Track? get() = queue.getOrNull(currentIndex)
 }
@@ -100,7 +101,8 @@ class PlayerViewModel(app: Application) : AndroidViewModel(app) {
                 currentIndex = player.currentMediaItemIndex,
                 playing = player.isPlaying,
                 buffering = player.playbackState == Player.STATE_BUFFERING,
-                error = if (player.playerError == null) null else _ui.value.error,
+                recovering = player.playerError?.errorCode in 2000..4999 && player.playWhenReady,
+                error = if (player.playerError == null) null else "当前歌曲暂时无法播放",
                 repeatMode = player.repeatMode, shuffle = player.shuffleModeEnabled,
                 playbackSource = player.currentMediaItem?.mediaMetadata?.extras?.getString("kinara.playbackSource"),
                 playbackBitrate = player.currentMediaItem?.mediaMetadata?.extras?.getString("kinara.playbackBitrate"),
@@ -114,7 +116,8 @@ class PlayerViewModel(app: Application) : AndroidViewModel(app) {
                 .filterIsInstance<java.io.IOException>()
                 .mapNotNull { it.message }
                 .firstOrNull { !it.contains("://") && it.any { ch -> ch.code > 127 } }
-            _ui.value = _ui.value.copy(error = message ?: "播放失败，请重试或选择其他音源", playing = false, buffering = false)
+            _ui.value = _ui.value.copy(error = message ?: "当前歌曲暂时无法播放", playing = false, buffering = false,
+                recovering = error.errorCode in 2000..4999 && controller?.playWhenReady == true)
         }
     }
 
@@ -203,12 +206,12 @@ class PlayerViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun togglePlayPause() { controller?.let {
-        if (it.isPlaying || (it.playWhenReady && it.playbackState == Player.STATE_BUFFERING)) it.pause()
+        if (it.isPlaying || (it.playWhenReady && (it.playbackState == Player.STATE_BUFFERING || it.playerError != null))) it.pause()
         else if (it.playerError != null) it.sendCustomCommand(androidx.media3.session.SessionCommand(PlaybackService.RETRY_COMMAND, Bundle.EMPTY), Bundle.EMPTY)
         else { if (it.playbackState == Player.STATE_IDLE) it.prepare(); it.play() }
     } }
-    fun next() { controller?.seekToNextMediaItem() }
-    fun previous() { controller?.seekToPreviousMediaItem() }
+    fun next() { controller?.let { val failed = it.playerError != null; it.seekToNextMediaItem(); if (failed) it.prepare() } }
+    fun previous() { controller?.let { val failed = it.playerError != null; it.seekToPreviousMediaItem(); if (failed) it.prepare() } }
     fun playAt(index: Int) { controller?.let { c ->
         if (index in 0 until c.mediaItemCount) { c.seekTo(index, 0); c.prepare(); c.play() }
     } }

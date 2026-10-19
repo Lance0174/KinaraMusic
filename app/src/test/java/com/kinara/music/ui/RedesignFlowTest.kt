@@ -10,7 +10,6 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
-import com.kinara.music.account.BiliLoginState
 import com.kinara.music.data.*
 import com.kinara.music.online.*
 import com.kinara.music.player.PlayerUiState
@@ -86,16 +85,15 @@ class RedesignFlowTest {
         capture("library-dark-scrolled")
     }
 
-    @Test fun settingsAccountAndSourceSwitchAreRealActions() {
-        var logins = 0
+    @Test fun settingsHaveNoLoginAndSourceSwitchIsRealAction() {
         var settings by mutableStateOf(KinaraSettings())
         shell(KinaraNav.SETTINGS) {
             SettingsScreen(settings, {}, {}, { source, enabled ->
                 if (source == "bilibili") settings = settings.copy(sources = settings.sources.copy(bilibili = enabled))
-            }, onBiliLogin = { logins++ })
+            })
         }
         capture("settings-light")
-        compose.onNodeWithText("扫码登录").performClick(); assertEquals(1, logins)
+        compose.onNodeWithText("扫码登录").assertDoesNotExist()
         compose.onNode(hasText("哔哩哔哩") and isToggleable()).performScrollTo()
         // performScrollTo sees the full scene, including the area behind the floating dock.
         compose.onNodeWithTag("settings_scroll").performTouchInput { swipeUp(startY = height * 0.7f, endY = height * 0.35f) }
@@ -134,18 +132,18 @@ class RedesignFlowTest {
         compose.onNodeWithText("导入歌单").assertIsDisplayed()
     }
 
-    @Test fun searchSourceFilterKeepsBilibiliResultsReachable() {
+    @Test fun unifiedSearchKeepsBilibiliResultsReachable() {
         val a = OnlineTrack("netease", "123", "花海", "周杰伦", "测试")
         val b = OnlineTrack("bilibili", "BV1xx411c7mD|", "音乐现场", "演示UP主", "测试")
         var played: OnlineTrack? = null
         shell(KinaraNav.SEARCH) {
             SearchField("音乐", {}, "歌曲、艺术家、B站视频", Modifier.padding(horizontal = 20.dp))
             OnlineSearchScreen(OnlineSearchState(OnlineSearchState.Phase.DATA, listOf(OnlineResult("netease", listOf(a)), OnlineResult("bilibili", listOf(b))), "音乐"),
-                { list, index -> played = list[index]; assertEquals(1, list.size) }, {})
+                { list, index -> played = list[index]; assertEquals(2, list.size) }, {})
         }
         capture("search")
-        compose.onNodeWithText("哔哩哔哩").performScrollTo().performClick()
-        compose.onNodeWithText("花海").assertDoesNotExist()
+        compose.onNodeWithText("哔哩哔哩").assertDoesNotExist()
+        compose.onNodeWithText("花海").assertIsDisplayed()
         compose.onNodeWithText("音乐现场").performClick(); assertEquals(b, played)
     }
 
@@ -161,12 +159,12 @@ class RedesignFlowTest {
         val qq = compose.onNodeWithText("结果-qq").fetchSemanticsNode().boundsInRoot
         assertTrue(netease.top < qq.top)
         capture("source-priority")
-        compose.onNodeWithText("QQ音乐", useUnmergedTree = true).performScrollTo().performClick()
         compose.runOnIdle { state = state.copy(results = state.results.filterNot { it.platform in listOf("qq", "kugou") } +
             listOf(OnlineResult("qq", errorMessage = "QQ音乐搜索受限（500003）"), OnlineResult("kugou", errorMessage = "请求超时"))) }
-        compose.onNodeWithText("QQ音乐暂不可用，已显示酷我音乐结果").assertIsDisplayed()
+        compose.onNodeWithText("结果-qq").assertDoesNotExist()
+        compose.onNodeWithText("结果-netease").assertIsDisplayed()
         compose.onNodeWithText("结果-kuwo").performClick()
-        assertEquals(listOf("kuwo"), queue.map { it.platform })
+        assertEquals(SOURCE_PRIORITY.filterNot { it in listOf("qq", "kugou") }, queue.map { it.platform })
         capture("source-fallback")
     }
 
@@ -185,16 +183,30 @@ class RedesignFlowTest {
         compose.onNodeWithText("夜航星").performClick(); assertEquals(1, picked)
     }
 
-    @Test fun expiredQrHasRefreshAndCancelInsteadOfStaleImage() {
-        var refresh = 0; var close = 0
-        compose.setContent { KinaraTheme(KinaraThemeKind.DEFAULT) { BiliLoginDialog(
-            BiliLoginState(true, message = "二维码已过期", refreshable = true), { refresh++ }, { close++ }) } }
-        compose.onNodeWithContentDescription("哔哩哔哩官方登录二维码").assertDoesNotExist()
-        compose.onNodeWithText("刷新二维码").performClick(); assertEquals(1, refresh)
-        compose.onNodeWithText("取消").performClick(); assertEquals(1, close)
+    @Test fun recoveringPlaybackShowsProgressAndCanBePaused() {
+        var pauses = 0
+        compose.setContent { KinaraTheme(KinaraThemeKind.DEFAULT) {
+            PlayerBackdrop(emptyList()) { PlayScreen(player.copy(playing = false, error = "连接失败", recovering = true),
+                emptyList(), { pauses++ }, {}, {}, {}) }
+        } }
+        compose.onNodeWithText("正在尝试其他来源…").assertIsDisplayed()
+        compose.onNodeWithContentDescription("重试播放").assertDoesNotExist()
+        compose.onNodeWithContentDescription("暂停").performClick()
+        assertEquals(1, pauses)
     }
 
-    @Test @Config(qualifiers = "w320dp-h640dp-mdpi") fun smallScreenAndLargeTextKeepAccountActionReachable() {
+    @Test fun recoveringMiniPlayerKeepsPauseAvailable() {
+        var pauses = 0
+        compose.setContent { KinaraTheme(KinaraThemeKind.DEFAULT) {
+            MiniPlayer(player.copy(playing = false, error = "连接失败", recovering = true), { pauses++ }, {}, {})
+        } }
+        compose.onNodeWithText("正在尝试其他来源…").assertIsDisplayed()
+        compose.onNodeWithText("播放失败，点按重试").assertDoesNotExist()
+        compose.onNodeWithContentDescription("暂停").performClick()
+        assertEquals(1, pauses)
+    }
+
+    @Test @Config(qualifiers = "w320dp-h640dp-mdpi") fun smallScreenAndLargeTextKeepThemeActionReachable() {
         compose.setContent { CompositionLocalProvider(LocalDensity provides Density(1f, 1.35f)) {
             KinaraTheme(KinaraThemeKind.DEFAULT, KinaraDarkMode.DARK) {
                 KinaraShell(KinaraNav.SETTINGS, {}, player, {}, {}, {}) { Column(Modifier.fillMaxSize()) {
@@ -202,7 +214,8 @@ class RedesignFlowTest {
                 } }
             }
         } }
-        compose.onNodeWithText("扫码登录").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("主题").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("扫码登录").assertDoesNotExist()
         capture("settings-320-large-text")
     }
 

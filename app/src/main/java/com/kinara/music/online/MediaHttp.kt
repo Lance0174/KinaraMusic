@@ -20,6 +20,7 @@ internal class MediaRedirects(
             // Cookies/authorization never belong on artwork or audio requests.
             request = request.newBuilder().removeHeader("Cookie").removeHeader("Authorization")
                 .removeHeader("Proxy-Authorization").removeHeader("Referer").removeHeader("Origin")
+                .removeHeader("X-Kinara-Key")
                 .apply { headersForTarget(url).forEach { (name, value) -> header(name, value) } }.build()
             val response = chain.proceed(request)
             if (response.code !in setOf(301, 302, 303, 307, 308)) return response

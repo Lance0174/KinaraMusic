@@ -34,16 +34,16 @@ fun MiniPlayer(player: PlayerUiState, onTogglePlay: () -> Unit, onNext: () -> Un
                 Column(Modifier.weight(1f)) {
                     Text(current.title, color = c.text, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     Spacer(Modifier.height(3.dp))
-                    Text(if (player.error != null) "播放失败，点按重试" else if (player.buffering) "正在加载…" else current.artist,
+                    Text(if (player.recovering) "正在尝试其他来源…" else if (player.error != null) "播放失败，点按重试" else if (player.buffering) "正在加载…" else current.artist,
                         color = c.textDim, fontSize = 12.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
                 IconButton(onTogglePlay, Modifier.clip(CircleShape).background(c.accent.copy(alpha = 0.10f))) {
-                    KinaraIcon(if (player.error != null) Glyph.REFRESH else if (player.playing) Glyph.PAUSE else Glyph.PLAY,
-                        if (player.error != null) "重试播放" else if (player.playing) "暂停" else "播放", tint = c.accent)
+                    KinaraIcon(if (player.recovering || player.playing) Glyph.PAUSE else if (player.error != null) Glyph.REFRESH else Glyph.PLAY,
+                        if (player.recovering || player.playing) "暂停" else if (player.error != null) "重试播放" else "播放", tint = c.accent)
                 }
                 IconButton(onNext, enabled = player.currentIndex < player.queue.lastIndex) { KinaraIcon(Glyph.NEXT, "下一曲", tint = c.textDim) }
             }
-            if (player.buffering) LinearProgressIndicator(Modifier.fillMaxWidth().height(2.dp), color = c.accent, trackColor = c.accent.copy(alpha = 0.1f))
+            if (player.buffering || player.recovering) LinearProgressIndicator(Modifier.fillMaxWidth().height(2.dp), color = c.accent, trackColor = c.accent.copy(alpha = 0.1f))
             else LinearProgressIndicator(progress = { val tick = progress?.value
                 ((tick?.positionMs ?: player.positionMs).toFloat() / (tick?.durationMs ?: player.durationMs).coerceAtLeast(1)).coerceIn(0f, 1f) },
                 modifier = Modifier.fillMaxWidth().height(2.dp), color = c.accent, trackColor = c.accent.copy(alpha = 0.08f))

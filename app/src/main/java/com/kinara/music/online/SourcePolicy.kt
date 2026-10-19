@@ -5,12 +5,12 @@ import com.kinara.music.data.OnlineKey
 import com.kinara.music.data.SourceToggles
 import java.net.URI
 
-/** Search, filters and playback fallback share one order. */
+/** Search representatives and playback fallback share one order. */
 val SOURCE_PRIORITY = listOf("netease", "qq", "kugou", "kuwo", "bilibili", "solara", "gd")
 fun sourceRank(platform: String): Int = SOURCE_PRIORITY.indexOf(platform).takeIf { it >= 0 } ?: SOURCE_PRIORITY.size
 fun SourceToggles.enabledInOrder(): List<String> = SOURCE_PRIORITY.filter(::isEnabled)
 fun fallbackPlatforms(platform: String, toggles: SourceToggles): List<String> =
-    toggles.enabledInOrder().filter { sourceRank(it) > sourceRank(platform) }
+    toggles.enabledInOrder().filter { it != platform }
 
 /** Error text shown in the UI must not contain response bodies, credentials or signed URLs. */
 fun sourceErrorText(message: String?): String = when {

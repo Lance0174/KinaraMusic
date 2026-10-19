@@ -31,7 +31,7 @@ class MediaHttpTest {
                     }
                     else -> {
                         val safe = request.getHeader("Cookie") == null && request.getHeader("Authorization") == null &&
-                            request.getHeader("Range") == "bytes=8-11"
+                            request.getHeader("X-Kinara-Key") == null && request.getHeader("Range") == "bytes=8-11"
                         MockResponse().setResponseCode(if (safe) 206 else 400)
                             .setHeader("Content-Range", "bytes 8-11/100").setBody("abcd")
                     }
@@ -47,7 +47,7 @@ class MediaHttpTest {
             }).build()
         fun request(path: String) = Request.Builder().url("http://one.test:$port/$path")
             .header("Cookie", "private=value").header("Authorization", "private")
-            .header("Range", "bytes=8-11").build()
+            .header("X-Kinara-Key", "private-service-key").header("Range", "bytes=8-11").build()
         try {
             client.newCall(request("redirect")).execute().use {
                 assertEquals(206, it.code); assertEquals("abcd", it.body!!.string())
@@ -59,6 +59,17 @@ class MediaHttpTest {
             assertEquals(listOf("/redirect", "/audio", "/escape"), requests.toList())
         } finally {
             server.shutdown(); client.connectionPool.evictAll(); client.dispatcher.executorService.shutdown()
+        }
+    }
+
+    @Test fun privateServiceKeyIsBoundToExactHttpsOriginAndBiliPath() {
+        val bases = listOf("https://private.example")
+        assertEquals(mapOf("X-Kinara-Key" to "key"), workerHeaders("https://private.example/bili/stream?bvid=id", bases, "key"))
+        assertTrue(workerHeaders("https://private.example/bili/stream?bvid=id&ticket=short-lived", bases, "key").isEmpty())
+        for (url in listOf("https://private.example.evil.test/bili/stream", "https://private.example/other",
+            "http://private.example/bili/stream", "https://private.example:8443/bili/stream",
+            "https://user@private.example/bili/stream", "https://a.bilivideo.com/audio")) {
+            assertTrue(workerHeaders(url, bases, "key").isEmpty())
         }
     }
 }

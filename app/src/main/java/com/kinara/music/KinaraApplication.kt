@@ -2,7 +2,6 @@
 package com.kinara.music
 
 import android.app.Application
-import com.kinara.music.account.BiliSession
 import coil.ImageLoader
 import coil.ImageLoaderFactory
 import com.kinara.music.data.safeCoverUrl
@@ -14,6 +13,11 @@ class KinaraApplication : Application(), ImageLoaderFactory {
 
     override fun onCreate() {
         super.onCreate()
-        BiliSession.initialize(this)
+        // Upgrade cleanup: credentials are now held only by the private Worker.
+        android.util.AtomicFile(java.io.File(noBackupFilesDir, "bili-session.enc")).delete()
+        runCatching {
+            java.security.KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
+                .deleteEntry("kinara.bilibili.session.v1")
+        }
     }
 }

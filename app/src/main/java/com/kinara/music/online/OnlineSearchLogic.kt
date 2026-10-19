@@ -17,19 +17,11 @@ data class OnlineSearchState(
 ) {
     enum class Phase { IDLE, LOADING, ERROR, EMPTY, DATA }
 
-    val displayTracks: List<OnlineTrack>
-        get() = results.sortedBy { sourceRank(it.platform) }.flatMap { it.tracks }
+    val displayTracks: List<OnlineTrack> = mergeSearchTracks(results)
+
+    fun tracksFrom(enabled: List<String>): List<OnlineTrack> = mergeSearchTracks(results.filter { it.platform in enabled })
 
     val hasFailure: Boolean get() = results.any { it.errorMessage != null }
-
-    fun displayPlatform(requested: String, enabled: List<String>): String {
-        if (requested !in enabled) return "all"
-        val failed = results.any { it.platform == requested && it.errorMessage != null && it.tracks.isEmpty() }
-        if (!failed) return requested
-        return enabled.sortedBy(::sourceRank).firstOrNull { platform ->
-            sourceRank(platform) > sourceRank(requested) && results.any { it.platform == platform && it.tracks.isNotEmpty() }
-        } ?: requested
-    }
 
     companion object {
         /**
@@ -48,7 +40,6 @@ data class OnlineSearchState(
             val merged = OnlineSearchState(Phase.LOADING, results, state.keyword)
             return when {
                 merged.displayTracks.isNotEmpty() -> merged.copy(phase = Phase.DATA)
-                merged.hasFailure && merged.displayTracks.isNotEmpty() -> merged.copy(phase = Phase.DATA) // 部分失败仍显示成功的源
                 else -> merged // 保持 LOADING 等其余源
             }
         }
@@ -59,4 +50,17 @@ data class OnlineSearchState(
             else -> state.copy(phase = if (state.keyword.isBlank()) Phase.IDLE else Phase.EMPTY, searching = false)
         }
     }
+}
+
+/** Merge only the same credited recording; covers/live versions and ambiguous artists stay separate. */
+internal fun mergeSearchTracks(results: List<OnlineResult>): List<OnlineTrack> {
+    val songs = mutableListOf<OnlineTrack>()
+    results.sortedBy { sourceRank(it.platform) }.flatMap { it.tracks }
+        .distinctBy { it.platform to it.id }.forEach { candidate ->
+            val index = songs.indexOfFirst { it.platform != candidate.platform && sameRecording(it.toTrack("320"), candidate) }
+            if (index < 0) songs += candidate
+            else if (songs[index].picUrl.isNullOrBlank() && !candidate.picUrl.isNullOrBlank())
+                songs[index] = songs[index].copy(picUrl = candidate.picUrl)
+        }
+    return songs
 }

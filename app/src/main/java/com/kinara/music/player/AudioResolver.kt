@@ -6,7 +6,6 @@ import android.net.Uri
 import androidx.media3.datasource.*
 import androidx.media3.datasource.okhttp.OkHttpDataSource
 import com.kinara.music.account.BiliApi
-import com.kinara.music.account.BiliSession
 import com.kinara.music.data.*
 import com.kinara.music.online.*
 import kotlinx.coroutines.runBlocking
@@ -47,8 +46,11 @@ internal fun resolvedAudioCandidates(result: ResolvedUrl): List<String> {
 }
 
 private val audioHttpClient by lazy {
-    mediaHttpClient({ runCatching { it in audioCandidates(it) }.getOrDefault(false) }, BiliApi::playbackHeaders)
+    mediaHttpClient({ runCatching { it in audioCandidates(it) }.getOrDefault(false) }, ::audioRequestHeaders)
 }
+
+internal fun audioRequestHeaders(url: String): Map<String, String> =
+    BiliApi.playbackHeaders(url) + BiliWorkerClient.headers(url)
 
 fun interface AudioUrlAccess { suspend fun resolve(track: Track): List<String> }
 
@@ -63,7 +65,7 @@ class AudioResolver(private val context: Context) : AudioUrlAccess {
 
     private fun cacheId(track: Track, settings: KinaraSettings): String {
         val key = requireNotNull(track.onlineKey)
-        return "${key.platform}:${key.id}:${key.bitrate}:${settings.sources.hashCode()}:${settings.solaraBaseUrl}:${settings.solaraSecret.hashCode()}:${BiliSession.revision}"
+        return "${key.platform}:${key.id}:${key.bitrate}:${settings.sources.hashCode()}:${settings.solaraBaseUrl}:${settings.solaraSecret.hashCode()}"
     }
 
     fun prime(track: Track, result: ResolvedUrl): Boolean {
@@ -72,11 +74,11 @@ class AudioResolver(private val context: Context) : AudioUrlAccess {
         return true
     }
 
-    suspend fun next(original: Track, failed: Track): Track? {
+    suspend fun next(original: Track, failed: Track, attempts: PlaybackAttempts): Track? {
         if (!NetworkState.isOnline(context)) return null
         var cursor = failed
         while (true) {
-            val (result, track) = playback.resolveNextForPlay(original, cursor, prefs.settings()) ?: return null
+            val (result, track) = playback.resolveNextForPlay(original, cursor, prefs.settings(), attempts) ?: return null
             if (prime(track, result)) return track
             cursor = track
         }
@@ -117,7 +119,7 @@ class ResolvedAudioSource(private val context: Context, private val resolver: Au
             listeners.forEach(source::addTransferListener)
             delegate = source
             try {
-                return source.open(spec.withUri(Uri.parse(candidate)).withRequestHeaders(BiliApi.playbackHeaders(candidate)))
+                return source.open(spec.withUri(Uri.parse(candidate)).withRequestHeaders(audioRequestHeaders(candidate)))
             } catch (e: IOException) { failure = e; runCatching { source.close() }; delegate = null }
         }
         throw IOException(if (track?.onlineKey?.platform == "bilibili") "B站音频连接失败，当前 CDN 地址不可用" else "音频连接失败", failure)

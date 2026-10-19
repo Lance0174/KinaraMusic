@@ -4,6 +4,12 @@ package com.kinara.music.online
 import com.kinara.music.data.*
 import kotlinx.coroutines.*
 
+/** Owned by one selection, retained across failed streams, discarded on manual selection/retry. */
+class PlaybackAttempts {
+    internal val tried = mutableSetOf<OnlineKey>()
+    internal val candidates = mutableMapOf<String, List<OnlineTrack>>()
+}
+
 class OnlinePlayback(private val repo: PlaybackAccess) {
     suspend fun resolveForPlay(track: Track, settings: KinaraSettings): Pair<ResolvedUrl, Track> {
         val key = track.onlineKey ?: return ResolvedUrl(ResolveStage.NOT_CONFIGURED, errorMessage = "非在线曲目") to track
@@ -11,20 +17,32 @@ class OnlinePlayback(private val repo: PlaybackAccess) {
     }
 
     /** Called after a failed stream is closed; never splice another recording into a byte range. */
-    suspend fun resolveNextForPlay(original: Track, failed: Track, settings: KinaraSettings): Pair<ResolvedUrl, Track>? {
+    suspend fun resolveNextForPlay(original: Track, failed: Track, settings: KinaraSettings,
+        attempts: PlaybackAttempts): Pair<ResolvedUrl, Track>? {
         val key = failed.onlineKey ?: return null
+        original.onlineKey?.let { attempts.tried += it }
+        attempts.tried += key
         // Different B站 qualities may use different CDNs. Restart with a separate cache key.
         if (key.platform == "bilibili" && key.bitrate != "128" && settings.sources.bilibili) {
             val lower = failed.copy(onlineKey = key.copy(bitrate = "128"))
-            val result = resolve(lower.onlineKey!!, settings)
-            if (result.stage == ResolveStage.OK) return result to lower
+            if (attempts.tried.add(lower.onlineKey!!)) {
+                val result = resolve(lower.onlineKey, settings)
+                if (result.stage == ResolveStage.OK) return result to lower
+            }
         }
-        for (platform in fallbackPlatforms(key.platform, settings.sources)) {
+        for (platform in fallbackPlatforms(original.onlineKey?.platform ?: key.platform, settings.sources)) {
             val next = try { withTimeoutOrNull(12_000) {
-                val found = repo.searchSource(platform, "${original.title} ${original.artist}", settings)
-                for (candidate in found.tracks.filter { sameRecording(original, it) }.distinctBy { it.id }.take(3)) {
+                val found = attempts.candidates[platform] ?: run {
+                    // Mark before I/O, so timeouts cannot restart the same search after another stream fails.
+                    attempts.candidates[platform] = emptyList()
+                    repo.searchSource(platform, "${original.title} ${original.artist}", settings).tracks
+                        .filter { it.platform == platform && sameRecording(original, it) }.distinctBy { it.id }.take(3)
+                        .also { attempts.candidates[platform] = it }
+                }
+                for (candidate in found) {
                     val track = candidate.toTrack(original.onlineKey?.bitrate ?: settings.preferredBitrate)
-                    val result = resolve(track.onlineKey!!, settings)
+                    if (!attempts.tried.add(track.onlineKey!!)) continue
+                    val result = resolve(track.onlineKey, settings)
                     if (result.stage == ResolveStage.OK) return@withTimeoutOrNull result to track
                 }
                 null
