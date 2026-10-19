@@ -16,7 +16,7 @@ const result = await build({
 await copyFile('src/index.html', `${out}/index.html`);
 await copyFile('vendor/folia/LICENSE', `${out}/FOLIA-LICENSE.txt`);
 await copyFile('../licenses/GPL-3.0.txt', `${out}/KINARA-LICENSE.txt`);
-await writeFile(`${out}/NOTICE.txt`, 'Folia Lumiere © 2026 chthollyphile — AGPL-3.0.\nhttps://github.com/chthollyphile/folia-major\nKinara Android integration © 2026 Kinara contributors.\nCorresponding renderer source and build scripts: visualizer/ in the Kinara source archive.\n');
+await writeFile(`${out}/NOTICE.txt`, 'Folia Lumiere, Sonnet and Tempera © 2026 chthollyphile — AGPL-3.0.\nhttps://github.com/chthollyphile/folia-major\nKinara Android integration © 2026 Kinara contributors.\nCorresponding source, original hashes, local adaptations and build scripts: visualizer/ in the Kinara source archive.\nhttps://github.com/Lance0174/KinaraMusic\n');
 const packages = new Set(Object.keys(result.metafile.inputs).filter(p => p.startsWith('node_modules/')).map(p => {
   const parts = p.split('/'); return parts.slice(0, parts[1].startsWith('@') ? 3 : 2).join('/');
 }));

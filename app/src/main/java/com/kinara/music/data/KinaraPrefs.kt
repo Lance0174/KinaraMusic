@@ -39,6 +39,7 @@ data class KinaraSettings(
     val playerVisualMode: PlayerVisualMode = PlayerVisualMode.COVER,
     val lyricRenderer: LyricRenderer = LyricRenderer.GLOW,
     val lumiereQuality: LumiereQuality = LumiereQuality.BALANCED,
+    val lyricVisualStyle: LyricVisualStyle = LyricVisualStyle.AUTO,
     val showTranslation: Boolean = true,
     val showRomanization: Boolean = false,
     val reduceLyricMotion: Boolean = false,
@@ -48,7 +49,13 @@ data class KinaraSettings(
 )
 
 enum class PlayerVisualMode(val label: String) { COVER("封面"), LYRICS("歌词") }
-enum class LyricRenderer(val label: String) { CLASSIC("经典"), GLOW("逐字辉光"), FOLIA_LUMIERE("Folia 流光") }
+enum class LyricRenderer(val label: String) { CLASSIC("经典"), GLOW("逐字辉光"), FOLIA_LUMIERE("动态视界") }
+enum class LyricVisualStyle(val label: String, val wireName: String, val description: String) {
+    AUTO("随曲变化", "auto", "每首歌选择一种视觉编排，同一首歌保持一致"),
+    LUMIERE("流光", "lumiere", "光束、薄雾与粒子随音乐起伏，歌词在光场中浮现"),
+    SONNET("动态排字", "sonnet", "文字冲击、镜头追踪与海报排字，随歌词变换构图"),
+    TEMPERA("凝彩", "tempera", "色块拼贴、动态反色与分镜转场，逐句展开歌词影像"),
+}
 enum class LumiereQuality(val label: String, val wireName: String) {
     LOW("省电", "low"), BALANCED("均衡", "balanced"), FULL("精细", "full")
 }

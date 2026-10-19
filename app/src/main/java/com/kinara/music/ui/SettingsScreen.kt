@@ -22,6 +22,7 @@ import com.kinara.music.account.BiliSession
 import com.kinara.music.data.KinaraSettings
 import com.kinara.music.data.LyricRenderer
 import com.kinara.music.data.LumiereQuality
+import com.kinara.music.data.LyricVisualStyle
 import com.kinara.music.ui.theme.*
 import androidx.compose.ui.platform.LocalContext
 import com.kinara.music.player.AudioCache
@@ -100,7 +101,7 @@ fun SettingsScreen(settings: KinaraSettings, onTheme: (KinaraThemeKind) -> Unit,
                         Text(when (renderer) {
                             LyricRenderer.CLASSIC -> "清晰简洁，逐行跟随"
                             LyricRenderer.GLOW -> "逐字点亮，柔和平滑滚动"
-                            LyricRenderer.FOLIA_LUMIERE -> "体积光与雾，文字在光场中流动"
+                            LyricRenderer.FOLIA_LUMIERE -> "让歌词成为影像，体验多种动态编排"
                         }, fontSize = 12.sp, color = c.textDim)
                     }
                 }
@@ -108,7 +109,20 @@ fun SettingsScreen(settings: KinaraSettings, onTheme: (KinaraThemeKind) -> Unit,
             Text("在播放页左右滑动，或轻点底部切换封面与歌词", color = c.textDim, fontSize = 12.sp)
             if (settings.lyricRenderer == LyricRenderer.FOLIA_LUMIERE) {
                 Spacer(Modifier.height(12.dp))
-                Text("流光画质", color = c.text)
+                Text("视觉编排", color = c.text, fontWeight = FontWeight.SemiBold)
+                LyricVisualStyle.entries.forEach { style ->
+                    Row(Modifier.fillMaxWidth().selectable(settings.lyricVisualStyle == style, role = Role.RadioButton,
+                        onClick = { onPreferences { it.copy(lyricVisualStyle = style) } }).heightIn(min = 64.dp),
+                        verticalAlignment = Alignment.CenterVertically) {
+                        RadioButton(settings.lyricVisualStyle == style, onClick = null)
+                        Column(Modifier.padding(start = 8.dp)) {
+                            Text(style.label, color = c.text)
+                            Text(style.description, color = c.textDim, fontSize = 12.sp)
+                        }
+                    }
+                }
+                Spacer(Modifier.height(12.dp))
+                Text("动态画质", color = c.text)
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     LumiereQuality.entries.forEach { quality ->
                         ChoiceChip(quality.label, settings.lumiereQuality == quality,
@@ -119,7 +133,7 @@ fun SettingsScreen(settings: KinaraSettings, onTheme: (KinaraThemeKind) -> Unit,
             HorizontalDivider(Modifier.padding(vertical = 12.dp), color = c.textDim.copy(alpha = 0.12f))
             SourceRow("translation", "显示译文", settings.showTranslation, { _, value -> onPreferences { it.copy(showTranslation = value) } })
             SourceRow("romanization", "显示罗马音", settings.showRomanization, { _, value -> onPreferences { it.copy(showRomanization = value) } })
-            SourceRow("motion", "减少歌词动效", settings.reduceLyricMotion, { _, value -> onPreferences { it.copy(reduceLyricMotion = value) } }, "保留歌词高亮；流光改用静态歌词，关闭扫光与缩放")
+            SourceRow("motion", "减少歌词动效", settings.reduceLyricMotion, { _, value -> onPreferences { it.copy(reduceLyricMotion = value) } }, "保留歌词高亮；动态视界改用静态歌词，关闭扫光与缩放")
             SourceRow("info", "联网更新歌曲信息", settings.autoTrackInfo, { _, value -> onPreferences { it.copy(autoTrackInfo = value) } }, "自动补全专辑封面；本地歌曲仅在信息明确匹配时更新，不修改音频文件")
             Text("全局歌词时间 · ${if (settings.lyricDelayMs > 0) "+" else ""}${settings.lyricDelayMs} ms", color = c.text)
             Text("单首歌不准时，请在播放页菜单中选择「歌词校准」", color = c.textDim, fontSize = 12.sp)
@@ -129,10 +143,11 @@ fun SettingsScreen(settings: KinaraSettings, onTheme: (KinaraThemeKind) -> Unit,
                 TextButton({ onPreferences { it.copy(lyricDelayMs = (it.lyricDelayMs + 100).coerceAtMost(10_000)) } }) { Text("延后 0.1 秒") }
             }
         }
+        SettingsSection("应用更新") { AppUpdatePanel() }
         Column(Modifier.fillMaxWidth().padding(bottom = 8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Text("Kinara", color = c.text, fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
             Text("版本 ${BuildConfig.VERSION_NAME}", color = c.textDim, fontSize = 12.sp, modifier = Modifier.padding(top = 4.dp))
-            TextButton({ licenses = true }) { Text("开源许可 · Kinara / Folia") }
+            TextButton({ licenses = true }) { Text("开源许可") }
         }
     }
     if (licenses) {
@@ -143,7 +158,7 @@ fun SettingsScreen(settings: KinaraSettings, onTheme: (KinaraThemeKind) -> Unit,
             Column {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                     TextButton({ file = "KINARA-LICENSE.txt" }) { Text("Kinara") }
-                    TextButton({ file = "FOLIA-LICENSE.txt" }) { Text("Folia") }
+                    TextButton({ file = "FOLIA-LICENSE.txt" }) { Text("渲染组件") }
                     TextButton({ file = "THIRD-PARTY.txt" }) { Text("第三方") }
                 }
                 Text(notice, fontSize = 12.sp, modifier = Modifier.heightIn(max = 340.dp).verticalScroll(rememberScrollState()))

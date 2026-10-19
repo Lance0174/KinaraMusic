@@ -98,3 +98,53 @@ test('line-only lyrics, empty lyrics and context loss have explicit behavior', a
   expect(await page.evaluate(() => window.KinaraFolia.status)).toBe('failed');
   await expect(page.locator('canvas')).toHaveCount(0);
 });
+
+for (const visualStyle of ['sonnet', 'tempera']) {
+  test(`${visualStyle}: distinct choreography, pause, seek, line-only lyrics and mode disposal`, async ({page}) => {
+    const errors = [], external = [];
+    page.on('pageerror', error => errors.push(error.message));
+    page.on('request', request => { if (!request.url().startsWith(base)) external.push(request.url()); });
+    await page.goto(base);
+    await page.evaluate(song => window.KinaraFolia.setSong(song), {...fixture, visualStyle});
+    expect(await page.evaluate(() => [window.KinaraFolia.status, window.KinaraFolia.mode, window.KinaraFolia.failure]))
+      .toEqual(['ready', visualStyle, '']);
+    await tick(page, 1400);
+    const early = await page.screenshot({path: `${shots}/${visualStyle}-early.png`});
+    await tick(page, 6100);
+    const late = await page.screenshot({path: `${shots}/${visualStyle}-late.png`});
+    expect(early.equals(late)).toBe(false);
+    await page.waitForTimeout(150);
+    expect(late.equals(await page.screenshot())).toBe(true);
+    await page.evaluate(song => window.KinaraFolia.setSong(song), {...fixture, visualStyle, quality: 'low', lines: fixture.lines.map(line => ({...line,words:[]}))});
+    await tick(page, 18100);
+    expect(await page.evaluate(() => window.KinaraFolia.status)).toBe('ready');
+    await page.screenshot({path: `${shots}/${visualStyle}-lrc.png`});
+    await page.evaluate(song => window.KinaraFolia.setSong(song), {...fixture, visualStyle, quality: 'full'});
+    await tick(page, 19100);
+    expect(await page.evaluate(() => window.KinaraFolia.status)).toBe('ready');
+    await page.screenshot({path: `${shots}/${visualStyle}-full.png`});
+    await page.evaluate(song => window.KinaraFolia.setSong(song), {...fixture, visualStyle, identity:'instrumental', lines:[]});
+    await tick(page, 15000);
+    expect(await page.evaluate(() => window.KinaraFolia.status)).toBe('ready');
+    await page.evaluate(song => window.KinaraFolia.setSong(song), {...fixture, visualStyle: 'lumiere'});
+    await expect(page.locator('canvas')).toHaveCount(1);
+    expect(errors).toEqual([]); expect(external).toEqual([]);
+    await page.evaluate(() => window.KinaraFolia.destroy());
+    await expect(page.locator('canvas')).toHaveCount(0);
+  });
+}
+
+test('rapid style changes keep only the latest renderer and dispose during initialization', async ({page}) => {
+  await page.goto(base);
+  await page.evaluate(async song => {
+    await Promise.all(['sonnet', 'tempera', 'lumiere', 'tempera'].map(visualStyle => window.KinaraFolia.setSong({...song, visualStyle})));
+  }, fixture);
+  expect(await page.evaluate(() => [window.KinaraFolia.status, window.KinaraFolia.mode])).toEqual(['ready', 'tempera']);
+  await expect(page.locator('canvas')).toHaveCount(1);
+  await page.evaluate(async song => {
+    const pending = window.KinaraFolia.setSong({...song, visualStyle:'sonnet'});
+    await Promise.resolve(); // Let the queue begin creating the next WebGL runtime.
+    window.KinaraFolia.destroy(); await pending;
+  }, fixture);
+  await expect(page.locator('canvas')).toHaveCount(0);
+});

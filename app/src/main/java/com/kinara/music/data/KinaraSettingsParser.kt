@@ -49,6 +49,7 @@ fun parseSettings(snapshot: PrefsSnapshot): KinaraSettings {
         lyricRenderer = LyricRenderer.entries.firstOrNull { it.name == str("lyric_renderer", "") }
             ?: if (str("player_visual_mode", "COVER") == "LYRICS") LyricRenderer.CLASSIC else LyricRenderer.GLOW,
         lumiereQuality = LumiereQuality.entries.firstOrNull { it.name == str("lumiere_quality", "BALANCED") } ?: LumiereQuality.BALANCED,
+        lyricVisualStyle = LyricVisualStyle.entries.firstOrNull { it.name == str("lyric_visual_style", "AUTO") } ?: LyricVisualStyle.AUTO,
         showTranslation = bool("show_translation", true),
         showRomanization = bool("show_romanization", false),
         reduceLyricMotion = bool("reduce_lyric_motion", false),
@@ -76,6 +77,7 @@ fun KinaraSettings.toPrefsMap(): Map<String, Any> = buildMap {
     put("player_visual_mode", playerVisualMode.name)
     put("lyric_renderer", lyricRenderer.name)
     put("lumiere_quality", lumiereQuality.name)
+    put("lyric_visual_style", lyricVisualStyle.name)
     put("show_translation", showTranslation)
     put("show_romanization", showRomanization)
     put("reduce_lyric_motion", reduceLyricMotion)

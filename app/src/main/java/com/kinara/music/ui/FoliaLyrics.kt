@@ -69,6 +69,7 @@ internal fun foliaSongJson(lyrics: List<LyricLine>, player: PlayerUiState, setti
     return JSONObject().put("identity", com.kinara.music.data.lyricIdentity(track).orEmpty())
         .put("title", track?.title.orEmpty()).put("artist", track?.artist.orEmpty()).put("album", track?.album.orEmpty())
         .put("durationMs", duration).put("quality", settings.lumiereQuality.wireName)
+        .put("visualStyle", settings.lyricVisualStyle.wireName)
         .put("industrial", settings.theme == KinaraThemeKind.INDUSTRIAL).put("reduceMotion", settings.reduceLyricMotion)
         .put("lines", JSONArray().apply { lyrics.forEachIndexed { index, line ->
             val end = line.endMs ?: lyrics.getOrNull(index + 1)?.timeMs ?: duration.takeIf { it > line.timeMs } ?: (line.timeMs + 5000)
@@ -99,7 +100,7 @@ internal fun FoliaLyrics(lyrics: List<LyricLine>, player: PlayerUiState, setting
     var failed by remember { mutableStateOf(false) }
     var web by remember { mutableStateOf<WebView?>(null) }
     val config = remember(settings, systemMotion) { settings.copy(reduceLyricMotion = settings.reduceLyricMotion || !systemMotion) }
-    val song = remember(lyrics, player.actualTrack, player.current, player.durationMs, config.lyricRenderer, config.lumiereQuality, config.theme, config.reduceLyricMotion) {
+    val song = remember(lyrics, player.actualTrack, player.current, player.durationMs, config.lyricRenderer, config.lumiereQuality, config.lyricVisualStyle, config.theme, config.reduceLyricMotion) {
         foliaSongJson(lyrics, player, config)
     }
     LaunchedEffect(web, loaded, song) {
@@ -166,7 +167,7 @@ internal fun FoliaLyrics(lyrics: List<LyricLine>, player: PlayerUiState, setting
     Box(Modifier.fillMaxSize().testTag("folia_lyrics").then(if (!failed) Modifier.background(androidx.compose.ui.graphics.Color(0xff070b12)) else Modifier)) {
         if (failed) {
             DynamicLyrics(lyrics, player, settings, onSeek)
-            Text("流光暂不可用，已使用逐字辉光", color = com.kinara.music.ui.theme.LocalKinaraTheme.current.colors.textDim, fontSize = 12.sp,
+            Text("动态视界暂不可用，已使用逐字辉光", color = com.kinara.music.ui.theme.LocalKinaraTheme.current.colors.textDim, fontSize = 12.sp,
                 modifier = Modifier.align(Alignment.TopCenter).padding(12.dp))
         } else {
             AndroidView(modifier = Modifier.fillMaxSize(), factory = {
@@ -189,12 +190,12 @@ internal fun FoliaLyrics(lyrics: List<LyricLine>, player: PlayerUiState, setting
             })
             val line = lyrics.getOrNull(active)
             // Compose handles taps/swipes above the canvas, so WebView cannot swallow pager gestures.
-            Box(Modifier.fillMaxSize().semantics { contentDescription = line?.text ?: "Folia 流光" }
+            Box(Modifier.fillMaxSize().semantics { contentDescription = line?.text ?: "Kinara 动态视界" }
                 .pointerInput(line, settings.lyricDelayMs) { detectTapGestures { line?.let { onSeek(LyricTiming.seek(it, settings.lyricDelayMs)) } } })
             Column(Modifier.align(Alignment.BottomCenter).padding(horizontal = 24.dp, vertical = 10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally) {
-                if (!ready) Text("流光正在展开…", color = androidx.compose.ui.graphics.Color(0xffded7ca), fontSize = 13.sp)
-                else if (lyrics.isEmpty()) Text("暂时没有歌词 · 聆听流光", color = androidx.compose.ui.graphics.Color(0xffded7ca), fontSize = 13.sp)
+                if (!ready) Text("动态视界正在展开…", color = androidx.compose.ui.graphics.Color(0xffded7ca), fontSize = 13.sp)
+                else if (lyrics.isEmpty()) Text("暂时没有歌词 · 继续聆听", color = androidx.compose.ui.graphics.Color(0xffded7ca), fontSize = 13.sp)
                 if (settings.showTranslation) line?.translation?.let { Text(it, color = androidx.compose.ui.graphics.Color(0xffded7ca), fontSize = 13.sp, textAlign = TextAlign.Center) }
                 if (settings.showRomanization) line?.romanization?.let { Text(it, color = androidx.compose.ui.graphics.Color(0xffb0b5bf), fontSize = 12.sp, textAlign = TextAlign.Center) }
             }

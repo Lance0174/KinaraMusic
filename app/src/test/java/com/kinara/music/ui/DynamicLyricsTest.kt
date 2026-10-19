@@ -51,18 +51,26 @@ class DynamicLyricsTest {
         assertEquals(0, seeks); assertEquals(0, plays)
     }
 
-    @Test fun foliaIsSelectedInSettingsAndItsQualityIsRemembered() {
+    @Test fun visualDirectorsAndQualityAreSelectedInSettingsAndRemembered() {
         var settings by mutableStateOf(KinaraSettings())
         compose.setContent { KinaraTheme(KinaraThemeKind.DEFAULT, KinaraDarkMode.LIGHT) {
             SettingsScreen(settings, {}, {}, { _, _ -> }, onPreferences = { settings = it(settings) })
         } }
-        compose.onNodeWithText("Folia 流光").performScrollTo().performClick()
+        compose.onNodeWithText("动态视界").performScrollTo().performClick()
         assertEquals(LyricRenderer.FOLIA_LUMIERE, settings.lyricRenderer)
+        compose.onNodeWithText("动态排字").performScrollTo().performClick()
+        assertEquals(LyricVisualStyle.SONNET, settings.lyricVisualStyle)
+        compose.onNodeWithText("凝彩").performScrollTo().performClick()
+        assertEquals(LyricVisualStyle.TEMPERA, settings.lyricVisualStyle)
         compose.onNodeWithText("省电").performScrollTo().performClick()
         assertEquals(LumiereQuality.LOW, settings.lumiereQuality)
         assertEquals(settings, parseSettings { settings.toPrefsMap()[it] })
-        compose.onNodeWithText("Folia 流光").performScrollTo()
+        compose.onNodeWithText("视觉编排").performScrollTo()
         capture("folia-settings")
+        compose.onNodeWithText("应用更新").performScrollTo()
+        compose.onNodeWithText("检查更新").performScrollTo().assertIsDisplayed()
+        capture("update-settings")
+        compose.onNodeWithText("Folia 流光").assertDoesNotExist()
     }
 
     @Test fun calibrationUsesActualRecordingAndAppliesToLyricSeekImmediately() {

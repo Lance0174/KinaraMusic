@@ -10,8 +10,11 @@ class LyricPreferencesTest {
         assertEquals(LyricRenderer.GLOW, dynamic.lyricRenderer)
         val classic = parseSettings { if (it == "player_visual_mode") "LYRICS" else null }
         assertEquals(LyricRenderer.CLASSIC, classic.lyricRenderer)
-        val selected = dynamic.copy(lyricRenderer = LyricRenderer.FOLIA_LUMIERE, lumiereQuality = LumiereQuality.LOW)
-        assertEquals(selected, parseSettings { selected.toPrefsMap()[it] })
+        LyricVisualStyle.entries.forEach { style ->
+            val selected = dynamic.copy(lyricRenderer = LyricRenderer.FOLIA_LUMIERE, lumiereQuality = LumiereQuality.LOW, lyricVisualStyle = style)
+            assertEquals(selected, parseSettings { selected.toPrefsMap()[it] })
+        }
+        assertEquals(LyricVisualStyle.AUTO, parseSettings { if (it == "lyric_visual_style") "unknown" else null }.lyricVisualStyle)
         assertEquals(2, PlayerVisualMode.entries.size)
     }
     @Test fun calibrationIsPerRecordingAndRoundTripsWithPunctuation() {

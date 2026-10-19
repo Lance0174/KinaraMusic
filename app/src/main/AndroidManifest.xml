@@ -2,10 +2,10 @@
 <!-- Kinara — Android music client. Copyright (C) 2026 Kinara contributors. GPL-3.0 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- 联网仅用于：在线音源搜索/取流/歌词、封面与歌单导入。
-         本地功能不依赖网络；全部音源开关关闭后应用不发起任何请求。 -->
+    <!-- 联网用于音乐服务，以及用户主动检查和下载应用更新。本地播放不依赖网络。 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <!-- 本地曲库读取：Android 13+ 用 READ_MEDIA_AUDIO；旧版本回落 READ_EXTERNAL_STORAGE -->
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
@@ -30,6 +30,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Kinara"
         android:networkSecurityConfig="@xml/network_security_config">
+
+        <provider android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.updates" android:exported="false" android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/update_paths" />
+        </provider>
 
         <activity
             android:name=".MainActivity"

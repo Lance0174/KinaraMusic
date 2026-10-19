@@ -54,5 +54,6 @@ jobs:
             app/build/reports/lint-results-debug.*
             app/build/reports/performance/
             app/build/reports/v110-screens/
+            app/build/reports/v121-screens/
             app/build/folia-screens/
             visualizer/test-results/

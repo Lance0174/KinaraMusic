@@ -89,7 +89,8 @@ export const buildLineGraphemeTimeline = (line: Line): GraphemeTiming[] => {
     }
 
     if (line.words.length === 0) {
-        return buildEvenGraphemeTimings(line.fullText, line.startTime, line.endTime);
+        // Kinara: ordinary LRC has no word clock; reveal the entire line together.
+        return lineGraphemes.map(char => ({ char, startTime: line.startTime, endTime: line.startTime }));
     }
 
     const timeline: GraphemeTiming[] = [];

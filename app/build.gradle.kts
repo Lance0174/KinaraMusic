@@ -56,8 +56,11 @@ android {
         applicationId = "com.kinara.music"
         minSdk = 24
         targetSdk = 34
-        versionCode = 9
-        versionName = "1.3.1"
+        versionCode = 10
+        versionName = "1.4.0"
+        val updateRepository = providers.gradleProperty("kinaraUpdateRepository").getOrElse("Lance0174/KinaraMusic")
+        require(Regex("[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+").matches(updateRepository)) { "Invalid update repository" }
+        buildConfigField("String", "UPDATE_REPOSITORY", buildConfigString(updateRepository))
         // Release artifacts may carry locally supplied Solara settings; the public source defaults to empty.
         buildConfigField("String", "SOLARA_BASE_URL", buildConfigString(solaraBuildUrl))
         buildConfigField("String", "SOLARA_SECRET", buildConfigString(solaraBuildSecret))
