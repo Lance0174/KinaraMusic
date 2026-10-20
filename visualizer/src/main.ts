@@ -1,4 +1,5 @@
 /* Kinara integration — AGPL-3.0. Folia renderer retains its upstream copyright/license. */
+import './compat.mjs';
 import { createRenderer, type Renderer } from './renderers';
 import { resolveVisualStyle } from './styles.mjs';
 import { AudioClock } from './clock.mjs';

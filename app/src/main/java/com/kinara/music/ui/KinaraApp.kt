@@ -151,7 +151,10 @@ fun KinaraApp(vm: MainViewModel, playerVm: PlayerViewModel,
                     }
                     KinaraNav.SETTINGS -> SettingsScreen(settings, vm::setTheme, { vm.setDarkMode(KinaraDarkMode.valueOf(it)) }, vm::setSource,
                         vm::setBitrate, vm::setCacheLimit, { showDiagnostics = true },
-                        onPreferences = vm::update)
+                        onPreferences = vm::update, onPreviewLyrics = if (player.current == null) null else ({
+                            vm.update { it.copy(playerVisualMode = com.kinara.music.data.PlayerVisualMode.LYRICS) }
+                            showPlayer = true
+                        }))
                 }
             }
         }

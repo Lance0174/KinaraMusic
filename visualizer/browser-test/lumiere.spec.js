@@ -148,3 +148,39 @@ test('rapid style changes keep only the latest renderer and dispose during initi
   }, fixture);
   await expect(page.locator('canvas')).toHaveCount(0);
 });
+
+test('reduced motion keeps each selected director, follows lyrics and recovers after context loss', async ({page}) => {
+  await page.goto(base);
+  const frames = [];
+  for (const visualStyle of ['lumiere', 'sonnet', 'tempera']) {
+    await page.evaluate(song => window.KinaraFolia.setSong(song), {...fixture, visualStyle, reduceMotion: true});
+    expect(await page.evaluate(() => [window.KinaraFolia.status, window.KinaraFolia.mode]))
+      .toEqual(['ready', visualStyle]);
+    await tick(page, 6100);
+    const first = await page.screenshot({path: `${shots}/${visualStyle}-reduced.png`});
+    await page.waitForTimeout(150);
+    expect(first.equals(await page.screenshot())).toBe(true);
+    await tick(page, 18100);
+    expect(first.equals(await page.screenshot())).toBe(false);
+    frames.push(first);
+  }
+  expect(frames[0].equals(frames[1])).toBe(false);
+  expect(frames[1].equals(frames[2])).toBe(false);
+  await page.evaluate(() => document.querySelector('canvas').dispatchEvent(new Event('webglcontextlost', {bubbles:true,cancelable:true})));
+  expect(await page.evaluate(() => window.KinaraFolia.status)).toBe('failed');
+  await page.evaluate(song => window.KinaraFolia.setSong(song), {...fixture, visualStyle: 'sonnet'});
+  expect(await page.evaluate(() => [window.KinaraFolia.status, window.KinaraFolia.mode])).toEqual(['ready', 'sonnet']);
+  await expect(page.locator('canvas')).toHaveCount(1);
+});
+
+test('older Android WebView without Array.at can initialize all three directors', async ({page}) => {
+  await page.addInitScript(() => { delete Array.prototype.at; });
+  await page.goto(base);
+  for (const visualStyle of ['lumiere', 'sonnet', 'tempera']) {
+    await page.evaluate(song => window.KinaraFolia.setSong(song), {...fixture, visualStyle});
+    expect(await page.evaluate(() => [window.KinaraFolia.status, window.KinaraFolia.mode, window.KinaraFolia.failure]))
+      .toEqual(['ready', visualStyle, '']);
+    await tick(page, 6100);
+    await expect(page.locator('canvas')).toHaveCount(1);
+  }
+});

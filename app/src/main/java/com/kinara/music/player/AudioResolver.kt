@@ -45,8 +45,10 @@ internal fun resolvedAudioCandidates(result: ResolvedUrl): List<String> {
     }).distinct()
 }
 
-private val audioHttpClient by lazy {
+internal val audioHttpClient by lazy {
     mediaHttpClient({ runCatching { it in audioCandidates(it) }.getOrDefault(false) }, ::audioRequestHeaders)
+        .newBuilder().connectTimeout(2500, java.util.concurrent.TimeUnit.MILLISECONDS)
+        .readTimeout(4, java.util.concurrent.TimeUnit.SECONDS).retryOnConnectionFailure(false).build()
 }
 
 internal fun audioRequestHeaders(url: String): Map<String, String> =
@@ -60,7 +62,7 @@ class AudioResolver(private val context: Context) : AudioUrlAccess {
         override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, Entry>?) = size > 64
     }
     private val prefs = KinaraPrefs.get(context)
-    private val playback = OnlinePlayback(OnlineRepository { prefs.settings().sources })
+    private val playback = OnlinePlayback(OnlineRepository { prefs.settings().sources }, ::verifiedAudio)
     fun invalidate() = synchronized(urls) { urls.clear() }
 
     private fun cacheId(track: Track, settings: KinaraSettings): String {
@@ -87,13 +89,14 @@ class AudioResolver(private val context: Context) : AudioUrlAccess {
     override suspend fun resolve(track: Track): List<String> {
         val key = track.onlineKey ?: throw IOException("缺少在线曲目标识")
         val settings = prefs.settings().copy(preferredBitrate = key.bitrate)
-        if (!settings.sources.isEnabled(key.platform)) throw IOException("该音源已关闭")
-        if (!NetworkState.isOnline(context)) throw IOException("未缓存部分需要联网")
+        if (!settings.sources.isEnabled(key.platform)) throw AudioResolutionException("该音源已关闭")
+        if (!NetworkState.isOnline(context)) throw AudioResolutionException("未缓存部分需要联网")
         val id = cacheId(track, settings)
         val now = android.os.SystemClock.elapsedRealtime()
         synchronized(urls) { urls[id] }?.takeIf { now - it.at in 0 until 120_000 }?.let { return it.urls }
         val result = playback.resolveForPlay(track, settings).first
-        val choices = resolvedAudioCandidates(result)
+        val checked = if (result.stage == ResolveStage.OK) verifiedAudio(result) else null
+        val choices = resolvedAudioCandidates(checked ?: throw AudioResolutionException("该来源暂不可用"))
         synchronized(urls) { urls[id] = Entry(now, choices) }
         return choices
     }

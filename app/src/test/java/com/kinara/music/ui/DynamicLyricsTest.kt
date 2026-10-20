@@ -73,6 +73,45 @@ class DynamicLyricsTest {
         compose.onNodeWithText("Folia 流光").assertDoesNotExist()
     }
 
+    @Test fun savedSettingsOpenTheSelectedDirectorEvenWithReducedMotionAndCanRetryFailure() {
+        val prefs = KinaraPrefs.get(compose.activity)
+        prefs.save(KinaraSettings(reduceLyricMotion = true))
+        val vm = com.kinara.music.MainViewModel(compose.activity.application)
+        var preview by mutableStateOf(false)
+        compose.setContent {
+            val settings by vm.settings.collectAsState()
+            KinaraTheme(KinaraThemeKind.DEFAULT, KinaraDarkMode.DARK) {
+                if (preview) PlayScreen(player, lyrics, {}, {}, {}, {}, settings = settings,
+                    onVisualMode = { mode -> vm.update { it.copy(playerVisualMode = mode) } })
+                else SettingsScreen(settings, {}, {}, { _, _ -> }, onPreferences = vm::update,
+                    onPreviewLyrics = { preview = true })
+            }
+        }
+        compose.onNodeWithText("动态视界").performScrollTo().performClick()
+        compose.onNodeWithText("动态排字").performScrollTo().performClick()
+        compose.onNodeWithText("查看当前歌曲效果").performScrollTo().performClick()
+        compose.onNodeWithTag("folia_lyrics").assertIsDisplayed()
+        compose.onNodeWithTag("dynamic_lyrics").assertDoesNotExist()
+        assertEquals(PlayerVisualMode.LYRICS, prefs.settings().playerVisualMode)
+        assertEquals(LyricVisualStyle.SONNET, prefs.settings().lyricVisualStyle)
+        fun web(view: android.view.View = compose.activity.window.decorView): android.webkit.WebView? {
+            if (view is android.webkit.WebView) return view
+            if (view is android.view.ViewGroup) for (i in 0 until view.childCount) web(view.getChildAt(i))?.let { return it }
+            return null
+        }
+        lateinit var first: android.webkit.WebView
+        compose.runOnIdle {
+            first = web()!!
+            first.webViewClient.onRenderProcessGone(first, null)
+        }
+        compose.onNodeWithText("重新加载动态视界").performClick()
+        compose.onNodeWithTag("dynamic_lyrics").assertDoesNotExist()
+        compose.runOnIdle { assertNotSame(first, web()); vm.update { it.copy(lyricVisualStyle = LyricVisualStyle.TEMPERA) } }
+        compose.onNodeWithTag("folia_lyrics").assertIsDisplayed()
+        compose.onNodeWithTag("dynamic_lyrics").assertDoesNotExist()
+        assertEquals(LyricVisualStyle.TEMPERA, prefs.settings().lyricVisualStyle)
+    }
+
     @Test fun calibrationUsesActualRecordingAndAppliesToLyricSeekImmediately() {
         val actual = track.copy(mediaId = "other", onlineKey = OnlineKey("qq", "other"), source = "qq")
         var settings by mutableStateOf(KinaraSettings(playerVisualMode = PlayerVisualMode.LYRICS, reduceLyricMotion = true))

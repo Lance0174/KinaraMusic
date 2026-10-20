@@ -94,11 +94,6 @@ class PlaybackInfrastructureTest {
             assertEquals(before + 1, calls)
         } finally { cache.release() }
     }
-    @Test fun retryIsBoundedAndCannotRetryAnotherSelection() {
-        val gate = PlaybackRetryGate()
-        gate.select("a"); assertTrue(gate.take("a")); assertFalse(gate.take("a"))
-        gate.select("b"); assertFalse(gate.take("a")); assertTrue(gate.take("b"))
-    }
     @Test fun audioFallbackIsHttpsFirstAndConfinedToAudioHosts() {
         assertEquals(listOf("https://m10.music.126.net/song", "http://m10.music.126.net/song"), audioCandidates("http://m10.music.126.net/song"))
         assertEquals(listOf("https://cn-test.bilivideo.com/audio.m4s"), audioCandidates("https://cn-test.bilivideo.com/audio.m4s"))

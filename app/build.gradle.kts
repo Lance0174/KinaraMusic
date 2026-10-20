@@ -57,8 +57,8 @@ android {
         applicationId = "com.kinara.music"
         minSdk = 24
         targetSdk = 34
-        versionCode = 11
-        versionName = "1.4.1"
+        versionCode = 12
+        versionName = "1.4.2"
         val updateRepository = providers.gradleProperty("kinaraUpdateRepository").getOrElse("Lance0174/KinaraMusic")
         require(Regex("[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+").matches(updateRepository)) { "Invalid update repository" }
         buildConfigField("String", "UPDATE_REPOSITORY", buildConfigString(updateRepository))

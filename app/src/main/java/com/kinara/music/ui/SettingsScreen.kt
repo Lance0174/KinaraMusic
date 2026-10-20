@@ -22,6 +22,7 @@ import com.kinara.music.data.KinaraSettings
 import com.kinara.music.data.LyricRenderer
 import com.kinara.music.data.LumiereQuality
 import com.kinara.music.data.LyricVisualStyle
+import com.kinara.music.data.PlayerVisualMode
 import com.kinara.music.ui.theme.*
 import androidx.compose.ui.platform.LocalContext
 import com.kinara.music.player.AudioCache
@@ -33,7 +34,7 @@ import kotlinx.coroutines.launch
 fun SettingsScreen(settings: KinaraSettings, onTheme: (KinaraThemeKind) -> Unit, onDark: (String) -> Unit,
     onSource: (String, Boolean) -> Unit, onBitrate: (String) -> Unit = {},
     onCacheLimit: (Int) -> Unit = {}, onDiagnostics: () -> Unit = {},
-    onPreferences: ((KinaraSettings) -> KinaraSettings) -> Unit = {}) {
+    onPreferences: ((KinaraSettings) -> KinaraSettings) -> Unit = {}, onPreviewLyrics: (() -> Unit)? = null) {
     val c = LocalKinaraTheme.current.colors
     var licenses by remember { mutableStateOf(false) }
     Column(Modifier.fillMaxSize().testTag("settings_scroll").verticalScroll(rememberScrollState()).padding(horizontal = 20.dp)
@@ -69,7 +70,7 @@ fun SettingsScreen(settings: KinaraSettings, onTheme: (KinaraThemeKind) -> Unit,
             Text("歌词视觉模式", fontWeight = FontWeight.SemiBold, color = c.text)
             LyricRenderer.entries.forEach { renderer ->
                 Row(Modifier.fillMaxWidth().selectable(settings.lyricRenderer == renderer, role = Role.RadioButton,
-                    onClick = { onPreferences { it.copy(lyricRenderer = renderer) } }).heightIn(min = 64.dp),
+                    onClick = { onPreferences { it.copy(lyricRenderer = renderer, playerVisualMode = PlayerVisualMode.LYRICS) } }).heightIn(min = 64.dp),
                     verticalAlignment = Alignment.CenterVertically) {
                     RadioButton(settings.lyricRenderer == renderer, onClick = null)
                     Column(Modifier.padding(start = 8.dp)) {
@@ -88,7 +89,7 @@ fun SettingsScreen(settings: KinaraSettings, onTheme: (KinaraThemeKind) -> Unit,
                 Text("视觉编排", color = c.text, fontWeight = FontWeight.SemiBold)
                 LyricVisualStyle.entries.forEach { style ->
                     Row(Modifier.fillMaxWidth().selectable(settings.lyricVisualStyle == style, role = Role.RadioButton,
-                        onClick = { onPreferences { it.copy(lyricVisualStyle = style) } }).heightIn(min = 64.dp),
+                        onClick = { onPreferences { it.copy(lyricVisualStyle = style, playerVisualMode = PlayerVisualMode.LYRICS) } }).heightIn(min = 64.dp),
                         verticalAlignment = Alignment.CenterVertically) {
                         RadioButton(settings.lyricVisualStyle == style, onClick = null)
                         Column(Modifier.padding(start = 8.dp)) {
@@ -106,10 +107,11 @@ fun SettingsScreen(settings: KinaraSettings, onTheme: (KinaraThemeKind) -> Unit,
                     }
                 }
             }
+            if (onPreviewLyrics != null) TextButton(onPreviewLyrics, Modifier.fillMaxWidth()) { Text("查看当前歌曲效果") }
             HorizontalDivider(Modifier.padding(vertical = 12.dp), color = c.textDim.copy(alpha = 0.12f))
             SourceRow("translation", "显示译文", settings.showTranslation, { _, value -> onPreferences { it.copy(showTranslation = value) } })
             SourceRow("romanization", "显示罗马音", settings.showRomanization, { _, value -> onPreferences { it.copy(showRomanization = value) } })
-            SourceRow("motion", "减少歌词动效", settings.reduceLyricMotion, { _, value -> onPreferences { it.copy(reduceLyricMotion = value) } }, "保留歌词高亮；动态视界改用静态歌词，关闭扫光与缩放")
+            SourceRow("motion", "减少歌词动效", settings.reduceLyricMotion, { _, value -> onPreferences { it.copy(reduceLyricMotion = value) } }, "保留所选视觉编排与歌词高亮，减少镜头运动和连续动画")
             SourceRow("info", "联网更新歌曲信息", settings.autoTrackInfo, { _, value -> onPreferences { it.copy(autoTrackInfo = value) } }, "自动补全专辑封面；本地歌曲仅在信息明确匹配时更新，不修改音频文件")
             Text("全局歌词时间 · ${if (settings.lyricDelayMs > 0) "+" else ""}${settings.lyricDelayMs} ms", color = c.text)
             Text("单首歌不准时，请在播放页菜单中选择「歌词校准」", color = c.textDim, fontSize = 12.sp)

@@ -3,8 +3,6 @@ package com.kinara.music.player
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.media3.common.*
 import androidx.media3.datasource.DataSource
 import androidx.media3.exoplayer.DefaultRenderersFactory
@@ -25,7 +23,6 @@ class PlaybackService : MediaSessionService() {
     private var mediaSession: MediaSession? = null
     private var timer: SleepTimer? = null
     private var trackInfo: TrackInfoSync? = null
-    private val handler = Handler(Looper.getMainLooper())
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     override fun onCreate() {
@@ -45,7 +42,6 @@ class PlaybackService : MediaSessionService() {
                 .setContentType(C.AUDIO_CONTENT_TYPE_MUSIC).build(), true)
             .setHandleAudioBecomingNoisy(true).setWakeMode(C.WAKE_MODE_NETWORK).build()
         timer = SleepTimer(player::pause)
-        val retry = PlaybackRetryGate()
         val fallback = PlaybackFallback(scope, resolver::next)
         var selection = 0L
         var replacementUri: String? = null
@@ -92,7 +88,6 @@ class PlaybackService : MediaSessionService() {
                     automaticAdvance == (player.currentMediaItemIndex to mediaItem?.mediaId)
                 automaticAdvance = null
                 if (!advanced) unavailableQueue.reset()
-                retry.select(mediaItem?.mediaId)
                 if (reason == Player.MEDIA_ITEM_TRANSITION_REASON_AUTO || reason == Player.MEDIA_ITEM_TRANSITION_REASON_REPEAT) timer?.trackEnded()
             }
             override fun onPositionDiscontinuity(oldPosition: Player.PositionInfo, newPosition: Player.PositionInfo, reason: Int) {
@@ -105,7 +100,6 @@ class PlaybackService : MediaSessionService() {
                     selection++
                     fallback.reset()
                     unavailableQueue.reset()
-                    retry.select(player.currentMediaItem?.mediaId)
                 }
             }
             override fun onPlaybackStateChanged(state: Int) {
@@ -134,21 +128,6 @@ class PlaybackService : MediaSessionService() {
                 if (!player.playWhenReady || error.errorCode !in 2000..4999) return
                 val failed = item.localConfiguration?.uri?.toString()?.let(OnlineMediaUri::decode)
                 if (failed == null) { skipUnavailable(); return }
-                val causes = generateSequence<Throwable>(error) { it.cause }.toList()
-                val unavailable = causes.any { it is AudioResolutionException ||
-                    (it is androidx.media3.datasource.HttpDataSource.InvalidResponseCodeException && it.responseCode in 400..499) }
-                if (!unavailable && error.errorCode in 2000..2999 && retry.take(item.mediaId)) {
-                    resolver.invalidate()
-                    val generation = selection
-                    val position = player.currentPosition.coerceAtLeast(0)
-                    handler.post {
-                        if (generation == selection && player.currentMediaItem?.mediaId == item.mediaId && player.playWhenReady) {
-                            PlaybackDiagnostics.record(PlaybackDiagnostics.Event.RETRY, 1)
-                            seek(player.currentMediaItemIndex, position); player.prepare()
-                        }
-                    }
-                    return
-                }
                 val original = item.mediaMetadata.extras?.getString("kinara.track")?.let(::decodeTrackLine) ?: failed
                 val generation = selection
                 val index = player.currentMediaItemIndex
@@ -161,7 +140,6 @@ class PlaybackService : MediaSessionService() {
                     val replacement = fallbackMediaItem(player.currentMediaItem ?: item, actual)
                     PlaybackDiagnostics.record(PlaybackDiagnostics.Event.FALLBACK, com.kinara.music.online.sourceRank(actual.source))
                     replacementUri = replacement.localConfiguration?.uri.toString()
-                    retry.select(item.mediaId)
                     player.replaceMediaItem(index, replacement)
                     // Use a time position in the new extractor, never the previous file's byte offset.
                     seek(index, position)
@@ -187,7 +165,7 @@ class PlaybackService : MediaSessionService() {
                 if (controller.uid != applicationInfo.uid) return Futures.immediateFuture(SessionResult(SessionError.ERROR_PERMISSION_DENIED))
                 when (customCommand.customAction) {
                     SleepTimer.COMMAND -> timer?.set(args.getInt("minutes"), args.getBoolean("afterTrack"))
-                    RETRY_COMMAND -> { selection++; fallback.reset(); unavailableQueue.reset(); resolver.invalidate(); retry.select(player.currentMediaItem?.mediaId); player.prepare(); player.play() }
+                    RETRY_COMMAND -> { selection++; fallback.reset(); unavailableQueue.reset(); resolver.invalidate(); player.prepare(); player.play() }
                     else -> return Futures.immediateFuture(SessionResult(SessionError.ERROR_NOT_SUPPORTED))
                 }
                 return Futures.immediateFuture(SessionResult(SessionResult.RESULT_SUCCESS))
@@ -199,7 +177,6 @@ class PlaybackService : MediaSessionService() {
     override fun onDestroy() {
         trackInfo?.close(); trackInfo = null
         scope.cancel()
-        handler.removeCallbacksAndMessages(null)
         timer?.cancel(); timer = null
         mediaSession?.let { it.player.release(); it.release() }; mediaSession = null
         super.onDestroy()

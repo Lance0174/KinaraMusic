@@ -18,7 +18,7 @@ import org.robolectric.annotation.Config
 class PlaybackServiceRecoveryTest {
     @Test fun realLoaderFailuresAdvanceAndStopEvenInRepeatOne() = verifyQueue(online = false)
 
-    @Test fun disabledOnlineSourcesAdvanceAfterOneRetryPerSong() = verifyQueue(online = true)
+    @Test fun disabledOnlineSourcesAdvanceWithoutRetryingTheSameFailure() = verifyQueue(online = true)
 
     private fun verifyQueue(online: Boolean) {
         val service = Robolectric.buildService(PlaybackService::class.java).create()
@@ -40,7 +40,7 @@ class PlaybackServiceRecoveryTest {
                     else android.net.Uri.fromFile(java.io.File(service.get().cacheDir, "missing-$it.mp3"))).build() })
             player.repeatMode = Player.REPEAT_MODE_ONE
             player.prepare(); player.play()
-            val expectedErrors = if (online) 4 else 2
+            val expectedErrors = 2
             val deadline = System.nanoTime() + 10_000_000_000
             while ((errors < expectedErrors || player.playWhenReady) && System.nanoTime() < deadline) {
                 shadowOf((player as androidx.media3.exoplayer.ExoPlayer).playbackLooper).idle()

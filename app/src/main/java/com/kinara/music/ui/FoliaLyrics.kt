@@ -11,6 +11,7 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -83,12 +84,25 @@ internal fun foliaSongJson(lyrics: List<LyricLine>, player: PlayerUiState, setti
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 internal fun FoliaLyrics(lyrics: List<LyricLine>, player: PlayerUiState, settings: KinaraSettings, onSeek: (Long) -> Unit) {
+    var reload by remember { mutableIntStateOf(0) }
+    // A failed WebView must not permanently mask later choices with the native fallback.
+    key(settings.lyricVisualStyle, settings.lumiereQuality, reload) {
+        FoliaLyricsContent(lyrics, player, settings, onSeek, onReload = { reload++ })
+    }
+}
+
+@SuppressLint("SetJavaScriptEnabled")
+@Composable
+private fun FoliaLyricsContent(lyrics: List<LyricLine>, player: PlayerUiState, settings: KinaraSettings,
+    onSeek: (Long) -> Unit, onReload: () -> Unit) {
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
-    val systemMotion = android.os.Build.VERSION.SDK_INT < 26 || android.animation.ValueAnimator.areAnimatorsEnabled()
-    if (settings.reduceLyricMotion || !systemMotion) {
-        DynamicLyrics(lyrics, player, settings.copy(reduceLyricMotion = true), onSeek)
-        return
+    var systemMotion by remember { mutableStateOf(true) }
+    DisposableEffect(lifecycle) {
+        fun update() { systemMotion = android.os.Build.VERSION.SDK_INT < 26 || android.animation.ValueAnimator.areAnimatorsEnabled() }
+        val observer = LifecycleEventObserver { _, _ -> update() }
+        lifecycle.addObserver(observer); update()
+        onDispose { lifecycle.removeObserver(observer) }
     }
     val progress = LocalPlayerProgress.current
     val recording = com.kinara.music.data.lyricIdentity(player.actualTrack ?: player.current).orEmpty()
@@ -117,7 +131,7 @@ internal fun FoliaLyrics(lyrics: List<LyricLine>, player: PlayerUiState, setting
         }
         failed = true
     }
-    LaunchedEffect(web, loaded, failed, recording, player.playing, player.buffering, settings.lyricDelayMs) {
+    LaunchedEffect(web, loaded, failed, recording, player.playing, player.buffering, settings.lyricDelayMs, config.reduceLyricMotion) {
         if (!loaded || failed) return@LaunchedEffect
         lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             while (isActive) {
@@ -126,7 +140,7 @@ internal fun FoliaLyrics(lyrics: List<LyricLine>, player: PlayerUiState, setting
                 val valid = sample?.belongsTo(player.current?.mediaId, recording) ?: true
                 val lease = if (sample != null && sample.sampledAtMs > 0) (1000 - (now - sample.sampledAtMs)).coerceIn(0, 1000) else 0L
                 val audioPosition = if (valid) sample?.estimatedPosition(now) ?: player.positionMs else 0
-                val bands = if (player.playing && !player.buffering) ReactiveAudio.at(audioPosition) else AudioBands()
+                val bands = if (!config.reduceLyricMotion && player.playing && !player.buffering) ReactiveAudio.at(audioPosition) else AudioBands()
                 val clock = JSONObject().put("positionMs", audioPosition)
                     .put("identity", recording)
                     .put("durationMs", sample?.durationMs ?: player.durationMs).put("speed", sample?.speed ?: 1f)
@@ -151,10 +165,10 @@ internal fun FoliaLyrics(lyrics: List<LyricLine>, player: PlayerUiState, setting
         lifecycle.addObserver(observer)
         onDispose { lifecycle.removeObserver(observer) }
     }
-    DisposableEffect(lifecycle, failed) {
+    DisposableEffect(lifecycle, failed, config.reduceLyricMotion) {
         var subscribed = false
         fun update() {
-            val visible = !failed && lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
+            val visible = !failed && !config.reduceLyricMotion && lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
             if (visible != subscribed) {
                 subscribed = visible
                 if (visible) ReactiveAudio.consumers.incrementAndGet() else ReactiveAudio.consumers.decrementAndGet()
@@ -167,8 +181,10 @@ internal fun FoliaLyrics(lyrics: List<LyricLine>, player: PlayerUiState, setting
     Box(Modifier.fillMaxSize().testTag("folia_lyrics").then(if (!failed) Modifier.background(androidx.compose.ui.graphics.Color(0xff070b12)) else Modifier)) {
         if (failed) {
             DynamicLyrics(lyrics, player, settings, onSeek)
-            Text("动态视界暂不可用，已使用逐字辉光", color = com.kinara.music.ui.theme.LocalKinaraTheme.current.colors.textDim, fontSize = 12.sp,
-                modifier = Modifier.align(Alignment.TopCenter).padding(12.dp))
+            Column(Modifier.align(Alignment.TopCenter).padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                Text("动态视界加载失败，暂用逐字辉光", color = com.kinara.music.ui.theme.LocalKinaraTheme.current.colors.textDim, fontSize = 12.sp)
+                TextButton(onReload) { Text("重新加载动态视界") }
+            }
         } else {
             AndroidView(modifier = Modifier.fillMaxSize(), factory = {
                 WebView(context).apply {
@@ -196,6 +212,7 @@ internal fun FoliaLyrics(lyrics: List<LyricLine>, player: PlayerUiState, setting
                 horizontalAlignment = Alignment.CenterHorizontally) {
                 if (!ready) Text("动态视界正在展开…", color = androidx.compose.ui.graphics.Color(0xffded7ca), fontSize = 13.sp)
                 else if (lyrics.isEmpty()) Text("暂时没有歌词 · 继续聆听", color = androidx.compose.ui.graphics.Color(0xffded7ca), fontSize = 13.sp)
+                if (config.reduceLyricMotion) Text("已减少动效 · 保留所选编排", color = androidx.compose.ui.graphics.Color(0xffb0b5bf), fontSize = 12.sp)
                 if (settings.showTranslation) line?.translation?.let { Text(it, color = androidx.compose.ui.graphics.Color(0xffded7ca), fontSize = 13.sp, textAlign = TextAlign.Center) }
                 if (settings.showRomanization) line?.romanization?.let { Text(it, color = androidx.compose.ui.graphics.Color(0xffb0b5bf), fontSize = 12.sp, textAlign = TextAlign.Center) }
             }

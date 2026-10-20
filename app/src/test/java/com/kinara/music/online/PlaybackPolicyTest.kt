@@ -48,13 +48,14 @@ class PlaybackPolicyTest {
         }
     }
 
-    @Test fun fallbackFollowsPrioritySkipsDisabledAndStopsOnSuccess() = runBlocking {
+    @Test fun fallbackRacesEnabledSourcesAndFollowsPriorityAmongReadyResults() = runBlocking {
         val original = track.copy(source = "netease", onlineKey = OnlineKey("netease", "123"))
         val access = Sources(setOf("kuwo")) { p -> listOf(OnlineTrack(p, "id", track.title, track.artist, track.album, track.durationMs)) }
         val settings = KinaraSettings(sources = SourceToggles(kugou = false))
         val next = OnlinePlayback(access).resolveNextForPlay(original, original, settings, PlaybackAttempts())!!
         assertEquals("kuwo", next.second.onlineKey!!.platform)
-        assertEquals(listOf("search:qq", "resolve:qq:320", "search:kuwo", "resolve:kuwo:320"), access.calls)
+        assertFalse(access.calls.any { it.contains("kugou") })
+        assertTrue(access.calls.containsAll(listOf("search:qq", "resolve:qq:320", "search:kuwo", "resolve:kuwo:320")))
     }
 
     @Test fun emptyAndMismatchedSourcesContinueWithoutPlayingOtherRecordings() = runBlocking {
@@ -71,7 +72,7 @@ class PlaybackPolicyTest {
         assertEquals(listOf("search:netease", "search:kugou", "search:kuwo", "search:bilibili", "search:solara", "search:gd", "resolve:gd:320"), access.calls)
     }
 
-    @Test fun biliUsesIndependentLowQualityBeforeOtherSourcesAndCannotLoop() = runBlocking {
+    @Test fun biliLowQualityRacesBesideOtherSourcesAndCannotLoop() = runBlocking {
         val bili = track.copy(source = "bilibili", onlineKey = OnlineKey("bilibili", "BV1xx411c7mD|"))
         val access = Sources(setOf("bilibili")) { emptyList() }
         val playback = OnlinePlayback(access)
@@ -80,7 +81,8 @@ class PlaybackPolicyTest {
         val low = playback.resolveNextForPlay(bili, bili, settings, attempts)!!.second
         assertEquals("128", low.onlineKey!!.bitrate)
         assertNull(playback.resolveNextForPlay(bili, low, settings, attempts))
-        assertEquals(listOf("resolve:bilibili:128", "search:netease", "search:qq", "search:kugou", "search:kuwo", "search:solara", "search:gd"), access.calls)
+        assertEquals(1, access.calls.count { it == "resolve:bilibili:128" })
+        assertEquals(listOf("search:netease", "search:qq", "search:kugou", "search:kuwo", "search:solara", "search:gd"), access.calls.filter { it.startsWith("search:") })
     }
 
     @Test fun allUnavailableEndsAndDisabledOtherSourcesNeverRun() = runBlocking {
@@ -125,7 +127,63 @@ class PlaybackPolicyTest {
         }
         val next = OnlinePlayback(access).resolveNextForPlay(original, original, KinaraSettings(), PlaybackAttempts())!!
         assertEquals("kuwo", next.second.source)
-        assertEquals(listOf("qq", "kugou", "kuwo"), calls)
-        assertEquals(12000L, testScheduler.currentTime)
+        assertTrue(calls.containsAll(listOf("qq", "kugou", "kuwo")))
+        assertEquals(200L, testScheduler.currentTime)
+    }
+
+    @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+    @Test fun allSlowSourcesShareOneDeadlineAndCancellationReleasesEveryRequest() = kotlinx.coroutines.test.runTest {
+        val active = mutableSetOf<String>()
+        val access = object : PlaybackAccess {
+            override suspend fun searchSource(platform: String, keyword: String, settings: KinaraSettings): OnlineResult {
+                active += platform
+                try { kotlinx.coroutines.delay(60_000); error("should time out") } finally { active -= platform }
+            }
+            override suspend fun resolveUrl(key: OnlineKey, settings: KinaraSettings) = error("no candidates")
+        }
+        assertNull(OnlinePlayback(access).resolveNextForPlay(track, track, KinaraSettings(), PlaybackAttempts()))
+        assertEquals(6000L, testScheduler.currentTime)
+        assertTrue(active.isEmpty())
+    }
+
+    @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+    @Test fun verifiedFastAudioWinsOverAStalledUrlAndCancelledCandidatesCanRecoverLater() = kotlinx.coroutines.test.runTest {
+        val original = track.copy(source = "netease", onlineKey = OnlineKey("netease", "123"))
+        val settings = KinaraSettings(sources = SourceToggles(kugou = false, bilibili = false, gdFallback = false, solara = false))
+        val access = Sources(setOf("qq", "kuwo")) { p -> listOf(OnlineTrack(p, p, track.title, track.artist, "")) }
+        var slow = true
+        val playback = OnlinePlayback(object : PlaybackAccess by access {
+            override suspend fun resolveUrl(key: OnlineKey, settings: KinaraSettings) =
+                ResolvedUrl(ResolveStage.OK, "https://audio.example/${key.platform}")
+        }) { url ->
+            if (url.url!!.endsWith("qq") && slow) kotlinx.coroutines.delay(60_000)
+            else kotlinx.coroutines.delay(100)
+            url
+        }
+        val attempts = PlaybackAttempts()
+        val first = playback.resolveNextForPlay(original, original, settings, attempts)!!.second
+        assertEquals("kuwo", first.source)
+        assertEquals(300L, testScheduler.currentTime)
+        slow = false
+        assertEquals("qq", playback.resolveNextForPlay(original, first, settings, attempts)!!.second.source)
+        assertNull(playback.resolveNextForPlay(original, first, settings, attempts))
+    }
+
+    @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+    @Test fun readyHigherPrioritySourceWinsWithinShortGraceAndBadAudioNeverReachesPlayer() = kotlinx.coroutines.test.runTest {
+        val settings = KinaraSettings(sources = SourceToggles(kugou = false, bilibili = false, gdFallback = false, solara = false))
+        val access = object : PlaybackAccess {
+            override suspend fun searchSource(platform: String, keyword: String, settings: KinaraSettings) =
+                OnlineResult(platform, listOf(OnlineTrack(platform, platform, track.title, track.artist, "")))
+            override suspend fun resolveUrl(key: OnlineKey, settings: KinaraSettings): ResolvedUrl {
+                kotlinx.coroutines.delay(if (key.platform == "netease") 150 else 50)
+                return ResolvedUrl(ResolveStage.OK, "https://audio.example/${key.platform}")
+            }
+        }
+        val playback = OnlinePlayback(access)
+        assertEquals("netease", playback.resolveNextForPlay(track, track, settings, PlaybackAttempts())!!.second.source)
+        assertEquals(150L, testScheduler.currentTime)
+        val rejecting = OnlinePlayback(access) { if (it.url!!.endsWith("netease")) null else it }
+        assertEquals("kuwo", rejecting.resolveNextForPlay(track, track, settings, PlaybackAttempts())!!.second.source)
     }
 }
