@@ -184,3 +184,27 @@ test('older Android WebView without Array.at can initialize all three directors'
     await expect(page.locator('canvas')).toHaveCount(1);
   }
 });
+
+test('stage fills the Android viewport even when the document percentage height collapses', async ({page}) => {
+  await page.goto(base);
+  // Reproduces the measured Android WebView layout: viewport > 0, HTML/body height == 0.
+  // A normal desktop viewport hid this regression in the earlier suite.
+  await page.addStyleTag({content: 'html,body{height:0px!important;min-height:0px!important}'});
+  for (const visualStyle of ['lumiere', 'sonnet', 'tempera']) {
+    await page.evaluate(song => window.KinaraFolia.setSong(song), {...fixture, visualStyle});
+    await tick(page, 6100);
+    expect(await page.evaluate(() => ({
+      documentHeight: document.documentElement.offsetHeight,
+      height: document.getElementById('stage').clientHeight,
+      viewport: innerHeight, status: window.KinaraFolia.displayStatus(),
+    }))).toEqual({documentHeight: 0, height: 440, viewport: 440, status: 'ready'});
+    await page.screenshot({path: `${shots}/${visualStyle}-collapsed-document.png`});
+  }
+  // Initialization must not be reported as visually ready if layout hides the canvas.
+  await page.locator('#stage').evaluate(stage => stage.style.display = 'none');
+  expect(await page.evaluate(() => window.KinaraFolia.displayStatus())).toBe('loading');
+  await page.locator('#stage').evaluate(stage => stage.style.display = '');
+  await page.setViewportSize({width: 740, height: 390});
+  await expect.poll(() => page.evaluate(() => document.getElementById('stage').clientHeight)).toBe(390);
+  expect(await page.evaluate(() => window.KinaraFolia.displayStatus())).toBe('ready');
+});

@@ -38,6 +38,12 @@ stage.addEventListener('webglcontextlost', event => { event.preventDefault(); fa
 
 const api = {
   status: 'loading', failure: '', identity: '', mode: '',
+  displayStatus() {
+    if (api.status !== 'ready') return api.status;
+    const canvas = stage.querySelector('canvas');
+    return stage.clientWidth > 0 && stage.clientHeight > 0 && canvas &&
+      canvas.clientWidth > 0 && canvas.clientHeight > 0 && stage.style.opacity !== '0' ? 'ready' : 'loading';
+  },
   setSong(song: any) {
     if (destroyed) return Promise.resolve();
     const request = ++generation;

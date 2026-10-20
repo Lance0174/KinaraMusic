@@ -6,6 +6,7 @@ package com.kinara.music.ui
 import android.annotation.SuppressLint
 import android.graphics.Color as AndroidColor
 import android.os.SystemClock
+import android.view.ViewGroup
 import android.webkit.*
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.background
@@ -18,6 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
@@ -64,13 +67,15 @@ internal class FoliaAssetClient(private val context: android.content.Context,
 }
 private const val FOLIA_URL = "https://kinara.invalid/folia/index.html"
 
-internal fun foliaSongJson(lyrics: List<LyricLine>, player: PlayerUiState, settings: KinaraSettings): String {
+internal fun foliaSongJson(lyrics: List<LyricLine>, player: PlayerUiState, settings: KinaraSettings,
+    coverColors: List<Color> = emptyList()): String {
     val track = player.actualTrack ?: player.current
     val duration = player.durationMs.takeIf { it > 0 } ?: track?.durationMs ?: 0
     return JSONObject().put("identity", com.kinara.music.data.lyricIdentity(track).orEmpty())
         .put("title", track?.title.orEmpty()).put("artist", track?.artist.orEmpty()).put("album", track?.album.orEmpty())
         .put("durationMs", duration).put("quality", settings.lumiereQuality.wireName)
         .put("visualStyle", settings.lyricVisualStyle.wireName)
+        .put("coverColors", JSONArray(coverColors.take(3).map { "#%06x".format(it.toArgb() and 0xffffff) }))
         .put("industrial", settings.theme == KinaraThemeKind.INDUSTRIAL).put("reduceMotion", settings.reduceLyricMotion)
         .put("lines", JSONArray().apply { lyrics.forEachIndexed { index, line ->
             val end = line.endMs ?: lyrics.getOrNull(index + 1)?.timeMs ?: duration.takeIf { it > line.timeMs } ?: (line.timeMs + 5000)
@@ -114,8 +119,9 @@ private fun FoliaLyricsContent(lyrics: List<LyricLine>, player: PlayerUiState, s
     var failed by remember { mutableStateOf(false) }
     var web by remember { mutableStateOf<WebView?>(null) }
     val config = remember(settings, systemMotion) { settings.copy(reduceLyricMotion = settings.reduceLyricMotion || !systemMotion) }
-    val song = remember(lyrics, player.actualTrack, player.current, player.durationMs, config.lyricRenderer, config.lumiereQuality, config.lyricVisualStyle, config.theme, config.reduceLyricMotion) {
-        foliaSongJson(lyrics, player, config)
+    val coverColors = rememberArtworkColors(player.actualTrack ?: player.current)
+    val song = remember(lyrics, player.actualTrack, player.current, player.durationMs, config.lyricRenderer, config.lumiereQuality, config.lyricVisualStyle, config.theme, config.reduceLyricMotion, coverColors) {
+        foliaSongJson(lyrics, player, config, coverColors)
     }
     LaunchedEffect(web, loaded, song) {
         if (!loaded || failed) return@LaunchedEffect
@@ -123,7 +129,9 @@ private fun FoliaLyricsContent(lyrics: List<LyricLine>, player: PlayerUiState, s
         web?.evaluateJavascript("window.KinaraFolia.setSong($song)", null)
         repeat(80) {
             if (ready || failed) return@LaunchedEffect
-            web?.evaluateJavascript("window.KinaraFolia.status") { status ->
+            // A loaded WebGL runtime is not enough: Android can give a percentage-height
+            // document a zero-height stage. Confirm the canvas actually occupies the viewport.
+            web?.evaluateJavascript("window.KinaraFolia?.displayStatus()") { status ->
                 if (status == "\"ready\"") ready = true
                 if (status == "\"failed\"") failed = true
             }
@@ -188,6 +196,7 @@ private fun FoliaLyricsContent(lyrics: List<LyricLine>, player: PlayerUiState, s
         } else {
             AndroidView(modifier = Modifier.fillMaxSize(), factory = {
                 WebView(context).apply {
+                    layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
                     setBackgroundColor(AndroidColor.TRANSPARENT)
                     this.settings.javaScriptEnabled = true
                     this.settings.allowFileAccess = false; this.settings.allowContentAccess = false

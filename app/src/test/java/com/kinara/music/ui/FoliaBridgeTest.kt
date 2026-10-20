@@ -20,9 +20,12 @@ class FoliaBridgeTest {
         val chosen = Track("one", "original", "artist", "album", 10000, "netease", onlineKey = OnlineKey("netease", "1"))
         val actual = chosen.copy(source = "qq", onlineKey = OnlineKey("qq", "2"))
         val lines = listOf(LyricLine(720, "</script>\"测试\n文本"), LyricLine(2070, "word", 3600, listOf(LyricWord(2070, 3600, "word"))))
-        val json = JSONObject(foliaSongJson(lines, PlayerUiState(listOf(chosen),0,actualTrack = actual), KinaraSettings(lyricVisualStyle = LyricVisualStyle.TEMPERA)))
+        val json = JSONObject(foliaSongJson(lines, PlayerUiState(listOf(chosen),0,actualTrack = actual),
+            KinaraSettings(lyricVisualStyle = LyricVisualStyle.TEMPERA),
+            listOf(androidx.compose.ui.graphics.Color(0xff3c5a78))))
         assertEquals("qq:2", json.getString("identity"))
         assertEquals("tempera", json.getString("visualStyle"))
+        assertEquals("#3c5a78", json.getJSONArray("coverColors").getString(0))
         val output = json.getJSONArray("lines")
         assertEquals(.72, output.getJSONObject(0).getDouble("startTime"), 0.0)
         assertEquals(2.07, output.getJSONObject(0).getDouble("endTime"), 0.0)
