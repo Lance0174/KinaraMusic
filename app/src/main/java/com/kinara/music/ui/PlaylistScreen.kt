@@ -7,6 +7,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.items as gridItems
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -24,7 +27,8 @@ import com.kinara.music.ui.theme.LocalKinaraTheme
 fun PlaylistScreen(playlists: List<Playlist>, activeId: String?, onPlay: (List<Track>, Int) -> Unit,
     onCreate: (String) -> Unit, onRename: (String, String) -> Unit, onDelete: (String) -> Unit,
     onRemoveTrack: (String, String) -> Unit, onImportNetease: (String) -> Unit = {}, onImportQQ: (String) -> Unit = {},
-    onImportLocal: (String?) -> Unit = {}, onImportJson: () -> Unit = {}, onExport: (Playlist) -> Unit = {}) {
+    onImportLocal: (String?) -> Unit = {}, onImportJson: () -> Unit = {}, onExport: (Playlist) -> Unit = {},
+    onPlayNext: ((Track) -> Unit)? = null) {
     val c = LocalKinaraTheme.current.colors
     var openedId by rememberSaveable { mutableStateOf<String?>(null) }
     var naming by remember { mutableStateOf(false) }
@@ -58,24 +62,26 @@ fun PlaylistScreen(playlists: List<Playlist>, activeId: String?, onPlay: (List<T
                 TextButton(onImportJson) { Text("导入 JSON 文件") }
             }
             if (playlists.isEmpty()) EmptyState(Glyph.QUEUE, "为每一种心情建个歌单", "新建一张歌单，或导入你在\n网易云音乐、QQ音乐里的收藏。")
-            else LazyColumn(contentPadding = PaddingValues(bottom = LocalDockInset.current)) {
-                items(playlists, key = { it.id }) { playlist ->
-                    Row(Modifier.fillMaxWidth().clickable { openedId = playlist.id }.padding(vertical = 12.dp, horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-                        KinaraArtwork(playlist.tracks.firstOrNull(), 68.dp, corner = 18.dp)
-                        Spacer(Modifier.width(16.dp))
-                        Column(Modifier.weight(1f)) {
-                            Text(playlist.name, fontSize = 17.sp, fontWeight = FontWeight.SemiBold, color = c.text, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                            Text("${playlist.tracks.size} 首歌曲", fontSize = 13.sp, color = c.textDim, modifier = Modifier.padding(top = 6.dp))
+            else LazyVerticalGrid(columns = GridCells.Adaptive(145.dp), modifier = Modifier.padding(bottom = LocalDockInset.current), horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalArrangement = Arrangement.spacedBy(18.dp), contentPadding = PaddingValues(top = 10.dp, bottom = 8.dp)) {
+                gridItems(playlists, key = { it.id }) { playlist ->
+                    top.yukonga.miuix.kmp.basic.Card(onClick = { openedId = playlist.id }, modifier = Modifier.fillMaxWidth(), cornerRadius = 16.dp) {
+                        Column(Modifier.padding(10.dp)) {
+                            KinaraArtwork(playlist.tracks.firstOrNull(), 180.dp, modifier = Modifier.fillMaxWidth().aspectRatio(1f), corner = 12.dp)
+                            Text(playlist.name, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = c.text, maxLines = 2,
+                                overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(top = 12.dp))
+                            Text("${playlist.tracks.size} 首歌曲", fontSize = 12.sp, color = c.textDim, modifier = Modifier.padding(top = 5.dp, bottom = 6.dp))
                         }
-                        KinaraIcon(Glyph.RIGHT, tint = c.textDim)
                     }
                 }
             }
         } else if (opened.tracks.isEmpty()) EmptyState(Glyph.NOTE, "把喜欢的歌放进来", "打开任意歌曲的更多菜单，\n选择「加入歌单」即可添加。")
-        else LazyColumn(contentPadding = PaddingValues(bottom = LocalDockInset.current)) {
+        else LazyColumn(modifier = Modifier.padding(bottom = LocalDockInset.current), contentPadding = PaddingValues(bottom = 8.dp)) {
             item { CollectionActions(opened.tracks.size, { onPlay(opened.tracks, 0) }, { onPlay(opened.tracks.shuffled(), 0) }) }
             itemsIndexed(opened.tracks, key = { _, t -> t.mediaId }) { index, track ->
-                TrackRow(track, active = activeId == track.mediaId, onClick = { onPlay(opened.tracks, index) }, onRemove = { onRemoveTrack(opened.id, track.mediaId) })
+                TrackRow(track, active = activeId == track.mediaId, onClick = { onPlay(opened.tracks, index) },
+                    onPlayNext = onPlayNext?.let { next -> { next(track) } },
+                    onRemove = { onRemoveTrack(opened.id, track.mediaId) })
             }
         }
     }

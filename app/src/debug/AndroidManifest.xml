@@ -3,5 +3,7 @@
     <application>
         <!-- Debug-only fixture host for actual Android WebView/GPU regression checks. -->
         <activity android:name=".ui.FoliaProbeActivity" android:exported="true" />
+        <activity android:name=".ui.MiuixProbeActivity" android:exported="true"
+            android:configChanges="orientation|screenSize|smallestScreenSize" />
     </application>
 </manifest>

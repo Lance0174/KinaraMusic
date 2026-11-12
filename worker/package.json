@@ -4,8 +4,10 @@
   "scripts": {
     "test": "node --test worker.test.mjs"
   },
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "devDependencies": {
-    "wrangler": "4.151.2"
+    "wrangler": "4.161.0"
   }
 }

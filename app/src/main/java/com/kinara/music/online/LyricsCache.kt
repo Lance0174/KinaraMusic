@@ -41,8 +41,15 @@ class LyricsCache(private val directory: File) {
             directory.mkdirs()
             val destination = file(key)
             val temp = File(directory, destination.name + ".tmp")
-            temp.writeText(content)
-            if (!temp.renameTo(destination)) { destination.writeText(content); temp.delete() }
+            try {
+                temp.writeText(content)
+                if (!temp.renameTo(destination)) { destination.writeText(content); temp.delete() }
+            } finally {
+                // 写入或改名中途抛错时不能把 *.json.tmp 留在磁盘上：
+                // 下面按 extension == "json" 做淘汰，".json.tmp" 的扩展名是 "tmp"，永远匹配不到，
+                // 残留文件只会一直堆积。
+                if (temp.exists()) temp.delete()
+            }
             directory.listFiles()?.filter { it.extension == "json" }?.sortedByDescending { it.lastModified() }?.drop(150)?.forEach { it.delete() }
         }
         Unit

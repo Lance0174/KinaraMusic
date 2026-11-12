@@ -93,7 +93,7 @@ class PerformanceAndFeatureTest {
         var dark by mutableStateOf(true)
         compose.setContent { KinaraTheme(KinaraThemeKind.INDUSTRIAL, if (dark) KinaraDarkMode.DARK else KinaraDarkMode.LIGHT) {
             KinaraShell(KinaraNav.LIBRARY, {}, player, {}, {}, {}) {
-                Column { PageTitle("音乐库", ""); LibrarySections(LibrarySection.SONGS, {})
+                Column { PageTitle("音乐库", "");
                     LibraryScreen(LibraryUiState.Ready(songs), player, "", {}, songs, { _, _ -> }, {}) }
             }
         } }

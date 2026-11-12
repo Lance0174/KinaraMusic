@@ -36,6 +36,8 @@ fun LibraryMessages(library: LibraryRepository) {
     LaunchedEffect(notice) { notice?.let { snackbar.showSnackbar(it); library.clearNotice() } }
     androidx.compose.foundation.layout.Box(androidx.compose.ui.Modifier.fillMaxSize()) {
         androidx.compose.material3.SnackbarHost(snackbar, androidx.compose.ui.Modifier.align(androidx.compose.ui.Alignment.BottomCenter)
-            .navigationBarsPadding().padding(16.dp))
+            // 之前只让开导航栏，提示条会压在底部 MiniPlayer / 导航栏上面。
+            // 让出实测的悬浮坞高度，提示才真正浮在内容之上。
+            .navigationBarsPadding().padding(bottom = LocalDockInset.current).padding(16.dp))
     }
 }

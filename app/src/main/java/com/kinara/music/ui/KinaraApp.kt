@@ -3,8 +3,6 @@ package com.kinara.music.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
@@ -16,19 +14,19 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kinara.music.MainViewModel
-import com.kinara.music.data.NetworkState
-import com.kinara.music.data.Track
-import com.kinara.music.data.withLyricOffset
-import com.kinara.music.online.toTrack
+import com.kinara.music.data.*
 import com.kinara.music.online.isEnabled
+import com.kinara.music.online.toTrack
 import com.kinara.music.player.PlayerViewModel
 import com.kinara.music.ui.theme.KinaraDarkMode
+import com.kinara.music.ui.theme.KinaraThemeKind
+import com.kinara.music.ui.theme.KinaraSurfaceStyle
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-enum class LibrarySection(val label: String) { SONGS("本地"), FAVORITES("收藏"), PLAYLISTS("歌单"), DOWNLOADS("下载") }
-
-/** Routing and state collection belong here; Activity only owns platform permissions/lifecycle. */
+/** Navigation owns durable intent; the player service remains independent of presentation. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KinaraApp(vm: MainViewModel, playerVm: PlayerViewModel,
@@ -40,7 +38,9 @@ fun KinaraApp(vm: MainViewModel, playerVm: PlayerViewModel,
     val imports by vm.import.collectAsStateWithLifecycle()
     val favorites by playerVm.favorites.collectAsStateWithLifecycle()
     val storedPlaylists by playerVm.playlists.collectAsStateWithLifecycle()
-    val playlists = remember(storedPlaylists, favorites) { listOf(com.kinara.music.data.Playlist(com.kinara.music.data.LibraryRepository.FAVORITES, "我喜欢", 0, favorites)) + storedPlaylists }
+    val playlists = remember(storedPlaylists, favorites) {
+        listOf(Playlist(LibraryRepository.FAVORITES, "我喜欢的音乐", 0, favorites)) + storedPlaylists
+    }
     val lyricContent by vm.lyrics.collectAsStateWithLifecycle()
     val favoriteIds = remember(favorites) { favorites.map { it.mediaId }.toSet() }
     val context = LocalContext.current
@@ -49,10 +49,13 @@ fun KinaraApp(vm: MainViewModel, playerVm: PlayerViewModel,
     var isOnline by remember { mutableStateOf(NetworkState.isOnline(context)) }
     val connectionScope = rememberCoroutineScope()
     var route by rememberSaveable { mutableStateOf(KinaraNav.LIBRARY) }
-    var section by rememberSaveable { mutableStateOf(LibrarySection.SONGS) }
     var localQuery by rememberSaveable { mutableStateOf("") }
     var onlineQuery by rememberSaveable { mutableStateOf("") }
     var showPlayer by rememberSaveable { mutableStateOf(false) }
+    var queueOnOpen by rememberSaveable { mutableStateOf(false) }
+    var landscapeRequested by rememberSaveable { mutableStateOf(false) }
+    val openPlayer: (Boolean) -> Unit = { queue -> queueOnOpen = queue; showPlayer = true }
+    val closePlayer: () -> Unit = { landscapeRequested = false; showPlayer = false }
     var pendingAdd by remember { mutableStateOf<Track?>(null) }
     var createForTrack by remember { mutableStateOf(false) }
     var downloadTrack by remember { mutableStateOf<Track?>(null) }
@@ -73,97 +76,107 @@ fun KinaraApp(vm: MainViewModel, playerVm: PlayerViewModel,
         onDispose { runCatching { manager.unregisterNetworkCallback(callback) } }
     }
     val lyricTrack = player.actualTrack ?: player.current
-    // Hide the previous recording synchronously, before the new LaunchedEffect fetch starts.
-    val lyrics = if (lyricContent.identity == com.kinara.music.data.lyricIdentity(lyricTrack)) lyricContent.lines else emptyList()
+    val lyrics = if (lyricContent.identity == lyricIdentity(player.current ?: lyricTrack)) lyricContent.lines else emptyList()
     LaunchedEffect(storedPlaylists, favorites, isOnline, settings.autoTrackInfo, settings.sources) {
         playerVm.library.refreshArtwork(settings, isOnline)
     }
     LaunchedEffect(player.current?.mediaId, lyricTrack?.onlineKey?.platform, lyricTrack?.onlineKey?.id, isOnline, settings.sources) {
-        vm.loadLyric(lyricTrack)
+        vm.loadLyric(lyricTrack, player.current)
     }
-    // Restoring text after process recreation must also restore its results.
     LaunchedEffect(Unit) { if (onlineQuery.isNotBlank() && online.keyword != onlineQuery) vm.searchOnline(onlineQuery) }
-    BackHandler(showPlayer) { showPlayer = false }
+    LaunchedEffect(showPlayer, settings.lyricRenderer) {
+        if (!showPlayer || settings.lyricRenderer != LyricRenderer.FOLIA_LUMIERE) landscapeRequested = false
+    }
+    BackHandler(showPlayer) { if (landscapeRequested) landscapeRequested = false else closePlayer() }
     BackHandler(!showPlayer && imports.title.isNotBlank()) { vm.closeImport() }
     BackHandler(!showPlayer && route != KinaraNav.LIBRARY) { route = KinaraNav.LIBRARY }
 
+    var libraryTracks by remember { mutableStateOf(emptyList<Track>()) }
+    LaunchedEffect(libraryState, favorites, storedPlaylists) {
+        libraryTracks = withContext(Dispatchers.Default) {
+            ((libraryState as? LibraryUiState.Ready)?.tracks.orEmpty() + favorites + storedPlaylists.flatMap { it.tracks })
+                .distinctBy { it.mediaId }
+        }
+    }
+    var visibleTracks by remember { mutableStateOf(emptyList<Track>()) }
+    LaunchedEffect(libraryTracks, localQuery) {
+        if (localQuery.isNotBlank()) delay(150)
+        visibleTracks = withContext(Dispatchers.Default) { playerVm.searchLocal(libraryTracks, localQuery) }
+    }
+    val displayLibrary = if (libraryTracks.isNotEmpty()) LibraryUiState.Ready(libraryTracks) else libraryState
+    val lockedLandscape = landscapeRequested && showPlayer && player.current != null &&
+        locksLandscape(PlayerEntry.EXPLICIT_LANDSCAPE, settings.lyricRenderer)
     CompositionLocalProvider(com.kinara.music.player.LocalPlayerProgress provides progress, LocalArtworkOnline provides isOnline) {
-    if (showPlayer && player.current != null) PlayerBackdrop(emptyList()) {
-        PlayScreen(player, lyrics, playerVm::togglePlayPause, playerVm::next, playerVm::previous, playerVm::seekTo,
-            onClose = { showPlayer = false }, favorite = player.current?.mediaId in favoriteIds,
-            onFavorite = { player.current?.let(playerVm::toggleFavorite) }, onQueuePick = playerVm::playAt,
-            onAdd = { pendingAdd = player.current }, onDownload = { downloadTrack = player.current },
-            onTimer = { showTimer = true }, onDiagnostics = { showDiagnostics = true }, onMode = playerVm::cycleMode,
-            settings = settings, onVisualMode = { mode -> vm.update { it.copy(playerVisualMode = mode) } },
-            onLyricSettings = { showPlayer = false; route = KinaraNav.SETTINGS },
-            onLyricOffset = { identity, offset -> vm.update { it.withLyricOffset(identity, offset) } })
-    } else KinaraShell(route, { route = it }, player, playerVm::togglePlayPause, playerVm::next, { showPlayer = true }) {
-        Column(Modifier.fillMaxSize()) {
-            PageTitle(route.label, when (route) {
-                KinaraNav.LIBRARY -> "KINARA · 为喜欢留一个位置"
-                KinaraNav.SEARCH -> "发现下一首喜欢"
-                KinaraNav.SETTINGS -> "让音乐更合心意"
-            }) {
-                if (route == KinaraNav.LIBRARY && section == LibrarySection.SONGS) {
-                    IconButton({ files.importAudio(null); section = LibrarySection.PLAYLISTS }) { KinaraIcon(Glyph.IMPORT, "导入本地歌曲") }
-                    IconButton(onRefreshLibrary) { KinaraIcon(Glyph.REFRESH, "刷新音乐库") }
+        LandscapeImmersive(lockedLandscape)
+        if (showPlayer && player.current != null) PlayerBackdrop {
+            PlayScreen(player, lyrics, playerVm::togglePlayPause, playerVm::next, playerVm::previous, playerVm::seekTo,
+                onClose = closePlayer, favorite = player.current?.mediaId in favoriteIds,
+                onFavorite = { player.current?.let(playerVm::toggleFavorite) }, onQueuePick = playerVm::playAt,
+                onAdd = { pendingAdd = player.current }, onDownload = { downloadTrack = player.current },
+                onTimer = { showTimer = true }, onDiagnostics = { showDiagnostics = true }, onMode = playerVm::cycleMode,
+                settings = settings, onVisualMode = { mode -> vm.update { it.copy(playerVisualMode = mode) } },
+                onLyricSettings = { closePlayer(); route = KinaraNav.SETTINGS },
+                onLyricOffset = { identity, offset -> vm.update { it.withLyricOffset(identity, offset) } },
+                onPlayNext = playerVm::playNext, onMoveInQueue = playerVm::moveInQueue,
+                onRemoveFromQueue = playerVm::removeFromQueue, onSpeed = playerVm::setSpeed,
+                lockedLandscape = lockedLandscape, onEnterLandscape = { landscapeRequested = true },
+                onExitLandscape = { landscapeRequested = false }, initialQueue = queueOnOpen)
+        } else KinaraShell(route, { route = it }, player, playerVm::togglePlayPause, playerVm::next,
+            { openPlayer(false) }, artworkColors = if (settings.surfaceStyle == KinaraSurfaceStyle.GLASS &&
+                settings.theme == KinaraThemeKind.DEFAULT) rememberArtworkColors(player.current) else emptyList(),
+            onOpenQueue = { openPlayer(true) }, onPrevious = playerVm::previous, onSeek = playerVm::seekTo,
+            onMode = playerVm::cycleMode) {
+            Column(Modifier.fillMaxSize()) {
+                PageTitle(route.label, when (route) {
+                    KinaraNav.LIBRARY -> "你的音乐，始终在这里"
+                    KinaraNav.SEARCH -> "一首喜欢的歌，值得被找到"
+                    KinaraNav.PLAYLISTS -> "把喜欢，整理成自己的形状"
+                    KinaraNav.DOWNLOADS -> "离线时，也有音乐陪伴"
+                    KinaraNav.SETTINGS -> "让 Kinara，更像你的 Kinara"
+                }) {
+                    if (route != KinaraNav.SEARCH) IconButton({ route = KinaraNav.SEARCH }) { KinaraIcon(Glyph.SEARCH, "搜索音乐") }
+                    if (route == KinaraNav.LIBRARY) IconButton({ files.importAudio(null) }) { KinaraIcon(Glyph.PLUS, "导入本地歌曲") }
                 }
-            }
-            savedScreens.SaveableStateProvider(route.name) {
-                when (route) {
-                    KinaraNav.LIBRARY -> Column(Modifier.fillMaxSize()) {
-                        LibrarySections(section, { section = it })
-                        if (imports.title.isNotBlank() && section == LibrarySection.PLAYLISTS) PlaylistResultScreen(imports.title, imports.message, imports.tracks,
+                savedScreens.SaveableStateProvider(route.name) {
+                    when (route) {
+                        KinaraNav.LIBRARY -> LibraryScreen(displayLibrary, player, localQuery, { localQuery = it }, visibleTracks,
+                            playerVm::playQueue, onRequestPermission, playerVm::toggleFavorite, favoriteIds,
+                            { pendingAdd = it }, onPlayNext = playerVm::playNext, onOpenPlayer = { openPlayer(false) },
+                            onRefresh = onRefreshLibrary)
+                        KinaraNav.SEARCH -> Column(Modifier.fillMaxSize()) {
+                            SearchField(onlineQuery, { onlineQuery = it; vm.searchOnline(it) }, "歌曲、歌手、专辑",
+                                Modifier.padding(horizontal = 22.dp, vertical = 2.dp))
+                            Spacer(Modifier.height(10.dp))
+                            OnlineSearchScreen(online, { list, index -> playerVm.playQueue(list.map { it.toTrack(settings.preferredBitrate) }, index) },
+                                { isOnline = NetworkState.isOnline(context); vm.searchOnline(onlineQuery) }, !isOnline, favoriteIds,
+                                { playerVm.toggleFavorite(it.toTrack(settings.preferredBitrate)) }, { pendingAdd = it.toTrack(settings.preferredBitrate) },
+                                enabledSources = com.kinara.music.online.SOURCE_PRIORITY.filter { settings.sources.isEnabled(it) },
+                                onPlayNext = { t -> playerVm.playNext(t.toTrack(settings.preferredBitrate)) },
+                                onOpenSettings = { route = KinaraNav.SETTINGS })
+                        }
+                        KinaraNav.PLAYLISTS -> if (imports.title.isNotBlank()) PlaylistResultScreen(imports.title, imports.message, imports.tracks,
                             onPlay = { t -> playerVm.playQueue(imports.tracks.map { it.toTrack(settings.preferredBitrate) }, imports.tracks.indexOf(t)) },
                             onClose = vm::closeImport, onSave = {
                                 playerVm.saveImportedPlaylist(imports.title, imports.tracks.map { it.toTrack(settings.preferredBitrate) }); vm.closeImport()
-                            }, importing = imports.importing)
-                        else savedScreens.SaveableStateProvider("library-${section.name}") {
-                            when (section) {
-                                LibrarySection.SONGS -> {
-                                    val tracks by produceState(emptyList<Track>(), libraryState, localQuery) {
-                                        if (localQuery.isNotBlank()) delay(150)
-                                        value = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
-                                            (libraryState as? LibraryUiState.Ready)?.let { playerVm.searchLocal(it.tracks, localQuery) }.orEmpty()
-                                        }
-                                    }
-                                    LibraryScreen(libraryState, player, localQuery, { localQuery = it }, tracks, playerVm::playQueue,
-                                        onRequestPermission, playerVm::toggleFavorite, favoriteIds, { pendingAdd = it })
-                                }
-                                LibrarySection.FAVORITES -> FavoriteScreen(favorites, player.current?.mediaId, playerVm::playQueue,
-                                    { route = KinaraNav.SEARCH }, playerVm::toggleFavorite, { pendingAdd = it })
-                                LibrarySection.PLAYLISTS -> PlaylistScreen(playlists, player.current?.mediaId, playerVm::playQueue,
-                                    playerVm::createPlaylist, playerVm::renamePlaylist, playerVm::deletePlaylist, playerVm::removeFromPlaylist, vm::importNetease, vm::importQQ,
-                                    files.importAudio, files.importJson, files.export)
-                                LibrarySection.DOWNLOADS -> DownloadsScreen(downloads, playerVm::playQueue, { pendingAdd = it })
-                            }
-                        }
+                            }, importing = imports.importing, onPlayNext = { t -> playerVm.playNext(t.toTrack(settings.preferredBitrate)) })
+                        else PlaylistScreen(playlists, player.current?.mediaId, playerVm::playQueue, playerVm::createPlaylist,
+                            playerVm::renamePlaylist, playerVm::deletePlaylist, playerVm::removeFromPlaylist,
+                            vm::importNetease, vm::importQQ, files.importAudio, files.importJson, files.export, onPlayNext = playerVm::playNext)
+                        KinaraNav.DOWNLOADS -> DownloadsScreen(downloads, playerVm::playQueue, { pendingAdd = it }, onPlayNext = playerVm::playNext)
+                        KinaraNav.SETTINGS -> SettingsScreen(settings, vm::setTheme, { vm.setDarkMode(KinaraDarkMode.valueOf(it)) },
+                            vm::setSource, vm::setBitrate, vm::setCacheLimit, { showDiagnostics = true },
+                            onPreferences = vm::update, onPreviewLyrics = if (player.current == null) null else ({
+                                vm.update { it.copy(playerVisualMode = PlayerVisualMode.LYRICS) }; openPlayer(false)
+                            }))
                     }
-                    KinaraNav.SEARCH -> Column(Modifier.fillMaxSize()) {
-                        SearchField(onlineQuery, { onlineQuery = it; vm.searchOnline(it) }, "歌曲、艺术家、B站视频", Modifier.padding(horizontal = 20.dp, vertical = 2.dp))
-                        Spacer(Modifier.height(10.dp))
-                        OnlineSearchScreen(online, { list, index ->
-                            playerVm.playQueue(list.map { it.toTrack(settings.preferredBitrate) }, index)
-                        }, { isOnline = NetworkState.isOnline(context); vm.searchOnline(onlineQuery) }, !isOnline, favoriteIds,
-                            { playerVm.toggleFavorite(it.toTrack(settings.preferredBitrate)) }, { pendingAdd = it.toTrack(settings.preferredBitrate) },
-                            enabledSources = com.kinara.music.online.SOURCE_PRIORITY.filter { settings.sources.isEnabled(it) },
-                            onOpenSettings = { route = KinaraNav.SETTINGS })
-                    }
-                    KinaraNav.SETTINGS -> SettingsScreen(settings, vm::setTheme, { vm.setDarkMode(KinaraDarkMode.valueOf(it)) }, vm::setSource,
-                        vm::setBitrate, vm::setCacheLimit, { showDiagnostics = true },
-                        onPreferences = vm::update, onPreviewLyrics = if (player.current == null) null else ({
-                            vm.update { it.copy(playerVisualMode = com.kinara.music.data.PlayerVisualMode.LYRICS) }
-                            showPlayer = true
-                        }))
                 }
             }
         }
     }
-    }
     if (showTimer) SleepTimerDialog({ showTimer = false }, playerVm::setSleepTimer)
     if (showDiagnostics) DiagnosticsDialog { showDiagnostics = false }
     downloadTrack?.let { track -> DownloadQualityDialog(track, settings.preferredBitrate, { downloadTrack = null }) { bitrate ->
-        downloads.enqueue(track, bitrate); downloadTrack = null; showPlayer = false; route = KinaraNav.LIBRARY; section = LibrarySection.DOWNLOADS
+        downloads.enqueue(track, bitrate); downloadTrack = null; closePlayer(); route = KinaraNav.DOWNLOADS
     } }
     LibraryMessages(playerVm.library)
     pendingAdd?.let { track ->
@@ -182,12 +195,5 @@ fun KinaraApp(vm: MainViewModel, playerVm: PlayerViewModel,
         if (createForTrack) NameDialog("新建歌单", onDismiss = { createForTrack = false }) { name ->
             playerVm.saveImportedPlaylist(name, listOf(track)); createForTrack = false; pendingAdd = null
         }
-    }
-}
-
-@Composable
-fun LibrarySections(current: LibrarySection, onSelect: (LibrarySection) -> Unit) {
-    Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 20.dp).padding(bottom = 10.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        LibrarySection.entries.forEach { section -> ChoiceChip(section.label, current == section, { onSelect(section) }) }
     }
 }

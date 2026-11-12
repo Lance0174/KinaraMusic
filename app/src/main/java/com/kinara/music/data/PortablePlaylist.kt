@@ -22,6 +22,10 @@ object PortablePlaylist {
 
     fun decode(text: String): Pair<String, List<Track>> {
         require(text.length <= 5_000_000) { "歌单文件过大" }
+        // org.json 的 nextValue() 对嵌套是递归展开的,只限制长度挡不住 "[[[[[…"。
+        // 深嵌套会抛 StackOverflowError,而它是 Error 而不是 Exception,
+        // 调用处 catch (e: Exception) 兜不住,会直接把进程带走。解析前先做一次线性扫描限制深度。
+        require(jsonNestingDepth(text) <= 32) { "歌单文件结构异常" }
         val root = JSONTokener(text).nextValue()
         val items = (root as? JSONObject)?.optJSONArray("items") ?: root as? JSONArray ?: error("文件缺少 items 歌曲列表")
         require(items.length() <= 10_000) { "歌单最多支持 10000 首" }
@@ -40,4 +44,31 @@ object PortablePlaylist {
         require(tracks.isNotEmpty()) { "没有可导入的在线曲目；本机音频需通过文件选择器导入" }
         return ((root as? JSONObject)?.optJSONObject("meta")?.optString("name")?.ifBlank { "导入歌单" } ?: "导入歌单") to tracks
     }
+}
+
+/**
+ * 线性扫描 JSON 的最大括号嵌套深度(字符串字面量与转义会被正确跳过)。
+ * 用于在交给 org.json 递归解析前挡掉深嵌套输入,避免 StackOverflowError 直接杀掉进程。
+ */
+internal fun jsonNestingDepth(text: String): Int {
+    var depth = 0
+    var max = 0
+    var inString = false
+    var escaped = false
+    for (ch in text) {
+        if (inString) {
+            when {
+                escaped -> escaped = false
+                ch == '\\' -> escaped = true
+                ch == '"' -> inString = false
+            }
+            continue
+        }
+        when (ch) {
+            '"' -> inString = true
+            '[', '{' -> { depth++; if (depth > max) max = depth }
+            ']', '}' -> if (depth > 0) depth--
+        }
+    }
+    return max
 }

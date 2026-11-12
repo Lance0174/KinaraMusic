@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Source credentials share the settings file; never include it in cloud backups. -->
+<!-- Download history records titles/artists/SAF URIs, i.e. a listening history; keep it off the cloud too. -->
 <full-backup-content>
     <exclude domain="sharedpref" path="kinara_prefs.xml" />
+    <exclude domain="sharedpref" path="kinara_downloads.xml" />
 </full-backup-content>

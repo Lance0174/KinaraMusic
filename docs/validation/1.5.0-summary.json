@@ -1,0 +1,29 @@
+{
+  "version": "1.5.0",
+  "versionCode": 17,
+  "androidJvmWindows": { "tests": 307, "passed": 306, "failed": 0, "skipped": 1, "skip": "UpdatePolicyTest.fileProviderCannotExposeOtherPrivateFiles (Windows path separators)" },
+  "androidLint": { "errors": 0, "warnings": 10, "information": 2 },
+  "workerTests": { "passed": 17 },
+  "visualizerLogicTests": { "passed": 4 },
+  "visualizerBrowserTests": { "passed": 9 },
+  "npmAudit": { "workerVulnerabilities": 0, "visualizerVulnerabilities": 0 },
+  "newDependencyFilesVerifiedAgainstOfficialRepositories": 371,
+  "deviceQa": {
+    "environment": "isolated Android 15 emulator",
+    "renderers": ["Lumiere", "Sonnet", "Tempera"],
+    "sameWebViewAcrossRotation": true,
+    "landscapeOnlyLyricsAndTimeline": true,
+    "tapCanvasTogglesPlayback": true,
+    "backRestoresPreviousPlayerModeAndOrientation": true,
+    "releaseUpgrade": { "from": "1.4.6", "to": "1.5.0", "withoutUninstall": true, "favoritesPreserved": true, "queuePreserved": true, "currentTrackPreserved": true, "resumedPlayback": true, "automaticNextTrack": true, "mediaError": null }
+  },
+  "publicApk": {
+    "name": "Kinara-1.5.0-arm64-v8a.apk",
+    "bytes": 3792754,
+    "sha256": "20fa68261cfd0b4641f2c499ce4a16a429b538c53b7a42333dde388e177b287f",
+    "certificateSha256": "592dde74cbe6793743ddc1e52f48b5c20800ed4bae5e1e9569fc9f3f34e095a5",
+    "sameCertificateAs146": true,
+    "privateServiceConfiguration": false
+  },
+  "limits": ["No Android 12 physical-device validation", "No long-running Bluetooth or thermal validation", "No measured physical-device frame rate or speedup percentage", "Upstream music availability remains dependent on accounts, region and service policy"]
+}

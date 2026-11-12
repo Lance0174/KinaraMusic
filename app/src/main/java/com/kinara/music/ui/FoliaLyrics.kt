@@ -88,18 +88,19 @@ internal fun foliaSongJson(lyrics: List<LyricLine>, player: PlayerUiState, setti
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-internal fun FoliaLyrics(lyrics: List<LyricLine>, player: PlayerUiState, settings: KinaraSettings, onSeek: (Long) -> Unit) {
+internal fun FoliaLyrics(lyrics: List<LyricLine>, player: PlayerUiState, settings: KinaraSettings, onSeek: (Long) -> Unit,
+    onCanvasTap: (() -> Unit)? = null, immersive: Boolean = false) {
     var reload by remember { mutableIntStateOf(0) }
     // A failed WebView must not permanently mask later choices with the native fallback.
     key(settings.lyricVisualStyle, settings.lumiereQuality, reload) {
-        FoliaLyricsContent(lyrics, player, settings, onSeek, onReload = { reload++ })
+        FoliaLyricsContent(lyrics, player, settings, onSeek, onReload = { reload++ }, onCanvasTap, immersive)
     }
 }
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 private fun FoliaLyricsContent(lyrics: List<LyricLine>, player: PlayerUiState, settings: KinaraSettings,
-    onSeek: (Long) -> Unit, onReload: () -> Unit) {
+    onSeek: (Long) -> Unit, onReload: () -> Unit, onCanvasTap: (() -> Unit)?, immersive: Boolean) {
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     var systemMotion by remember { mutableStateOf(true) }
@@ -214,16 +215,24 @@ private fun FoliaLyricsContent(lyrics: List<LyricLine>, player: PlayerUiState, s
                 web = null
             })
             val line = lyrics.getOrNull(active)
+            val tap by rememberUpdatedState(onCanvasTap)
+            val currentLine by rememberUpdatedState(line)
+            val seek by rememberUpdatedState(onSeek)
+            val delayMs by rememberUpdatedState(settings.lyricDelayMs)
             // Compose handles taps/swipes above the canvas, so WebView cannot swallow pager gestures.
             Box(Modifier.fillMaxSize().semantics { contentDescription = line?.text ?: "Kinara 动态视界" }
-                .pointerInput(line, settings.lyricDelayMs) { detectTapGestures { line?.let { onSeek(LyricTiming.seek(it, settings.lyricDelayMs)) } } })
+                .pointerInput(Unit) { detectTapGestures {
+                    tap?.invoke() ?: currentLine?.let { seek(LyricTiming.seek(it, delayMs)) }
+                } })
             Column(Modifier.align(Alignment.BottomCenter).padding(horizontal = 24.dp, vertical = 10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally) {
                 if (!ready) Text("动态视界正在展开…", color = androidx.compose.ui.graphics.Color(0xffded7ca), fontSize = 13.sp)
                 else if (lyrics.isEmpty()) Text("暂时没有歌词 · 继续聆听", color = androidx.compose.ui.graphics.Color(0xffded7ca), fontSize = 13.sp)
-                if (config.reduceLyricMotion) Text("已减少动效 · 保留所选编排", color = androidx.compose.ui.graphics.Color(0xffb0b5bf), fontSize = 12.sp)
-                if (settings.showTranslation) line?.translation?.let { Text(it, color = androidx.compose.ui.graphics.Color(0xffded7ca), fontSize = 13.sp, textAlign = TextAlign.Center) }
-                if (settings.showRomanization) line?.romanization?.let { Text(it, color = androidx.compose.ui.graphics.Color(0xffb0b5bf), fontSize = 12.sp, textAlign = TextAlign.Center) }
+                if (!immersive) {
+                    if (config.reduceLyricMotion) Text("已减少动效 · 保留所选编排", color = androidx.compose.ui.graphics.Color(0xffb0b5bf), fontSize = 12.sp)
+                    if (settings.showTranslation) line?.translation?.let { Text(it, color = androidx.compose.ui.graphics.Color(0xffded7ca), fontSize = 13.sp, textAlign = TextAlign.Center) }
+                    if (settings.showRomanization) line?.romanization?.let { Text(it, color = androidx.compose.ui.graphics.Color(0xffb0b5bf), fontSize = 12.sp, textAlign = TextAlign.Center) }
+                }
             }
         }
     }

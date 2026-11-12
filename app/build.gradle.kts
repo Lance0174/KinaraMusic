@@ -5,6 +5,7 @@ import java.security.MessageDigest
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 val unsignedRelease = providers.gradleProperty("ciUnsigned").isPresent
@@ -38,7 +39,7 @@ val releaseSigningReady = listOf("storeFile", "storePassword", "keyAlias", "keyP
 
 android {
     namespace = "com.kinara.music"
-    compileSdk = 34
+    compileSdk = 35
 
     // 只出 arm64-v8a：现代 Android 设备均为 64 位，不再单独产 armeabi-v7a 包。
     // abiFilter 属性仅用于 x86_64 模拟器调试（如 MuMu），正式构建不受影响。
@@ -57,8 +58,8 @@ android {
         applicationId = "com.kinara.music"
         minSdk = 24
         targetSdk = 34
-        versionCode = 13
-        versionName = "1.4.3"
+        versionCode = 17
+        versionName = "1.5.0"
         val updateRepository = providers.gradleProperty("kinaraUpdateRepository").getOrElse("Lance0174/KinaraMusic")
         require(Regex("[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+").matches(updateRepository)) { "Invalid update repository" }
         buildConfigField("String", "UPDATE_REPOSITORY", buildConfigString(updateRepository))
@@ -107,24 +108,15 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = "17"
-        freeCompilerArgs += listOf("-P", "plugin:androidx.compose.compiler.plugins.kotlin:strongSkipping=true")
-    }
-
     buildFeatures {
         compose = true
         buildConfig = true
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.14"
-    }
-
     testOptions.unitTests.isIncludeAndroidResources = true
     testOptions.unitTests.all {
         it.systemProperty("robolectric.dependency.repo.url", "https://repo.maven.apache.org/maven2")
-        // Robolectric's ParcelFileDescriptor shadow reflects FileDescriptor on JDK 17.
+        // Robolectric's ParcelFileDescriptor shadow reflects FileDescriptor on JDK 21.
         it.jvmArgs("--add-opens=java.base/java.io=ALL-UNNAMED")
     }
 
@@ -132,6 +124,12 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
     }
 }
 
@@ -177,16 +175,20 @@ tasks.matching { it.name == "preBuild" }.configureEach { dependsOn(verifyFoliaBu
 
 dependencies {
     implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.activity:activity-compose:1.9.1")
+    implementation("androidx.activity:activity-compose:1.10.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.4")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.4")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.4")
 
-    implementation(platform("androidx.compose:compose-bom:2024.09.03"))
+    implementation(platform("androidx.compose:compose-bom:2025.06.01"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.foundation:foundation")
     implementation("androidx.compose.material3:material3")
+
+    // Official Miuix Compose components. 0.5.1 uses API 35 and needs JDK 21 at build/test time;
+    // the 0.9.x artifacts require API 37 and a substantially newer compiler stack.
+    implementation("top.yukonga.miuix.kmp:miuix-android:0.5.1")
 
     // 播放内核：Media3/ExoPlayer + MediaSession（锁屏/耳机/蓝牙控制）
     implementation("androidx.media3:media3-exoplayer:1.4.0")

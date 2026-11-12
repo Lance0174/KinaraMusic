@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <title>Kinara · Miuix 界面预览</title>
+  <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body data-theme="light">
+  <svg class="symbol-library" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs>
+    <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 17V5l11-2v12M9 8l11-2"/><ellipse cx="6" cy="17.5" rx="3" ry="2.5"/><ellipse cx="17" cy="15.5" rx="3" ry="2.5"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></symbol>
+    <symbol id="i-playlists" viewBox="0 0 24 24"><path d="M4 5h12M4 10h12M4 15h7m6-1 5 3-5 3Z"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-4-4 4 4 4-4M4 16v4h16v-4"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="m9.6 3-.6 2.4-2 .9L4.8 6l-2 3.4 1.7 1.8v1.7l-1.7 1.8 2 3.4 2.3-.3 2 .9.5 2.3h4.8l.6-2.3 2-.9 2.2.3 2-3.4-1.7-1.8v-1.7l1.7-1.8-2-3.4-2.3.3-2-.9-.5-2.4Z"/><circle cx="12" cy="12" r="3.2"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="m5 9 7 7 7-7"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path class="fill-icon" d="m8 4 12 8-12 8Z"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path class="fill-icon" d="M6 4h4v16H6zm8 0h4v16h-4z"/></symbol>
+    <symbol id="i-next" viewBox="0 0 24 24"><path class="fill-icon" d="m4 5 12 7L4 19zm14 0h3v14h-3z"/></symbol>
+    <symbol id="i-prev" viewBox="0 0 24 24"><path class="fill-icon" d="m20 5-12 7 12 7zM3 5h3v14H3z"/></symbol>
+    <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20S3 14.5 3 8.5C3 3.5 9.5 2 12 7c2.5-5 9-3.5 9 1.5C21 14.5 12 20 12 20Z"/></symbol>
+    <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M3 6h2c5 0 9 12 14 12h2m-3-3 3 3-3 3M3 18h2c2 0 4-2 6-5m3-3c2-3 3-4 5-4h2m-3-3 3 3-3 3"/></symbol>
+    <symbol id="i-queue" viewBox="0 0 24 24"><path d="M3 5h18M3 11h12M3 17h8m6-3 5 3-5 3Z"/></symbol>
+    <symbol id="i-visual" viewBox="0 0 24 24"><path d="M3 15v-6m4 11V4m5 18V2m5 16V6m4 9V9"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M9 3H3v6m12-6h6v6M3 15v6h6m12-6v6h-6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m4 12 5 5L20 6"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="i-sort" viewBox="0 0 24 24"><path d="M4 6h16M4 12h11M4 18h6"/></symbol>
+    <symbol id="i-album" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 6a2 2 0 0 1 2-2h5l2 3h7a2 2 0 0 1 2 2v10H3Z"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 1v2m0 18v2M1 12h2m18 0h2M4 4l1.5 1.5m13 13L20 20M4 20l1.5-1.5m13-13L20 4"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 15.5A9 9 0 0 1 8.5 4 9 9 0 1 0 20 15.5Z"/></symbol>
+    <symbol id="i-speed" viewBox="0 0 24 24"><path d="M4 19a10 10 0 1 1 16 0M12 13l5-6"/><circle cx="12" cy="13" r="2"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v.1"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 17V3m-5 5 5-5 5 5M4 16v5h16v-5"/></symbol>
+    <symbol id="i-signal" viewBox="0 0 24 24"><path d="M4 20v-4m5 4v-8m5 8V8m5 12V4"/></symbol>
+  </defs></svg>
+
+  <div class="app-shell" id="app-shell">
+    <aside class="navigation-rail" aria-label="主导航">
+      <a class="brand" href="app.html" aria-label="Kinara 首页"><img src="assets/mark.svg" alt=""><span>Kinara</span></a>
+      <nav id="rail-links"></nav>
+      <div class="rail-bottom"><span class="library-state"><span></span> 音乐与你，随时相伴</span><button class="rail-theme" data-action="theme">切换外观 <svg class="icon"><use href="#i-sun"/></svg></button></div>
+    </aside>
+    <div class="workspace">
+      <div class="mobile-status" aria-hidden="true"><span>9:41</span><span class="status-symbols">▮▮▮ <span>◕</span> ▰</span></div>
+      <header class="app-header">
+        <div><div class="page-eyebrow" id="page-eyebrow">你的音乐，始终在这里</div><h1 id="page-title">音乐</h1></div>
+        <div class="header-actions"><button class="icon-button" data-action="search" aria-label="搜索音乐"><svg class="icon"><use href="#i-search"/></svg></button><button class="icon-button soft" data-action="import" aria-label="导入音乐"><svg class="icon"><use href="#i-plus"/></svg></button></div>
+      </header>
+      <main class="page-content" id="page-content"></main>
+      <footer class="app-footer"><div id="mini-player"></div><nav class="bottom-navigation" id="bottom-navigation" aria-label="底部导航"></nav><div class="gesture-line" aria-hidden="true"></div></footer>
+    </div>
+    <aside class="listening-panel" id="listening-panel" aria-label="正在播放"></aside>
+  </div>
+
+  <section class="player-screen" id="player-screen" aria-label="播放页" hidden>
+    <div class="mobile-status" aria-hidden="true"><span>9:41</span><span class="status-symbols">▮▮▮ ◕ ▰</span></div>
+    <header class="player-header"><button class="icon-button" data-action="close-player" aria-label="收起播放页"><svg class="icon"><use href="#i-down"/></svg></button><span>正在播放</span><div class="player-header-actions"><button class="text-button compact" data-action="immersive" id="landscape-entry"><svg class="icon"><use href="#i-expand"/></svg>横屏</button><button class="icon-button" data-action="player-menu" aria-label="播放选项"><svg class="icon"><use href="#i-more"/></svg></button></div></header>
+    <div class="player-body" id="player-body"></div>
+    <div class="gesture-line" aria-hidden="true"></div>
+  </section>
+
+  <section class="immersive-screen" id="immersive-screen" aria-label="横屏动态视界" hidden>
+    <div class="immersive-stage" id="immersive-stage"></div>
+    <div class="immersive-timeline"><span class="time" data-time>0:00</span><input type="range" class="seek-input" min="0" max="224" step="0.05" value="42" aria-label="播放进度" data-seek><span class="time">3:44</span></div>
+  </section>
+
+  <dialog class="bottom-sheet" id="sheet" aria-labelledby="sheet-title"><div class="sheet-grip"></div><header><h2 id="sheet-title"></h2><button class="icon-button" data-action="close-sheet" aria-label="关闭面板"><svg class="icon"><use href="#i-close"/></svg></button></header><div class="sheet-content" id="sheet-content"></div></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>

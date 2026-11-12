@@ -11,11 +11,12 @@ import com.kinara.music.data.Track
 
 @Composable
 fun FavoriteScreen(favorites: List<Track>, activeId: String?, onPlay: (List<Track>, Int) -> Unit,
-    onGoOnline: () -> Unit, onFavorite: (Track) -> Unit = {}, onAdd: (Track) -> Unit = {}) {
+    onGoOnline: () -> Unit, onFavorite: (Track) -> Unit = {}, onAdd: (Track) -> Unit = {},
+    onPlayNext: (Track) -> Unit = {}) {
     if (favorites.isEmpty()) EmptyState(Glyph.HEART, "留住喜欢的旋律", "在歌曲菜单或播放页点按收藏，\n喜欢的音乐就会出现在这里。", "去搜索音乐", onGoOnline)
-    else LazyColumn(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp), contentPadding = PaddingValues(bottom = LocalDockInset.current)) {
+    else LazyColumn(modifier = Modifier.fillMaxSize().padding(bottom = LocalDockInset.current).padding(horizontal = 16.dp), contentPadding = PaddingValues(bottom = 8.dp)) {
         item { CollectionActions(favorites.size, { onPlay(favorites, 0) }, { onPlay(favorites.shuffled(), 0) }) }
         itemsIndexed(favorites, key = { _, t -> t.mediaId }) { index, t -> TrackRow(t, t.mediaId == activeId, true,
-            { onPlay(favorites, index) }, { onFavorite(t) }, { onAdd(t) }) }
+            { onPlay(favorites, index) }, { onFavorite(t) }, { onAdd(t) }, onPlayNext = { onPlayNext(t) }) }
     }
 }

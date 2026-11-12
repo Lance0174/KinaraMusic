@@ -54,7 +54,7 @@ internal fun PlayerTrackDetails(track: Track, favorite: Boolean, onFavorite: () 
 /** Progress is read in this small subtree, leaving metadata and transport independent of ticks. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun PlayerTimeline(player: PlayerUiState, onSeek: (Long) -> Unit) {
+private fun PlayerTimeline(player: PlayerUiState, onSeek: (Long) -> Unit, showStatus: Boolean = true) {
     val c = LocalKinaraTheme.current.colors
     var dragging by remember(player.current?.mediaId) { mutableStateOf(false) }
     var dragged by remember(player.current?.mediaId) { mutableLongStateOf(0) }
@@ -62,9 +62,19 @@ private fun PlayerTimeline(player: PlayerUiState, onSeek: (Long) -> Unit) {
     val duration = (progress?.durationMs ?: player.durationMs).coerceAtLeast(0)
     val shown = (if (dragging) dragged else progress?.positionMs ?: player.positionMs).coerceIn(0, duration)
     // A fixed, small status slot keeps errors/buffering from displacing the seek and play targets.
-    Box(Modifier.fillMaxWidth().height(24.dp), contentAlignment = Alignment.BottomStart) {
-        Text(if (player.recovering) "正在尝试其他来源…" else player.error ?: if (player.buffering) "正在加载音频…" else "", color = c.textDim,
-            fontSize = 11.sp, maxLines = 1, overflow = TextOverflow.Ellipsis,
+    // heightIn (not height) so a long message can wrap instead of being clipped at large font scales.
+    if (showStatus) Box(Modifier.fillMaxWidth().heightIn(min = 24.dp), contentAlignment = Alignment.BottomStart) {
+        // 四种状态互斥，按优先级取第一个成立的：换源 > 错误 > 加载 > 恢复提示。
+        // 「已恢复上次播放」必须自解释，否则播放键显示"播放"、按下去又没声音，用户会以为播坏了。
+        val status = when {
+            player.recovering -> "正在尝试其他来源…"
+            player.error != null -> player.error.orEmpty()
+            player.buffering -> "正在加载音频…"
+            player.restored -> "已恢复上次播放 · 点按继续"
+            else -> ""
+        }
+        Text(status, color = c.textDim,
+            fontSize = 11.sp, maxLines = 2, overflow = TextOverflow.Ellipsis,
             modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite })
     }
     Slider(value = if (duration > 0) shown.toFloat() / duration else 0f, enabled = duration > 0,
@@ -86,6 +96,14 @@ private fun PlayerTimeline(player: PlayerUiState, onSeek: (Long) -> Unit) {
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
         Text(formatMs(shown), color = c.textDim, fontSize = 11.sp, letterSpacing = 0.5.sp)
         Text(formatMs(duration), color = c.textDim, fontSize = 11.sp, letterSpacing = 0.5.sp)
+    }
+}
+
+/** Landscape deliberately exposes a single transport control. Seeks commit on release. */
+@Composable
+internal fun ImmersiveTimeline(player: PlayerUiState, onSeek: (Long) -> Unit, modifier: Modifier = Modifier) {
+    Column(modifier.semantics { contentDescription = "横屏播放进度" }) {
+        PlayerTimeline(player, onSeek, showStatus = false)
     }
 }
 
@@ -114,13 +132,18 @@ internal fun PlaybackControls(player: PlayerUiState, onToggle: () -> Unit, onPre
         }
         IconButton(onPrevious) { KinaraIcon(Glyph.PREVIOUS, "上一曲", Modifier.size(27.dp)) }
         val playShape = if (theme.kind == KinaraThemeKind.INDUSTRIAL) kinaraShape(32.dp) else CircleShape
-        val ink = if (theme.kind == KinaraThemeKind.INDUSTRIAL) c.accent else c.text
+        val ink = c.accent
         IconButton(onToggle, Modifier.size(64.dp).clip(playShape)
-            .background(ink.copy(alpha = 0.035f)).border(1.5.dp, ink.copy(alpha = 0.85f), playShape)) {
+            .background(ink)) {
             KinaraIcon(if (player.recovering || player.playing) Glyph.PAUSE else if (player.error != null) Glyph.REFRESH else Glyph.PLAY,
-                if (player.recovering || player.playing) "暂停" else if (player.error != null) "重试播放" else "播放", Modifier.size(29.dp), ink)
+                if (player.recovering || player.playing) "暂停" else if (player.error != null) "重试播放" else "播放", Modifier.size(29.dp),
+                if (theme.kind == KinaraThemeKind.INDUSTRIAL) androidx.compose.ui.graphics.Color(0xff16191c) else androidx.compose.ui.graphics.Color.White)
         }
-        val canNext = player.currentIndex < player.queue.lastIndex
+        // 列表循环/随机模式下,最后一首之后仍会回到开头,所以不能只看 index 是否到了末尾,
+        // 否则"下一曲"会在一种正常播放模式下变灰失效。
+        val canNext = player.queue.size > 1 &&
+            (player.currentIndex < player.queue.lastIndex || player.shuffle ||
+                player.repeatMode == Player.REPEAT_MODE_ALL)
         IconButton(onNext, enabled = canNext) {
             KinaraIcon(Glyph.NEXT, "下一曲", Modifier.size(27.dp), if (canNext) c.text else c.textDim.copy(alpha = 0.35f))
         }
@@ -146,10 +169,12 @@ internal fun PlayerModeSelector(mode: PlayerVisualMode, onChange: (PlayerVisualM
         PlayerVisualMode.entries.forEach { item ->
             Box(Modifier.weight(1f).heightIn(min = 48.dp).clip(shape)
                 .selectable(item == mode, role = Role.Tab, onClick = { onChange(item) }), contentAlignment = Alignment.Center) {
-                Text(item.label, fontSize = 12.sp, fontWeight = if (item == mode) FontWeight.SemiBold else FontWeight.Normal,
-                    color = if (item == mode) c.text else c.textDim,
-                    modifier = Modifier.clip(shape).background(if (item == mode) c.text.copy(alpha = 0.09f) else androidx.compose.ui.graphics.Color.Transparent)
-                        .padding(horizontal = 17.dp, vertical = 7.dp))
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Box(Modifier.size(if (item == mode) 6.dp else 4.dp).background(
+                        if (item == mode) c.text else c.textDim.copy(alpha = 0.4f), CircleShape))
+                    Text(item.label, fontSize = 11.sp, fontWeight = if (item == mode) FontWeight.SemiBold else FontWeight.Normal,
+                        color = if (item == mode) c.text else c.textDim)
+                }
             }
         }
     }

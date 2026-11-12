@@ -47,18 +47,46 @@ internal class AppUpdater(private val context: Context,
     val policy: ReleasePolicy = ReleasePolicy(BuildConfig.UPDATE_REPOSITORY),
     private val client: OkHttpClient = mediaHttpClient(policy::trustedDownloadUrl)) {
     suspend fun check(): UpdateRelease? {
-        val response = OnlineTransport.getText(policy.apiUrl, mapOf("Accept" to "application/vnd.github+json"))
-        if (response.code == 404) return null
-        check(response.code == 200) { if (response.code == 403 || response.code == 429) "更新服务请求过于频繁，请稍后重试" else "更新服务暂时不可用" }
-        return policy.parse(response.body, requireNotNull(ReleaseVersion.parse(BuildConfig.VERSION_NAME)))
+        val headers = mapOf("Accept" to "application/vnd.github+json")
+        var failure: Exception? = null
+        // 直连 GitHub 优先；连不上（或被限流）时再走公共反代，让"连不上 GitHub"不等于"没法更新"。
+        for (target in policy.apiTargets) {
+            try {
+                val response = OnlineTransport.getText(target, headers)
+                when {
+                    response.code == 200 -> return policy.parse(response.body, requireNotNull(ReleaseVersion.parse(BuildConfig.VERSION_NAME)))
+                    // 404 表示确实还没有发布版本，换镜像也是同样的结果，直接收工。
+                    response.code == 404 -> return null
+                    response.code == 403 || response.code == 429 ->
+                        failure = IllegalStateException("更新服务请求过于频繁，请稍后重试")
+                    else -> failure = IllegalStateException("更新服务暂时不可用")
+                }
+            } catch (e: Exception) {
+                if (e is CancellationException) throw e
+                failure = e
+            }
+        }
+        throw failure ?: IllegalStateException("更新服务暂时不可用")
     }
 
     suspend fun download(release: UpdateRelease, progress: (Long) -> Unit): File = withContext(Dispatchers.IO) {
-        check(policy.trustedDownloadUrl(release.apkUrl)) { "安装包地址不受信任" }
         val folder = File(context.cacheDir, "updates").apply { mkdirs() }
+        var failure: Exception? = null
+        for (target in policy.downloadTargets(release.apkUrl)) {
+            check(policy.trustedDownloadUrl(target)) { "安装包地址不受信任" }
+            try { return@withContext fetch(target, release, folder, progress) }
+            catch (e: Exception) {
+                if (e is CancellationException) throw e
+                failure = e
+            }
+        }
+        throw failure ?: IllegalStateException("安装包下载失败，请稍后重试")
+    }
+
+    private suspend fun fetch(url: String, release: UpdateRelease, folder: File, progress: (Long) -> Unit): File {
         val partial = File.createTempFile("kinara-", ".part", folder)
-        val call = client.newCall(Request.Builder().url(release.apkUrl).header("Accept", "application/octet-stream").build())
-        suspendCancellableCoroutine { continuation ->
+        val call = client.newCall(Request.Builder().url(url).header("Accept", "application/octet-stream").build())
+        return suspendCancellableCoroutine { continuation ->
             continuation.invokeOnCancellation { call.cancel() }
             val result = runCatching {
                 call.execute().use { response ->

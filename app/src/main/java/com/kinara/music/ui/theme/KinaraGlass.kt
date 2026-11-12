@@ -14,6 +14,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -147,6 +148,12 @@ fun KinaraGlassPanel(
 ) {
     val spec = LocalKinaraTheme.current
     val c = spec.colors
+    if (spec.surfaceStyle == KinaraSurfaceStyle.SIMPLE && spec.kind != KinaraThemeKind.INDUSTRIAL) {
+        top.yukonga.miuix.kmp.basic.Card(modifier = modifier, cornerRadius = 16.dp) {
+            Box(Modifier.fillMaxWidth(), propagateMinConstraints = true, contentAlignment = contentAlignment, content = content)
+        }
+        return
+    }
     if (spec.kind == KinaraThemeKind.INDUSTRIAL) {
         val cut = androidx.compose.foundation.shape.CutCornerShape(topEnd = 12.dp, bottomStart = 4.dp)
         Box(modifier.clip(cut).background(c.panel).border(1.dp, c.borderOuter, cut), contentAlignment = contentAlignment) {

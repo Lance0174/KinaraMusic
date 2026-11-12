@@ -64,4 +64,50 @@ class OnlineRepository(private val toggles: () -> SourceToggles) : PlaybackAcces
         "solara" -> SolaraSource.lyric(key.id, settings.solaraBaseUrl, settings.solaraSecret)
         else -> null
     }
+
+    /**
+     * 按曲目取歌词：先问它自己的音源，取不到再按"同一条录音"去其他已启用音源上找。
+     *
+     * 为什么必须要有这一步：bilibili 与 gd 没有任何歌词接口（上面的 when 落到 else -> null），
+     * 而这两个平台恰恰是"别的源播不动"时最常用的兜底播放源——于是用户看到的就是
+     * "这首歌能放，但永远没有歌词"。跨源兜底把这些歌重新接回有歌词的音源。
+     * 匹配一律复用 sameRecording（标题归一化 + 歌手集合 + 时长 ±5s），避免张冠李戴。
+     */
+    suspend fun lyricFor(track: Track, settings: KinaraSettings): String? {
+        val key = track.onlineKey ?: return null
+        lyric(key, settings)?.takeIf { it.isNotBlank() }?.let { return it }
+        return crossSourceLyric(track, settings)
+    }
+
+    private suspend fun crossSourceLyric(track: Track, settings: KinaraSettings): String? {
+        val ownPlatform = track.onlineKey?.platform
+        val keyword = "${track.title} ${track.artist}".trim()
+        if (keyword.isEmpty()) return null
+        for (platform in settings.sources.enabledInOrder()) {
+            if (platform == ownPlatform) continue
+            // 没有歌词接口的平台不必问（问了也只是白等一个超时）。
+            if (platform !in LYRIC_PLATFORMS) continue
+            val hits = withTimeoutOrNull(LYRIC_SEARCH_BUDGET_MS) {
+                try { searchSource(platform, keyword, settings) } catch (e: Exception) {
+                    if (e is CancellationException) throw e
+                    null
+                }
+            }?.tracks?.filter { sameRecording(track, it) }?.distinctBy { it.id }?.take(2).orEmpty()
+            for (hit in hits) {
+                val text = withTimeoutOrNull(LYRIC_FETCH_BUDGET_MS) {
+                    try { lyric(OnlineKey(platform, hit.id, track.onlineKey?.bitrate ?: settings.preferredBitrate), settings) }
+                    catch (e: Exception) { if (e is CancellationException) throw e; null }
+                }
+                if (!text.isNullOrBlank()) return text
+            }
+        }
+        return null
+    }
+
+    private companion object {
+        /** 有歌词接口的平台；bilibili / gd 不在其中，只能通过跨源兜底拿词。 */
+        val LYRIC_PLATFORMS = setOf("netease", "qq", "kugou", "kuwo", "solara")
+        const val LYRIC_SEARCH_BUDGET_MS = 3500L
+        const val LYRIC_FETCH_BUDGET_MS = 4000L
+    }
 }

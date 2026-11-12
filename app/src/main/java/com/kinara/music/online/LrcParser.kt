@@ -37,9 +37,21 @@ object LrcParser {
         for (raw in lrc.lineSequence()) {
             val matches = TAG.findAll(raw).toList()
             if (matches.isEmpty()) continue
-            val text = raw.substring(matches.last().range.last + 1).trim()
-            if (text.isEmpty()) continue
+            // 只有"行首连续出现"的时间标签才代表同一句的多个时间点（[t1][t2]歌词）。
+            // 原实现按"最后一个标签之后"取文本，有两个毛病：
+            //   1) 少数 LRC 把标签写到行尾（"[00:01.00]歌词[00:02.00]"），取到空串就把整行丢掉，
+            //      歌词凭空少一句；
+            //   2) 行尾那个标签还会被当成时间点展开，同一句被重复计入。
+            // 现在只认行首连续的标签，文本取其后剩余内容并剔除残留标签。
+            var lead = matches.first().range.first
             for (m in matches) {
+                if (m.range.first == lead) lead = m.range.last + 1 else break
+            }
+            val leading = matches.filter { it.range.last < lead }
+            if (leading.isEmpty()) continue
+            val text = raw.substring(lead).replace(TAG, "").trim()
+            if (text.isEmpty()) continue
+            for (m in leading) {
                 val mm = m.groupValues[1].toLong()
                 val ss = m.groupValues[2].toLong()
                 if (ss >= 60) continue

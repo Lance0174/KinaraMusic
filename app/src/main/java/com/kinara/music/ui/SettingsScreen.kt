@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
@@ -29,6 +30,10 @@ import com.kinara.music.player.AudioCache
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.launch
+import top.yukonga.miuix.kmp.basic.Card
+import top.yukonga.miuix.kmp.extra.SuperSpinner
+import top.yukonga.miuix.kmp.extra.SpinnerEntry
+import top.yukonga.miuix.kmp.extra.SuperSwitch
 
 @Composable
 fun SettingsScreen(settings: KinaraSettings, onTheme: (KinaraThemeKind) -> Unit, onDark: (String) -> Unit,
@@ -37,75 +42,39 @@ fun SettingsScreen(settings: KinaraSettings, onTheme: (KinaraThemeKind) -> Unit,
     onPreferences: ((KinaraSettings) -> KinaraSettings) -> Unit = {}, onPreviewLyrics: (() -> Unit)? = null) {
     val c = LocalKinaraTheme.current.colors
     var licenses by remember { mutableStateOf(false) }
-    Column(Modifier.fillMaxSize().testTag("settings_scroll").verticalScroll(rememberScrollState()).padding(horizontal = 20.dp)
-        .padding(bottom = LocalDockInset.current), verticalArrangement = Arrangement.spacedBy(20.dp)) {
-        SettingsSection("外观") {
-            Text("主题", fontSize = 14.sp, color = c.textDim)
+    Column(Modifier.fillMaxSize().padding(bottom = LocalDockInset.current).testTag("settings_scroll")
+        .verticalScroll(rememberScrollState()).padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
+        SettingsSection("外观与主题") {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                KinaraThemeKind.entries.forEach { kind -> ChoiceChip(kind.label, settings.theme == kind, { onTheme(kind) }, Modifier.weight(1f)) }
-            }
-            Spacer(Modifier.height(12.dp))
-            Text("明暗模式", fontSize = 14.sp, color = c.textDim)
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                listOf("浅色" to "LIGHT", "深色" to "DARK", "自动" to "SYSTEM").forEach { (label, value) ->
-                    ChoiceChip(label, settings.darkMode.name == value, { onDark(value) }, Modifier.weight(1f))
+                listOf("浅色", "深色", "工业").forEachIndexed { index, label ->
+                    val selected = if (index == 2) settings.theme == KinaraThemeKind.INDUSTRIAL else
+                        settings.theme == KinaraThemeKind.DEFAULT && settings.darkMode == if (index == 0) KinaraDarkMode.LIGHT else KinaraDarkMode.DARK
+                    ChoiceChip(label, selected, {
+                        onPreferences { it.copy(theme = if (index == 2) KinaraThemeKind.INDUSTRIAL else KinaraThemeKind.DEFAULT,
+                            darkMode = if (index == 0) KinaraDarkMode.LIGHT else KinaraDarkMode.DARK) }
+                    }, Modifier.weight(1f))
                 }
             }
-        }
-        SettingsSection("音乐来源") {
-            Text("搜索会合并各来源的歌曲；播放失败时自动尝试其他来源。", color = c.textDim, fontSize = 12.sp)
-            SourceRow("netease", "网易云音乐", settings.sources.netease, onSource)
-            SourceRow("kuwo", "酷我音乐", settings.sources.kuwo, onSource)
-            SourceRow("kugou", "酷狗音乐", settings.sources.kugou, onSource, "播放可使用聚合匹配")
-            SourceRow("qq", "QQ音乐", settings.sources.qq, onSource, "播放可使用聚合匹配")
-            SourceRow("bilibili", "哔哩哔哩", settings.sources.bilibili, onSource)
-            SourceRow("solara", "Solara", settings.sources.solara, onSource, if (settings.solaraBaseUrl.isNotBlank()) "已配置服务" else "需由部署者配置服务地址和凭据")
-            HorizontalDivider(color = c.textDim.copy(alpha = 0.12f), modifier = Modifier.padding(vertical = 6.dp))
-            SourceRow("gdFallback", "聚合补充", settings.sources.gdFallback, onSource, "为部分来源匹配同名、同艺术家的音频")
-        }
-        SettingsSection("播放与缓存") {
-            PlaybackPreferences(settings, onBitrate, onCacheLimit, onDiagnostics)
+            SettingsChoice("明暗模式", KinaraDarkMode.entries.map { it.label }, settings.darkMode.ordinal,
+                onSelect = { onDark(KinaraDarkMode.entries[it].name) })
+            SettingsChoice("界面质感", KinaraSurfaceStyle.entries.map { it.label }, settings.surfaceStyle.ordinal,
+                summary = "简洁卡片，或带背景模糊的液态玻璃", onSelect = { index -> onPreferences { it.copy(surfaceStyle = KinaraSurfaceStyle.entries[index]) } })
         }
         SettingsSection("歌词与歌曲信息") {
-            Text("歌词视觉模式", fontWeight = FontWeight.SemiBold, color = c.text)
-            LyricRenderer.entries.forEach { renderer ->
-                Row(Modifier.fillMaxWidth().selectable(settings.lyricRenderer == renderer, role = Role.RadioButton,
-                    onClick = { onPreferences { it.copy(lyricRenderer = renderer, playerVisualMode = PlayerVisualMode.LYRICS) } }).heightIn(min = 64.dp),
-                    verticalAlignment = Alignment.CenterVertically) {
-                    RadioButton(settings.lyricRenderer == renderer, onClick = null)
-                    Column(Modifier.padding(start = 8.dp)) {
-                        Text(renderer.label, color = c.text)
-                        Text(when (renderer) {
-                            LyricRenderer.CLASSIC -> "清晰简洁，逐行跟随"
-                            LyricRenderer.GLOW -> "逐字点亮，柔和平滑滚动"
-                            LyricRenderer.FOLIA_LUMIERE -> "让歌词成为影像，体验多种动态编排"
-                        }, fontSize = 12.sp, color = c.textDim)
-                    }
-                }
-            }
+            SettingsChoice("歌词视觉模式", LyricRenderer.entries.map { it.label }, settings.lyricRenderer.ordinal,
+                summary = "经典逐行、逐字辉光与多样动态编排", onSelect = { index ->
+                    onPreferences { it.copy(lyricRenderer = LyricRenderer.entries[index], playerVisualMode = PlayerVisualMode.LYRICS) }
+                })
             Text("在播放页左右滑动，或轻点底部切换封面与歌词", color = c.textDim, fontSize = 12.sp)
             if (settings.lyricRenderer == LyricRenderer.FOLIA_LUMIERE) {
                 Spacer(Modifier.height(12.dp))
-                Text("视觉编排", color = c.text, fontWeight = FontWeight.SemiBold)
-                LyricVisualStyle.entries.forEach { style ->
-                    Row(Modifier.fillMaxWidth().selectable(settings.lyricVisualStyle == style, role = Role.RadioButton,
-                        onClick = { onPreferences { it.copy(lyricVisualStyle = style, playerVisualMode = PlayerVisualMode.LYRICS) } }).heightIn(min = 64.dp),
-                        verticalAlignment = Alignment.CenterVertically) {
-                        RadioButton(settings.lyricVisualStyle == style, onClick = null)
-                        Column(Modifier.padding(start = 8.dp)) {
-                            Text(style.label, color = c.text)
-                            Text(style.description, color = c.textDim, fontSize = 12.sp)
-                        }
-                    }
-                }
-                Spacer(Modifier.height(12.dp))
-                Text("动态画质", color = c.text)
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    LumiereQuality.entries.forEach { quality ->
-                        ChoiceChip(quality.label, settings.lumiereQuality == quality,
-                            { onPreferences { it.copy(lumiereQuality = quality) } }, Modifier.weight(1f))
-                    }
-                }
+                SettingsChoice("视觉编排", LyricVisualStyle.entries.map { it.label }, settings.lyricVisualStyle.ordinal,
+                    summary = settings.lyricVisualStyle.description, onSelect = { index ->
+                        onPreferences { it.copy(lyricVisualStyle = LyricVisualStyle.entries[index], playerVisualMode = PlayerVisualMode.LYRICS) }
+                    })
+                SettingsChoice("动态画质", LumiereQuality.entries.map { it.label }, settings.lumiereQuality.ordinal,
+                    onSelect = { index -> onPreferences { it.copy(lumiereQuality = LumiereQuality.entries[index]) } })
+                Text("在播放页轻点「横屏」进入沉浸视界，返回可退出。", color = c.textDim, fontSize = 12.sp)
             }
             if (onPreviewLyrics != null) TextButton(onPreviewLyrics, Modifier.fillMaxWidth()) { Text("查看当前歌曲效果") }
             HorizontalDivider(Modifier.padding(vertical = 12.dp), color = c.textDim.copy(alpha = 0.12f))
@@ -121,6 +90,20 @@ fun SettingsScreen(settings: KinaraSettings, onTheme: (KinaraThemeKind) -> Unit,
                 TextButton({ onPreferences { it.copy(lyricDelayMs = (it.lyricDelayMs + 100).coerceAtMost(10_000)) } }) { Text("延后 0.1 秒") }
             }
         }
+        SettingsSection("音乐来源") {
+            Text("搜索会合并各来源的歌曲；播放失败时自动尝试其他来源。", color = c.textDim, fontSize = 12.sp)
+            SourceRow("netease", "网易云音乐", settings.sources.netease, onSource)
+            SourceRow("qq", "QQ音乐", settings.sources.qq, onSource, "播放可使用聚合匹配")
+            SourceRow("kugou", "酷狗音乐", settings.sources.kugou, onSource, "播放可使用聚合匹配")
+            SourceRow("kuwo", "酷我音乐", settings.sources.kuwo, onSource)
+            SourceRow("bilibili", "哔哩哔哩", settings.sources.bilibili, onSource)
+            SourceRow("solara", "Solara", settings.sources.solara, onSource, if (settings.solaraBaseUrl.isNotBlank()) "已配置服务" else "需由部署者配置服务地址和凭据")
+            HorizontalDivider(color = c.textDim.copy(alpha = 0.12f), modifier = Modifier.padding(vertical = 6.dp))
+            SourceRow("gdFallback", "聚合补充", settings.sources.gdFallback, onSource, "为部分来源匹配同名、同艺术家的音频")
+        }
+        SettingsSection("播放与缓存") {
+            PlaybackPreferences(settings, onBitrate, onCacheLimit, onDiagnostics)
+        }
         SettingsSection("应用更新") { AppUpdatePanel() }
         Column(Modifier.fillMaxWidth().padding(bottom = 8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Text("Kinara", color = c.text, fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
@@ -131,7 +114,16 @@ fun SettingsScreen(settings: KinaraSettings, onTheme: (KinaraThemeKind) -> Unit,
     if (licenses) {
         val context = LocalContext.current
         var file by remember { mutableStateOf("NOTICE.txt") }
-        val notice = remember(file) { context.assets.open("folia/$file").bufferedReader().use { it.readText() } }
+        // 原来在组合期间直接 assets.open().readText()：既是主线程阻塞 I/O，
+        // 又会在资源缺失时直接抛异常把设置页打崩。改成 IO 读取 + 失败降级。
+        var notice by remember(file) { mutableStateOf("正在读取…") }
+        LaunchedEffect(file) {
+            notice = withContext(Dispatchers.IO) {
+                val path = if (file == "miuix-Apache-2.0.txt") "licenses/$file" else "folia/$file"
+                runCatching { context.assets.open(path).bufferedReader().use { it.readText() } }
+                    .getOrElse { "无法读取该许可文件（$file）" }
+            }
+        }
         AlertDialog(onDismissRequest = { licenses = false }, title = { Text("开源许可") }, text = {
             Column {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
@@ -139,6 +131,7 @@ fun SettingsScreen(settings: KinaraSettings, onTheme: (KinaraThemeKind) -> Unit,
                     TextButton({ file = "FOLIA-LICENSE.txt" }) { Text("渲染组件") }
                     TextButton({ file = "THIRD-PARTY.txt" }) { Text("第三方") }
                 }
+                TextButton({ file = "miuix-Apache-2.0.txt" }) { Text("界面组件许可") }
                 Text(notice, fontSize = 12.sp, modifier = Modifier.heightIn(max = 340.dp).verticalScroll(rememberScrollState()))
             }
         }, confirmButton = { TextButton({ licenses = false }) { Text("关闭") } })
@@ -159,7 +152,9 @@ private fun PlaybackPreferences(settings: KinaraSettings, onBitrate: (String) ->
     }
     Text("默认在线音质", style = MaterialTheme.typography.labelLarge)
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-        listOf("128", "320", "flac").forEach { bitrate -> ChoiceChip(bitrate.uppercase(), settings.preferredBitrate == bitrate, { onBitrate(bitrate) }, Modifier.weight(1f)) }
+        // 192 一直是数据模型里合法的一档（PortablePlaylist 导入时接受 128/192/320/flac），
+        // 但设置页只给了三档，导致"能导入却选不出来"。这里补齐，与数据模型对齐。
+        listOf("128", "192", "320", "flac").forEach { bitrate -> ChoiceChip(bitrate.uppercase(), settings.preferredBitrate == bitrate, { onBitrate(bitrate) }, Modifier.weight(1f)) }
     }
     Spacer(Modifier.height(12.dp))
     Text("播放缓存 · ${formatBytes(usage)}", style = MaterialTheme.typography.labelLarge)
@@ -184,8 +179,8 @@ private fun PlaybackPreferences(settings: KinaraSettings, onBitrate: (String) ->
 private fun SettingsSection(title: String, content: @Composable ColumnScope.() -> Unit) {
     val c = LocalKinaraTheme.current.colors
     Column {
-        Text(title, fontSize = 19.sp, fontWeight = FontWeight.SemiBold, color = c.text, modifier = Modifier.padding(start = 4.dp, bottom = 12.dp))
-        Surface(shape = kinaraShape(24.dp), color = c.panelRaised.copy(alpha = if (c.isDark) 0.5f else 0.64f)) {
+        Text(title, fontSize = 13.sp, fontWeight = FontWeight.Medium, color = c.textDim, modifier = Modifier.padding(start = 16.dp, bottom = 9.dp))
+        Card(modifier = Modifier.fillMaxWidth(), cornerRadius = 16.dp) {
             Column(Modifier.padding(16.dp), content = content)
         }
     }
@@ -193,13 +188,13 @@ private fun SettingsSection(title: String, content: @Composable ColumnScope.() -
 
 @Composable
 private fun SourceRow(key: String, label: String, enabled: Boolean, onSource: (String, Boolean) -> Unit, description: String? = null) {
-    val c = LocalKinaraTheme.current.colors
-    Row(Modifier.fillMaxWidth().toggleable(enabled, role = Role.Switch, onValueChange = { onSource(key, it) })
-        .heightIn(min = 60.dp).padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-        Column(Modifier.weight(1f).padding(end = 12.dp)) {
-            Text(label, color = c.text, fontSize = 15.sp)
-            if (description != null) Text(description, color = c.textDim, fontSize = 12.sp, lineHeight = 18.sp, modifier = Modifier.padding(top = 3.dp))
-        }
-        Switch(enabled, onCheckedChange = null)
-    }
+    SuperSwitch(checked = enabled, onCheckedChange = { onSource(key, it) }, title = label, summary = description,
+        insideMargin = PaddingValues(vertical = 12.dp))
+}
+
+@Composable
+private fun SettingsChoice(title: String, items: List<String>, selected: Int, summary: String? = null, onSelect: (Int) -> Unit) {
+    // Dialog mode also supports large text and avoids the popup's duplicate measurement semantics.
+    SuperSpinner(items = items.map { SpinnerEntry(title = it) }, selectedIndex = selected, title = title, dialogButtonString = "完成",
+        summary = summary, insideMargin = PaddingValues(vertical = 14.dp), onSelectedIndexChange = onSelect)
 }

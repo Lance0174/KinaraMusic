@@ -21,15 +21,16 @@ import com.kinara.music.ui.theme.KinaraGlassPanel
 import com.kinara.music.ui.theme.LocalKinaraTheme
 
 @Composable
-fun MiniPlayer(player: PlayerUiState, onTogglePlay: () -> Unit, onNext: () -> Unit, onOpen: () -> Unit, modifier: Modifier = Modifier) {
+fun MiniPlayer(player: PlayerUiState, onTogglePlay: () -> Unit, onNext: () -> Unit, onOpen: () -> Unit, modifier: Modifier = Modifier,
+    onQueue: () -> Unit = onOpen) {
     val current = player.current ?: return
     val c = LocalKinaraTheme.current.colors
     val progress = com.kinara.music.player.LocalPlayerProgress.current
-    KinaraGlassPanel(modifier = modifier.fillMaxWidth().testTag("mini_player"), shape = RoundedCornerShape(24.dp)) {
+    KinaraGlassPanel(modifier = modifier.fillMaxWidth().testTag("mini_player"), shape = RoundedCornerShape(16.dp)) {
         Column {
             Row(Modifier.fillMaxWidth().clickable(onClickLabel = "打开正在播放", onClick = onOpen)
                 .padding(start = 10.dp, end = 4.dp, top = 10.dp, bottom = 10.dp), verticalAlignment = Alignment.CenterVertically) {
-                KinaraArtwork(current, 46.dp, corner = 13.dp)
+                KinaraArtwork(current, 42.dp, corner = 10.dp)
                 Spacer(Modifier.width(12.dp))
                 Column(Modifier.weight(1f)) {
                     Text(current.title, color = c.text, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
@@ -37,11 +38,11 @@ fun MiniPlayer(player: PlayerUiState, onTogglePlay: () -> Unit, onNext: () -> Un
                     Text(if (player.recovering) "正在尝试其他来源…" else if (player.error != null) "播放失败，点按重试" else if (player.buffering) "正在加载…" else current.artist,
                         color = c.textDim, fontSize = 12.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
-                IconButton(onTogglePlay, Modifier.clip(CircleShape).background(c.accent.copy(alpha = 0.10f))) {
+                IconButton(onTogglePlay) {
                     KinaraIcon(if (player.recovering || player.playing) Glyph.PAUSE else if (player.error != null) Glyph.REFRESH else Glyph.PLAY,
                         if (player.recovering || player.playing) "暂停" else if (player.error != null) "重试播放" else "播放", tint = c.accent)
                 }
-                IconButton(onNext, enabled = player.currentIndex < player.queue.lastIndex) { KinaraIcon(Glyph.NEXT, "下一曲", tint = c.textDim) }
+                IconButton(onQueue) { KinaraIcon(Glyph.QUEUE, "打开播放队列", tint = c.textDim) }
             }
             if (player.buffering || player.recovering) LinearProgressIndicator(Modifier.fillMaxWidth().height(2.dp), color = c.accent, trackColor = c.accent.copy(alpha = 0.1f))
             else LinearProgressIndicator(progress = { val tick = progress?.value

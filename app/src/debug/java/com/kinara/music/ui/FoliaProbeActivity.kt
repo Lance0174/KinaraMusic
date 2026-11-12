@@ -55,7 +55,7 @@ class FoliaProbeActivity : ComponentActivity() {
             }
             KinaraTheme(KinaraThemeKind.DEFAULT, KinaraDarkMode.DARK) {
                 CompositionLocalProvider(LocalPlayerProgress provides progress) {
-                    PlayerBackdrop(emptyList()) {
+                    PlayerBackdrop {
                         PlayScreen(PlayerUiState(listOf(track), 0, playing = playing, durationMs = 60000, positionMs = seek),
                             lyrics, {}, {}, {}, { seek = it }, settings = settings,
                             onVisualMode = { settings = settings.copy(playerVisualMode = it) })

@@ -19,6 +19,7 @@ import com.kinara.music.ui.theme.LocalKinaraTheme
 enum class Glyph(val path: String, val solid: Boolean = false) {
     LIBRARY("M4 5 L4 20 M9 3 L9 20 M14 6 L18 5 L22 19 L18 20 Z"),
     SEARCH("M18 10 A8 8 0 1 1 2 10 A8 8 0 1 1 18 10 M16 16 L22 22"),
+    DOWNLOAD("M12 3 L12 15 M7 10 L12 15 L17 10 M4 17 L4 21 L20 21 L20 17"),
     SETTINGS("M4 6 L20 6 M4 12 L20 12 M4 18 L20 18 M8 3 L8 9 M16 9 L16 15 M10 15 L10 21"),
     PLAY("M8 4 L21 12 L8 20 Z", true),
     PAUSE("M6 4 L10 4 L10 20 L6 20 Z M14 4 L18 4 L18 20 L14 20 Z", true),

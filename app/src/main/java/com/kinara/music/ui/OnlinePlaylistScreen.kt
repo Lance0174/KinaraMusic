@@ -16,7 +16,8 @@ import com.kinara.music.ui.theme.LocalKinaraTheme
 
 @Composable
 fun PlaylistResultScreen(title: String, message: String, tracks: List<OnlineTrack>, onPlay: (OnlineTrack) -> Unit,
-    onClose: () -> Unit, onSave: () -> Unit, importing: Boolean = false) {
+    onClose: () -> Unit, onSave: () -> Unit, importing: Boolean = false,
+    onPlayNext: ((OnlineTrack) -> Unit)? = null) {
     val c = LocalKinaraTheme.current.colors
     Column(Modifier.fillMaxSize().padding(horizontal = 20.dp)) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
@@ -25,9 +26,15 @@ fun PlaylistResultScreen(title: String, message: String, tracks: List<OnlineTrac
         }
         Text(message, color = c.textDim, fontSize = 13.sp, modifier = Modifier.padding(vertical = 12.dp))
         if (importing) LinearProgressIndicator(Modifier.fillMaxWidth())
-        if (tracks.isNotEmpty()) Button(onSave, Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text("保存到音乐库 · ${tracks.size} 首") }
-        LazyColumn(contentPadding = PaddingValues(top = 12.dp, bottom = LocalDockInset.current)) {
-            items(tracks, key = { it.platform + it.id }) { t -> TrackRow(t.toTrack("320"), onClick = { onPlay(t) }) }
+        // 导入进行中必须禁用，否则连点两下会创建两个同名歌单。
+        if (tracks.isNotEmpty()) Button(onSave, Modifier.fillMaxWidth().heightIn(min = 48.dp), enabled = !importing) {
+            Text("保存到音乐库 · ${tracks.size} 首")
+        }
+        LazyColumn(modifier = Modifier.padding(bottom = LocalDockInset.current), contentPadding = PaddingValues(top = 12.dp, bottom = 8.dp)) {
+            items(tracks, key = { it.platform + it.id }) { t ->
+                TrackRow(t.toTrack("320"), onClick = { onPlay(t) },
+                    onPlayNext = if (onPlayNext == null) null else ({ onPlayNext(t) }))
+            }
         }
     }
 }

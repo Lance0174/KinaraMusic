@@ -138,6 +138,12 @@ class Downloads internal constructor(private val context: Context,
     }
     fun retry(entry: DownloadEntry) { enqueue(entry.requestedTrack, entry.requestedTrack.onlineKey?.bitrate ?: "320") }
 
+    /**
+     * 等首次加载完成（构造时异步解码磁盘记录，然后才启动首轮校验）。
+     * 下载列表界面用它在首帧显示加载态，而不是先渲染"空列表"再被真实数据替换。
+     */
+    suspend fun awaitReady() { ready.join() }
+
     fun refresh() {
         if (polling?.isActive == true) return
         polling = scope.launch {

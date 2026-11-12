@@ -78,8 +78,13 @@ class OnlinePlayback(private val repo: PlaybackAccess,
         }
     }
 
+    /**
+     * 歌词按"整首曲目"取，因为跨源兜底需要标题与艺术家去别的音源上找同一条录音。
+     * 只有 OnlineRepository 实现了歌词（PlaybackAccess 接口本身没有 lyric 契约），
+     * 拿不到时明确返回 null，而不是静默当成"这首歌没有歌词"。
+     */
     suspend fun lyricFor(track: Track, settings: KinaraSettings): String? =
-        track.onlineKey?.let { (repo as? OnlineRepository)?.lyric(it, settings) }
+        (repo as? OnlineRepository)?.lyricFor(track, settings)
 
     companion object {
         internal const val SOURCE_BUDGET_MS = 6000L
