@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
@@ -94,6 +95,7 @@ internal fun DynamicLyrics(lyrics: List<LyricLine>, player: PlayerUiState, setti
         LaunchedEffect(browsing, list.isScrollInProgress) {
             if (browsing && !list.isScrollInProgress) { delay(5_000); browsing = false }
         }
+        val anchorPx = with(LocalDensity.current) { inset.roundToPx() }
         LaunchedEffect(active, lyrics, motion, browsing) {
             if (!browsing) {
                 val target = active.coerceAtLeast(0)
@@ -101,7 +103,10 @@ internal fun DynamicLyrics(lyrics: List<LyricLine>, player: PlayerUiState, setti
                 val visible = list.layoutInfo.visibleItemsInfo.firstOrNull { it.index == target }
                 // A seek across many lines jumps directly; normal progression eases into the reading anchor.
                 if (!motion || active < 0 || lineDuration < 180 || visible == null) list.scrollToItem(target)
-                else list.animateScrollBy(visible.offset.toFloat(), tween(
+                // visible.offset 已经包含顶部 contentPadding(=阅读锚点)。原来按 offset 滚动会把
+                // 正在唱的那行顶到视口最上沿,正好落进上方 DstIn 渐隐里而看不清;
+                // 减去锚点后,这一行才会停在设计好的阅读位置。
+                else list.animateScrollBy((visible.offset - anchorPx).toFloat(), tween(
                     (lineDuration / 3).coerceIn(180, 480).toInt(), easing = FastOutSlowInEasing))
             }
         }

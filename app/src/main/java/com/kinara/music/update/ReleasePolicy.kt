@@ -21,11 +21,31 @@ data class ReleaseVersion(val major: Int, val minor: Int, val patch: Int) : Comp
 data class UpdateRelease(val version: ReleaseVersion, val notes: String, val pageUrl: String,
     val apkUrl: String, val bytes: Long, val sha256: String)
 
+/**
+ * 公共 GitHub 反代前缀（path 前缀式：镜像地址 = 前缀 + 原始地址）。
+ *
+ * 只在直连 github.com 失败时按顺序尝试，解决"国内连不上 GitHub 就没法更新"。
+ * 安全性并不依赖这些镜像：元数据仍必须匹配 html_url、资源名与 SHA-256，
+ * 落地前还要求安装包**签名与已安装应用一致**（validateApkIdentity），
+ * 镜像即使返回伪造的元数据也换不出一个能覆盖安装的包。
+ */
+internal val UPDATE_MIRRORS = listOf(
+    "https://gh-proxy.com/",
+    "https://ghfast.top/",
+    "https://ghproxy.net/",
+)
+
 /** Only official release assets, not Actions artifacts, are eligible for installation. */
 internal class ReleasePolicy(val repository: String) {
     init { require(Regex("[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+").matches(repository)) }
     val pageUrl = "https://github.com/$repository/releases"
     val apiUrl = "https://api.github.com/repos/$repository/releases/latest"
+
+    /** 检查更新的地址：直连优先，失败后依次试反代。 */
+    val apiTargets: List<String> get() = listOf(apiUrl) + UPDATE_MIRRORS.map { it + apiUrl }
+
+    /** 下载地址：直连优先，失败后依次试反代。 */
+    fun downloadTargets(apkUrl: String): List<String> = listOf(apkUrl) + UPDATE_MIRRORS.map { it + apkUrl }
 
     fun parse(body: String, installed: ReleaseVersion): UpdateRelease? {
         val release = JSONObject(body)
@@ -50,7 +70,17 @@ internal class ReleasePolicy(val repository: String) {
         return UpdateRelease(version, release.optString("body").take(12_000), expectedPage, expectedUrl, size, digest.substring(7).lowercase())
     }
 
-    fun trustedDownloadUrl(value: String): Boolean = runCatching {
+    /**
+     * 允许两种形态：直连 GitHub 的正式资源地址，或"已知反代前缀 + 该地址"。
+     * 反代形态会剥掉前缀后按**完全相同**的规则再校验一次内层地址，
+     * 所以前缀只是个传输通道，不会放宽对目标地址的要求。
+     */
+    fun trustedDownloadUrl(value: String): Boolean =
+        canonicalAsset(value) || UPDATE_MIRRORS.any { prefix ->
+            value.startsWith(prefix) && canonicalAsset(value.removePrefix(prefix))
+        }
+
+    private fun canonicalAsset(value: String): Boolean = runCatching {
         val url = URI(value)
         url.scheme == "https" && url.rawUserInfo == null && url.rawFragment == null && url.port in listOf(-1, 443) &&
             when (url.host?.lowercase()) {

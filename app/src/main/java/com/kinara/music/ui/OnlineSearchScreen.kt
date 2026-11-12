@@ -21,7 +21,7 @@ import com.kinara.music.ui.theme.LocalKinaraTheme
 @Composable
 fun OnlineSearchScreen(state: OnlineSearchState, onPlay: (List<OnlineTrack>, Int) -> Unit, onRetry: () -> Unit,
     offline: Boolean = false, favoriteIds: Set<String> = emptySet(), onFavorite: (OnlineTrack) -> Unit = {},
-    onAddToPlaylist: (OnlineTrack) -> Unit = {},
+    onAddToPlaylist: (OnlineTrack) -> Unit = {}, onPlayNext: (OnlineTrack) -> Unit = {},
     enabledSources: List<String> = SOURCE_PRIORITY,
     onOpenSettings: () -> Unit = {}) {
     val c = LocalKinaraTheme.current.colors
@@ -40,10 +40,11 @@ fun OnlineSearchScreen(state: OnlineSearchState, onPlay: (List<OnlineTrack>, Int
             enabledSources.isEmpty() -> EmptyState(Glyph.SETTINGS, "选择你的音乐来源", "开启至少一个音乐来源，\n就可以在这里搜索歌曲。", "前往设置", onOpenSettings)
             offline -> EmptyState(Glyph.SEARCH, "当前没有网络连接", "连接网络后继续搜索。\n本地音乐和收藏仍可在音乐库中查看。", "重新连接", onRetry)
             state.phase == OnlineSearchState.Phase.IDLE -> EmptyState(Glyph.SEARCH, "下一首，想听什么？", "搜索歌名、艺术家或 B站视频。\n把新的喜欢，放进自己的音乐库。")
-            tracks.isNotEmpty() -> LazyColumn(modifier = Modifier.padding(horizontal = 16.dp), contentPadding = PaddingValues(bottom = LocalDockInset.current)) {
+            tracks.isNotEmpty() -> LazyColumn(modifier = Modifier.padding(bottom = LocalDockInset.current).padding(horizontal = 16.dp), contentPadding = PaddingValues(bottom = 8.dp)) {
                 items(tracks, key = { it.platform + it.id }) { t ->
                     TrackRow(t.toTrack("320"), favorite = t.toTrack("320").mediaId in favoriteIds,
-                        onClick = { onPlay(tracks, tracks.indexOf(t)) }, onFavorite = { onFavorite(t) }, onAdd = { onAddToPlaylist(t) }, showSource = false)
+                        onClick = { onPlay(tracks, tracks.indexOf(t)) }, onFavorite = { onFavorite(t) }, onAdd = { onAddToPlaylist(t) },
+                        onPlayNext = { onPlayNext(t) }, showSource = false)
                 }
             }
             state.searching -> Box(Modifier.fillMaxSize().padding(bottom = LocalDockInset.current), contentAlignment = Alignment.Center) { CircularProgressIndicator() }

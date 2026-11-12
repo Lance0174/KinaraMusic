@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  API 24–25 兜底图标。
+  自适应图标 (adaptive-icon) 从 API 26 起才有；项目 minSdk = 24，而此前
+  @mipmap/ic_launcher 只存在于 mipmap-anydpi-v26，导致 24/25 设备运行时
+  解析不到启动器图标（构建期不报错，属于运行期缺陷）。
+  这里提供一份默认配置的 layer-list：API 26+ 仍会优先选用 mipmap-anydpi-v26
+  里的自适应图标，24/25 则回落到这一份。
+  前景矢量本身是 108dp 画布、图形只占中间 72dp 安全区，直接铺满即与自适应
+  图标观感一致。
+-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/ic_launcher_background" />
+    <item android:drawable="@drawable/ic_launcher_foreground" android:gravity="center" />
+</layer-list>

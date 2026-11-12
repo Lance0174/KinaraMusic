@@ -61,8 +61,8 @@ class RedesignFlowTest {
     @Test fun songMenuDoesNotStartPlaybackAndOffersFavoriteAndPlaylist() {
         var plays = 0; var favorites = 0; var additions = 0
         shell {
-            LibrarySections(LibrarySection.SONGS, {})
-            LibraryScreen(LibraryUiState.Ready(songs), player, "", {}, songs, { _, _ -> plays++ }, {},
+
+            LibraryScreen(LibraryUiState.Ready(songs), player, "春", {}, songs, { _, _ -> plays++ }, {},
                 { favorites++ }, emptySet(), { additions++ })
         }
         capture("library-light")
@@ -76,9 +76,9 @@ class RedesignFlowTest {
 
     @Test fun lastSongCanScrollCompletelyAboveFloatingPlayer() {
         val many = (0..39).map { songs[it % songs.size].copy(mediaId = "item-$it", title = "歌曲 $it") }
-        shell(dark = true) { LibrarySections(LibrarySection.SONGS, {})
+        shell(dark = true) {
             LibraryScreen(LibraryUiState.Ready(many), player, "", {}, many, { _, _ -> }, {}) }
-        compose.onNodeWithTag("local_tracks").performScrollToIndex(40)
+        compose.onNodeWithTag("local_tracks").performScrollToNode(hasText("歌曲 39"))
         val song = compose.onNodeWithText("歌曲 39").assertIsDisplayed().fetchSemanticsNode().boundsInRoot
         val mini = compose.onNodeWithTag("mini_player").fetchSemanticsNode().boundsInRoot
         assertTrue("last title must be above dock: $song vs $mini", song.bottom < mini.top)
@@ -94,10 +94,10 @@ class RedesignFlowTest {
         }
         capture("settings-light")
         compose.onNodeWithText("扫码登录").assertDoesNotExist()
-        compose.onNode(hasText("哔哩哔哩") and isToggleable()).performScrollTo()
+        compose.onNode(hasText("哔哩哔哩")).performScrollTo()
         // performScrollTo sees the full scene, including the area behind the floating dock.
         compose.onNodeWithTag("settings_scroll").performTouchInput { swipeUp(startY = height * 0.7f, endY = height * 0.35f) }
-        compose.onNode(hasText("哔哩哔哩") and isToggleable()).performClick().assertIsOff()
+        compose.onNode(hasText("哔哩哔哩")).performClick()
         assertFalse(settings.sources.bilibili)
         compose.onNodeWithText("B站（经Worker）").assertDoesNotExist()
     }
@@ -106,7 +106,7 @@ class RedesignFlowTest {
     // qualifier loops even with a bare Material TextField; render checks retain those dimensions.
     @Test @Config(qualifiers = "w320dp-h470dp-mdpi") fun playlistImportAndCreateUseSeparateFlows() {
         var created = ""; var imported = ""; var qq = true
-        shell { LibrarySections(LibrarySection.PLAYLISTS, {})
+        shell {
             PlaylistScreen(emptyList(), null, { _, _ -> }, { created = it }, { _, _ -> }, {}, { _, _ -> },
                 { qq = false; imported = it }, { qq = true; imported = it }) }
         compose.onNodeWithText("新建歌单").performClick()
@@ -120,7 +120,7 @@ class RedesignFlowTest {
 
     @Test fun playlistDetailBackAndDeleteNeedExplicitActions() {
         var deleted = false
-        shell { LibrarySections(LibrarySection.PLAYLISTS, {})
+        shell {
             PlaylistScreen(listOf(Playlist("p1", "夜晚散步", 0, songs)), null, { _, _ -> }, {}, { _, _ -> }, { deleted = true }, { _, _ -> }) }
         capture("playlists")
         compose.onNodeWithText("夜晚散步").performClick()
@@ -214,7 +214,7 @@ class RedesignFlowTest {
                 } }
             }
         } }
-        compose.onNodeWithText("主题").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("外观与主题").performScrollTo().assertIsDisplayed()
         compose.onNodeWithText("扫码登录").assertDoesNotExist()
         capture("settings-320-large-text")
     }

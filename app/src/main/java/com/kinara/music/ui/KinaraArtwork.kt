@@ -30,7 +30,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.produceState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
@@ -61,6 +63,7 @@ fun KinaraArtwork(
     size: Dp,
     modifier: Modifier = Modifier,
     corner: Dp = 10.dp,
+    contentScale: ContentScale = ContentScale.Crop,
 ) {
     val shape = com.kinara.music.ui.theme.kinaraShape(corner)
     Box(modifier.size(size).clip(shape), contentAlignment = Alignment.Center) {
@@ -77,13 +80,13 @@ fun KinaraArtwork(
         ArtworkPlaceholder(track, Modifier.fillMaxSize())
         when {
             localBitmap != null ->
-                Image(localBitmap, contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
+                Image(localBitmap, contentDescription = null, contentScale = contentScale, modifier = Modifier.fillMaxSize())
             !remoteUrl.isNullOrBlank() -> key(remoteUrl, LocalArtworkOnline.current) {
                 // 在线封面（Coil：磁盘缓存 + 失败自动 error 占位）
                 AsyncImage(
                     model = request,
                     contentDescription = null,
-                    contentScale = ContentScale.Crop,
+                    contentScale = contentScale,
                     modifier = Modifier.fillMaxSize(),
                 )
             }
@@ -121,9 +124,9 @@ internal fun extractLocalArtwork(context: Context, track: Track): Bitmap? {
 @Composable
 private fun rememberLocalArtwork(track: Track): ImageBitmap? {
     val ctx = LocalContext.current.applicationContext
-    val state by produceState<ImageBitmap?>(initialValue = null, track.mediaId, track.localPath) {
-        value = null
-        value = withContext(Dispatchers.IO) { artworkSlots.withPermit { extractLocalArtwork(ctx, track)?.asImageBitmap() } }
+    var state by remember(track.mediaId, track.localPath) { mutableStateOf<ImageBitmap?>(null) }
+    LaunchedEffect(track.mediaId, track.localPath) {
+        state = withContext(Dispatchers.IO) { artworkSlots.withPermit { extractLocalArtwork(ctx, track)?.asImageBitmap() } }
     }
     return state
 }
@@ -133,9 +136,9 @@ private fun rememberLocalArtwork(track: Track): ImageBitmap? {
 fun rememberArtworkColors(track: Track?): List<Color> {
     val ctx = LocalContext.current.applicationContext
     val online = LocalArtworkOnline.current
-    val colors by produceState<List<Color>>(emptyList(), track?.mediaId, track?.coverUrl, online) {
-        value = emptyList()
-        value = withContext(Dispatchers.IO) {
+    var colors by remember(track?.mediaId, track?.coverUrl, online) { mutableStateOf(emptyList<Color>()) }
+    LaunchedEffect(track?.mediaId, track?.coverUrl, online) {
+        colors = withContext(Dispatchers.IO) {
             val bitmap = if (track?.isLocal == true) extractLocalArtwork(ctx, track) else {
                 safeCoverUrl(track?.coverUrl)?.let { url ->
                     val result = coil.Coil.imageLoader(ctx).execute(ImageRequest.Builder(ctx)

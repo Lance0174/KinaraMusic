@@ -32,7 +32,7 @@ class GlassScreenTest {
 
     private fun render(dark: Boolean, playback: Boolean) {
         compose.setContent {
-            KinaraTheme(KinaraThemeKind.DEFAULT, if (dark) KinaraDarkMode.DARK else KinaraDarkMode.LIGHT) {
+            KinaraTheme(KinaraThemeKind.DEFAULT, if (dark) KinaraDarkMode.DARK else KinaraDarkMode.LIGHT, KinaraSurfaceStyle.GLASS) {
                 val haze = rememberKinaraBackdrop()
                 CompositionLocalProvider(LocalKinaraBackdrop provides haze) {
                     Box(Modifier.fillMaxSize().testTag("screen")) {
@@ -45,7 +45,7 @@ class GlassScreenTest {
                         } else KinaraShell(KinaraNav.LIBRARY, {}, player, {}, {}, {}) {
                             Column(Modifier.fillMaxSize()) {
                                 PageTitle("音乐库", "KINARA · 为喜欢留一个位置")
-                                LibrarySections(LibrarySection.SONGS, {})
+
                                 LibraryScreen(LibraryUiState.Ready(listOf(song)), player, "", {}, listOf(song), { _, _ -> }, {})
                             }
                         }
@@ -55,9 +55,9 @@ class GlassScreenTest {
         }
         compose.waitForIdle()
         if (!playback) {
-            compose.onNodeWithContentDescription("下一曲").assertIsDisplayed()
+            compose.onNodeWithContentDescription("打开播放队列").assertIsDisplayed()
             compose.onAllNodesWithText("音乐库")[0].assertIsDisplayed()
-            compose.onNodeWithText("搜索本地歌曲、艺术家").assertIsDisplayed()
+            compose.onNodeWithText("搜索音乐库").assertIsDisplayed()
         } else {
             compose.onNodeWithText("1:14").assertIsDisplayed()
             compose.onNodeWithText("4:00").assertIsDisplayed()
@@ -87,7 +87,7 @@ class GlassScreenTest {
 
     @Test fun fullGlassActuallyBlursBackdropComparedWithLite() {
         compose.setContent {
-            KinaraTheme(KinaraThemeKind.DEFAULT, KinaraDarkMode.LIGHT) {
+            KinaraTheme(KinaraThemeKind.DEFAULT, KinaraDarkMode.LIGHT, KinaraSurfaceStyle.GLASS) {
                 val backdrop = rememberKinaraBackdrop()
                 CompositionLocalProvider(LocalKinaraBackdrop provides backdrop) {
                     Box(Modifier.fillMaxSize()) {
@@ -119,7 +119,7 @@ class GlassScreenTest {
     @Test fun cachedGlassStillUpdatesWhenTheBackdropChanges() {
         var swapped by mutableStateOf(false)
         compose.setContent {
-            KinaraTheme(KinaraThemeKind.DEFAULT, KinaraDarkMode.DARK) {
+            KinaraTheme(KinaraThemeKind.DEFAULT, KinaraDarkMode.DARK, KinaraSurfaceStyle.GLASS) {
                 val backdrop = rememberKinaraBackdrop()
                 CompositionLocalProvider(LocalKinaraBackdrop provides backdrop) {
                     Box(Modifier.fillMaxSize()) {

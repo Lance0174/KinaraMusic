@@ -21,15 +21,27 @@ fun interface PrefsSnapshot {
 private fun themeKindByName(v: String?): KinaraThemeKind =
     KinaraThemeKind.entries.firstOrNull { it.name == v } ?: KinaraThemeKind.DEFAULT
 
+// 注意：这里是**运行期真正生效的缺省值**——KinaraPrefs.settings() 就是走 parseSettings
+// （KinaraPrefs.kt:68），所以全新安装、dark_mode 键还没写盘时得到的是 LIGHT，
+// 而 KinaraSettings 里该字段声明的默认值是 SYSTEM。两者不一致是既有事实，
+// KinaraSettingsParserTest 的两条用例也是按 LIGHT 断言的。
+// 本轮刻意**不改运行期外观**：把缺省改成"跟随系统"会改变所有新装用户的首次观感，
+// 属于产品取向，需由产品决定后单独改（改这里一行，并同步那两条用例）。
 private fun darkModeByName(v: String?): KinaraDarkMode =
     KinaraDarkMode.entries.firstOrNull { it.name == v } ?: KinaraDarkMode.LIGHT
 
 fun parseSettings(snapshot: PrefsSnapshot): KinaraSettings {
     fun str(key: String, def: String) = (snapshot.get(key) as? String) ?: def
     fun bool(key: String, def: Boolean) = (snapshot.get(key) as? Boolean) ?: def
+    val surfaceName = snapshot.get("surface_style") as? String
+    val legacyGlass = surfaceName == null && snapshot.get("theme") == "DEFAULT"
     return KinaraSettings(
         theme = themeKindByName(snapshot.get("theme") as? String),
         darkMode = darkModeByName(snapshot.get("dark_mode") as? String),
+        surfaceStyle = com.kinara.music.ui.theme.KinaraSurfaceStyle.entries.firstOrNull {
+            it.name == surfaceName
+        } ?: if (legacyGlass) com.kinara.music.ui.theme.KinaraSurfaceStyle.GLASS
+            else com.kinara.music.ui.theme.KinaraSurfaceStyle.SIMPLE,
         sources = SourceToggles(
             netease = bool("src_netease", true),
             kuwo = bool("src_kuwo", true),
@@ -63,6 +75,7 @@ fun parseSettings(snapshot: PrefsSnapshot): KinaraSettings {
 fun KinaraSettings.toPrefsMap(): Map<String, Any> = buildMap {
     put("theme", theme.name)
     put("dark_mode", darkMode.name)
+    put("surface_style", surfaceStyle.name)
     put("src_netease", sources.netease)
     put("src_kuwo", sources.kuwo)
     put("src_kugou", sources.kugou)

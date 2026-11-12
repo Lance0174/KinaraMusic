@@ -1,0 +1,5196 @@
+[
+  {
+    "artifact": [
+      "androidx.activity",
+      "activity",
+      "1.10.1",
+      "activity-1.10.1.aar"
+    ],
+    "sha256": [
+      "b62b528c917de9be497eb6f88830197c20e9d21267c3916c613492e5ee837d4d"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/activity/activity/1.10.1/activity-1.10.1.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.activity",
+      "activity",
+      "1.10.1",
+      "activity-1.10.1.module"
+    ],
+    "sha256": [
+      "893b73a4b16d19c0338675ad0b9fa5122d9c69c44f611871bd8c407d3be23a68"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/activity/activity/1.10.1/activity-1.10.1.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.activity",
+      "activity-compose",
+      "1.10.1",
+      "activity-compose-1.10.1.aar"
+    ],
+    "sha256": [
+      "f89af1b26ccc834634387c857c2dd4f4654d37650890039c527c2fed07db6a61"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/activity/activity-compose/1.10.1/activity-compose-1.10.1.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.activity",
+      "activity-compose",
+      "1.10.1",
+      "activity-compose-1.10.1.module"
+    ],
+    "sha256": [
+      "1ed13a50edbb885962751e1bcb5b8a4207a20cb780ea248ffa653aab3fb10fe9"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/activity/activity-compose/1.10.1/activity-compose-1.10.1.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.activity",
+      "activity-ktx",
+      "1.10.1",
+      "activity-ktx-1.10.1.aar"
+    ],
+    "sha256": [
+      "f396f58dbd772c065b873696b74a3d4d087554b3766280e63b49b25dbb53ab16"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/activity/activity-ktx/1.10.1/activity-ktx-1.10.1.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.activity",
+      "activity-ktx",
+      "1.10.1",
+      "activity-ktx-1.10.1.module"
+    ],
+    "sha256": [
+      "7c183895189a27fd7aa59fdcf5029fa64fad28e9d39129a9cb30e40b5e4267ae"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/activity/activity-ktx/1.10.1/activity-ktx-1.10.1.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.annotation",
+      "annotation",
+      "1.9.1",
+      "annotation-1.9.1.module"
+    ],
+    "sha256": [
+      "f204b05b728a97561718bc716242e47c629c0085a80ee74fca53d4d638bcbe3f"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/annotation/annotation/1.9.1/annotation-1.9.1.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.annotation",
+      "annotation",
+      "1.9.1",
+      "annotation-metadata-1.9.1.jar"
+    ],
+    "sha256": [
+      "38322afa7345c37e29c65ec8852178ae1c26e23096a0634d07a4a3893931f58c"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/annotation/annotation/1.9.1/annotation-1.9.1.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.annotation",
+      "annotation-jvm",
+      "1.9.1",
+      "annotation-jvm-1.9.1.jar"
+    ],
+    "sha256": [
+      "1e343917ebf27ba96fe4dc52b1cad7fd32b738fbc6355bb6cd5b3b305d7212d0"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/annotation/annotation-jvm/1.9.1/annotation-jvm-1.9.1.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.annotation",
+      "annotation-jvm",
+      "1.9.1",
+      "annotation-jvm-1.9.1.module"
+    ],
+    "sha256": [
+      "03fb659177c8618e47425925c11bc91f384703ea26c265be9b25cd79292b511c"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/annotation/annotation-jvm/1.9.1/annotation-jvm-1.9.1.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.collection",
+      "collection",
+      "1.4.2",
+      "collection-1.4.2.module"
+    ],
+    "sha256": [
+      "0326d2cf5adbe592312810ca1f71c6c0cc30f753c43f07c7402361b788a7784c"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/collection/collection/1.4.2/collection-1.4.2.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.collection",
+      "collection",
+      "1.5.0",
+      "collection-1.5.0.module"
+    ],
+    "sha256": [
+      "bfeb7bd84f3f7dda7bd73b6709d4a1f61f5a37f843728bae08a067e3df9a0aef"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/collection/collection/1.5.0/collection-1.5.0.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.collection",
+      "collection",
+      "1.5.0",
+      "collection-metadata-1.5.0.jar"
+    ],
+    "sha256": [
+      "f5ffb8f461c4b5d6f2883a2c7047977773b31d5b23ef030c057514c0c9eceb47"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/collection/collection/1.5.0/collection-1.5.0.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.collection",
+      "collection-jvm",
+      "1.5.0",
+      "collection-jvm-1.5.0.jar"
+    ],
+    "sha256": [
+      "70b35924e4babcdffa37d0e575ee039c56a2d97123342624c48b603233704341"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/collection/collection-jvm/1.5.0/collection-jvm-1.5.0.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.collection",
+      "collection-jvm",
+      "1.5.0",
+      "collection-jvm-1.5.0.module"
+    ],
+    "sha256": [
+      "dde85e292509231b5471bb091b575099d4f43161eb281e87385038a0161072e6"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/collection/collection-jvm/1.5.0/collection-jvm-1.5.0.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.collection",
+      "collection-ktx",
+      "1.5.0",
+      "collection-ktx-1.5.0.jar"
+    ],
+    "sha256": [
+      "939b4a8697640e77d83e4e8b4c4a9d18f8130198c5961194af8dd9db9dc7c353"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/collection/collection-ktx/1.5.0/collection-ktx-1.5.0.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.collection",
+      "collection-ktx",
+      "1.5.0",
+      "collection-ktx-1.5.0.module"
+    ],
+    "sha256": [
+      "4228894e25eec7e17329b206ba72e8aad255bc535018dc62acc5eff3b5c7aaa5"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/collection/collection-ktx/1.5.0/collection-ktx-1.5.0.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose",
+      "compose-bom",
+      "2025.06.01",
+      "compose-bom-2025.06.01.pom"
+    ],
+    "sha256": [
+      "ef9b4ba4e0c4236e6da565bdb471b196aab00d2cd5ccfcf246b5ee8ff1e94ee9"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/compose-bom/2025.06.01/compose-bom-2025.06.01.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.animation",
+      "animation",
+      "1.8.3",
+      "animation-1.8.3.module"
+    ],
+    "sha256": [
+      "849188c50e0289582f233eb9af2650e79ba3d40e9aa676c380d5defd3bf4e0ee"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/animation/animation/1.8.3/animation-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.animation",
+      "animation",
+      "1.8.3",
+      "animation-metadata-1.8.3.jar"
+    ],
+    "sha256": [
+      "724af7c866353ff3879cb9795eafa2d9890bd3ec9b9cc343e05facd98ffdc727"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/animation/animation/1.8.3/animation-1.8.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.animation",
+      "animation-android",
+      "1.8.3",
+      "animation-android-1.8.3.module"
+    ],
+    "sha256": [
+      "e7bceacc6dcdb26416554a35dd06a07b8aa512859a2ce99362bb33f503532e57"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/animation/animation-android/1.8.3/animation-android-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.animation",
+      "animation-android",
+      "1.8.3",
+      "animation-release.aar"
+    ],
+    "sha256": [
+      "01c7ccea4579bd2096f3a01dea58a7891900e96db8c80e127be1c44c78a8f7f9"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/animation/animation-android/1.8.3/animation-android-1.8.3.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.animation",
+      "animation-core",
+      "1.8.3",
+      "animation-core-1.8.3.module"
+    ],
+    "sha256": [
+      "f4f4af3d1cc85c449347775a7059ce745fe0f3ee6b12b06411e7625a4a1a332a"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/animation/animation-core/1.8.3/animation-core-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.animation",
+      "animation-core",
+      "1.8.3",
+      "animation-core-metadata-1.8.3.jar"
+    ],
+    "sha256": [
+      "22581989eeb4c6b7a1b66916047c24f1bc01372f29295f170c379406aaca1a99"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/animation/animation-core/1.8.3/animation-core-1.8.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.animation",
+      "animation-core-android",
+      "1.8.3",
+      "animation-core-android-1.8.3.module"
+    ],
+    "sha256": [
+      "ccb58ff68ab6188b143f9b45d5b7e67838e3b7127a0ed76cd05ac80dd773c136"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/animation/animation-core-android/1.8.3/animation-core-android-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.animation",
+      "animation-core-android",
+      "1.8.3",
+      "animation-core-release.aar"
+    ],
+    "sha256": [
+      "24a964ca12d87a5e0cb15a084ec80a7da5588e49ed2a7195c4a640916bc08917"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/animation/animation-core-android/1.8.3/animation-core-android-1.8.3.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.foundation",
+      "foundation",
+      "1.8.3",
+      "foundation-1.8.3.module"
+    ],
+    "sha256": [
+      "8498d717acd70ceadd8d052ca63559e71d5ac0c65c4de2560ab78cd8ae83f282"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/foundation/foundation/1.8.3/foundation-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.foundation",
+      "foundation",
+      "1.8.3",
+      "foundation-metadata-1.8.3.jar"
+    ],
+    "sha256": [
+      "1547d35e817f9f8668f657475fa3a170381294fbfbc56949091eed46f3fd60d5"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/foundation/foundation/1.8.3/foundation-1.8.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.foundation",
+      "foundation-android",
+      "1.8.3",
+      "foundation-android-1.8.3.module"
+    ],
+    "sha256": [
+      "077a2c858553a17c8e2c1115cdbb9b693665d332b18e741ae47a2db555a1d360"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/foundation/foundation-android/1.8.3/foundation-android-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.foundation",
+      "foundation-android",
+      "1.8.3",
+      "foundation-release.aar"
+    ],
+    "sha256": [
+      "ddc815d857480c018c960ee73f1ee5bbebd012b2562864672c3a1ac7304278e5"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/foundation/foundation-android/1.8.3/foundation-android-1.8.3.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.foundation",
+      "foundation-layout",
+      "1.8.3",
+      "foundation-layout-1.8.3.module"
+    ],
+    "sha256": [
+      "d22bc21066ea4e125d7770e796ad483adaf3c2e86cbfc7d23acaf64b2410f0dd"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/foundation/foundation-layout/1.8.3/foundation-layout-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.foundation",
+      "foundation-layout",
+      "1.8.3",
+      "foundation-layout-metadata-1.8.3.jar"
+    ],
+    "sha256": [
+      "261826b42b2de8d6f9b5afa8f3c5476bbdf1e39fe640a2f278a4ae0ce9d9641b"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/foundation/foundation-layout/1.8.3/foundation-layout-1.8.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.foundation",
+      "foundation-layout-android",
+      "1.8.3",
+      "foundation-layout-android-1.8.3.module"
+    ],
+    "sha256": [
+      "ff5f18aa5c2383dc9418345b0e5bb46f80f54b0fb154d10deff12ce2294052b4"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/foundation/foundation-layout-android/1.8.3/foundation-layout-android-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.foundation",
+      "foundation-layout-android",
+      "1.8.3",
+      "foundation-layout-release.aar"
+    ],
+    "sha256": [
+      "053fc28015c454bf68a2ebf298c031ad6329b5628ae4a8d2370831be1dc4320d"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/foundation/foundation-layout-android/1.8.3/foundation-layout-android-1.8.3.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.material",
+      "material-icons-core",
+      "1.7.8",
+      "material-icons-core-1.7.8.module"
+    ],
+    "sha256": [
+      "f9d63655bac19ff7f27abf68a9c0f38f5e42c85e365655b990e6e1a317f92e2f"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material/material-icons-core/1.7.8/material-icons-core-1.7.8.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.material",
+      "material-icons-core",
+      "1.7.8",
+      "material-icons-core-metadata-1.7.8.jar"
+    ],
+    "sha256": [
+      "951f2a3a6c0913819dfaae7c69cb8cdf977f7c79bd53fef03e4faf459ee30a0f"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material/material-icons-core/1.7.8/material-icons-core-1.7.8.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.material",
+      "material-icons-core-android",
+      "1.7.8",
+      "material-icons-core-android-1.7.8.module"
+    ],
+    "sha256": [
+      "99a1ca83e54261a65eb96d44ea02fae43588be45ade5e97963d73e8489ea4a54"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material/material-icons-core-android/1.7.8/material-icons-core-android-1.7.8.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.material",
+      "material-icons-core-android",
+      "1.7.8",
+      "material-icons-core-release.aar"
+    ],
+    "sha256": [
+      "332c06b25e662cc417fb087e76b8faa5cb249f4992ffa3360084a3d4ab882284"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material/material-icons-core-android/1.7.8/material-icons-core-android-1.7.8.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.material",
+      "material-ripple",
+      "1.8.3",
+      "material-ripple-1.8.3.module"
+    ],
+    "sha256": [
+      "632a536c4afc137bd4fe07fd148266e913b3e8044469aebdc4f8f7a2005cf6ba"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material/material-ripple/1.8.3/material-ripple-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.material",
+      "material-ripple",
+      "1.8.3",
+      "material-ripple-metadata-1.8.3.jar"
+    ],
+    "sha256": [
+      "ba6e5494f8ea91ea325b9d19ee1b7551af76e9fb7e17f605e0936897e4c70d5a"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material/material-ripple/1.8.3/material-ripple-1.8.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.material",
+      "material-ripple-android",
+      "1.8.3",
+      "material-ripple-android-1.8.3.module"
+    ],
+    "sha256": [
+      "d8edfb61e976fe413c30bb7a5581af693115f6bf100f1bb25871525c797d83c2"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material/material-ripple-android/1.8.3/material-ripple-android-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.material",
+      "material-ripple-android",
+      "1.8.3",
+      "material-ripple-release.aar"
+    ],
+    "sha256": [
+      "5709ee08c1236f0a0575bf015cf18c302c2b55ba2bf3e0cbdd157cee7cb076bb"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material/material-ripple-android/1.8.3/material-ripple-android-1.8.3.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.material3",
+      "material3",
+      "1.3.2",
+      "material3-1.3.2.module"
+    ],
+    "sha256": [
+      "a44e5fb483d2b7557f14860b7c3f92d28d3249a9400cba73c6a57ba75a01f413"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material3/material3/1.3.2/material3-1.3.2.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.material3",
+      "material3",
+      "1.3.2",
+      "material3-metadata-1.3.2.jar"
+    ],
+    "sha256": [
+      "e2667048f898be236e8f3980d8137496bcafb626ebc4eedf32aa00f481f8fff7"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material3/material3/1.3.2/material3-1.3.2.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.material3",
+      "material3-android",
+      "1.3.2",
+      "material3-android-1.3.2.module"
+    ],
+    "sha256": [
+      "0161280e41b42bad9282e65b51a7abb5098552a8c826be6deb6d21230ff1b4cb"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material3/material3-android/1.3.2/material3-android-1.3.2.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.material3",
+      "material3-android",
+      "1.3.2",
+      "material3-release.aar"
+    ],
+    "sha256": [
+      "847666d9fc2d4348b6ec76a6a6094f14fb60de631ee4f6992004ec71a4f44336"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material3/material3-android/1.3.2/material3-android-1.3.2.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.material3",
+      "material3-window-size-class",
+      "1.3.2",
+      "material3-window-size-class-1.3.2.module"
+    ],
+    "sha256": [
+      "a1fec0066163a0e29bb2f42872d54bb0ec66e02d8e9f0f8865d5a6215b7f9be5"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material3/material3-window-size-class/1.3.2/material3-window-size-class-1.3.2.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.material3",
+      "material3-window-size-class-android",
+      "1.3.2",
+      "material3-window-size-class-android-1.3.2.module"
+    ],
+    "sha256": [
+      "c05bb8ae8b68d45c655150298ca6add682bc6a99ee2c79c0b2b24f47466afb26"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material3/material3-window-size-class-android/1.3.2/material3-window-size-class-android-1.3.2.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.material3",
+      "material3-window-size-class-android",
+      "1.3.2",
+      "material3-window-size-class-release.aar"
+    ],
+    "sha256": [
+      "f4f44a2841318b6cef325d16ad6522f0dd489f50f4f4cfc0faf4cd0ddc06c523"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/material3/material3-window-size-class-android/1.3.2/material3-window-size-class-android-1.3.2.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.runtime",
+      "runtime",
+      "1.8.3",
+      "runtime-1.8.3.module"
+    ],
+    "sha256": [
+      "f0f40ea3598b1d9e10bbab72c882f7328330c88d26fce1bf016655c721f6715d"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/runtime/runtime/1.8.3/runtime-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.runtime",
+      "runtime",
+      "1.8.3",
+      "runtime-metadata-1.8.3.jar"
+    ],
+    "sha256": [
+      "a2c86b1ababf345ae76284848c1041872b25a339a81cc39309fccd4217b1d6f9"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/runtime/runtime/1.8.3/runtime-1.8.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.runtime",
+      "runtime-android",
+      "1.8.3",
+      "runtime-android-1.8.3.module"
+    ],
+    "sha256": [
+      "5c9c61f1d7e35bd1055aaaa4f064659434368bb216e9829188fa4170372b55ae"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/runtime/runtime-android/1.8.3/runtime-android-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.runtime",
+      "runtime-android",
+      "1.8.3",
+      "runtime-release.aar"
+    ],
+    "sha256": [
+      "038732e3ef283b8a974b7d79e2eafd91e2d0dd8e123644ecc5096c06ccb515ef"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/runtime/runtime-android/1.8.3/runtime-android-1.8.3.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.runtime",
+      "runtime-saveable",
+      "1.8.3",
+      "runtime-saveable-1.8.3.module"
+    ],
+    "sha256": [
+      "fd10b06df99cdd0a77c27f60f1bd4ce3e2c1ae5b9691a3889207cf87bdbcf570"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/runtime/runtime-saveable/1.8.3/runtime-saveable-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.runtime",
+      "runtime-saveable",
+      "1.8.3",
+      "runtime-saveable-metadata-1.8.3.jar"
+    ],
+    "sha256": [
+      "219251d68fe316f9889a5e11558ecc4a7f8ec60d2aa687826ae67295a62e7262"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/runtime/runtime-saveable/1.8.3/runtime-saveable-1.8.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.runtime",
+      "runtime-saveable-android",
+      "1.8.3",
+      "runtime-saveable-android-1.8.3.module"
+    ],
+    "sha256": [
+      "514823b1f2fcf51f1804c30e87698bc2089d8301f0de53418320ffbd36348adc"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/runtime/runtime-saveable-android/1.8.3/runtime-saveable-android-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.runtime",
+      "runtime-saveable-android",
+      "1.8.3",
+      "runtime-saveable-release.aar"
+    ],
+    "sha256": [
+      "ef81bbff631ffc2903df746bca008f1dee9e32ef923472d46be3e50384b02ea7"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/runtime/runtime-saveable-android/1.8.3/runtime-saveable-android-1.8.3.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui",
+      "1.8.3",
+      "ui-1.8.3.module"
+    ],
+    "sha256": [
+      "aff21341154040256f773a950c39d273c157c746cd5a939aec3f5f45cb52c15f"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui/1.8.3/ui-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui",
+      "1.8.3",
+      "ui-metadata-1.8.3.jar"
+    ],
+    "sha256": [
+      "e21332a6c83797aee8eea9cbf6af96ca5290e00a6bea6f76a3b9da713a22dafb"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui/1.8.3/ui-1.8.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-android",
+      "1.8.3",
+      "ui-android-1.8.3.module"
+    ],
+    "sha256": [
+      "8792ea8a3c68c9ed709bbff03f5b57c2427c1293a7295813cae12d0a9e19fd0a"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-android/1.8.3/ui-android-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-android",
+      "1.8.3",
+      "ui-release.aar"
+    ],
+    "sha256": [
+      "b4ac5be52e40d0c58003eea027f544264cada8ac94b17e8cf5b0acd2666fcd35"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-android/1.8.3/ui-android-1.8.3.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-geometry",
+      "1.8.3",
+      "ui-geometry-1.8.3.module"
+    ],
+    "sha256": [
+      "28a6c6a3b675ae9e849191efb05727dba6d1feb2bebfa8ea98deaaa74f549b1e"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-geometry/1.8.3/ui-geometry-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-geometry",
+      "1.8.3",
+      "ui-geometry-metadata-1.8.3.jar"
+    ],
+    "sha256": [
+      "8a31b933087e6a229ec95282b8245dd53c6e1771ee4026bd9193c7d530611717"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-geometry/1.8.3/ui-geometry-1.8.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-geometry-android",
+      "1.8.3",
+      "ui-geometry-android-1.8.3.module"
+    ],
+    "sha256": [
+      "49668609f3ca7dde6f6f40c705acb9cad1bbdd2a10acb55bca42773c30273c2d"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-geometry-android/1.8.3/ui-geometry-android-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-geometry-android",
+      "1.8.3",
+      "ui-geometry-release.aar"
+    ],
+    "sha256": [
+      "3b6b6a3871ce3a31565db6e6832556a0d1da555f5c8449ff937df4f509e06edb"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-geometry-android/1.8.3/ui-geometry-android-1.8.3.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-graphics",
+      "1.8.3",
+      "ui-graphics-1.8.3.module"
+    ],
+    "sha256": [
+      "dc16f798a517ce10d473484bdd9b4cb59aad6d3a5f17834d4850e0c8b8af5340"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-graphics/1.8.3/ui-graphics-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-graphics",
+      "1.8.3",
+      "ui-graphics-metadata-1.8.3.jar"
+    ],
+    "sha256": [
+      "ad698fc22dd4380a9bcd66b81b60e9afbbdb3a2dd49be0f0c47a2ee8bc0f4168"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-graphics/1.8.3/ui-graphics-1.8.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-graphics-android",
+      "1.8.3",
+      "ui-graphics-android-1.8.3.module"
+    ],
+    "sha256": [
+      "295a26052eef0d6fd6a520d98aa5c1ee164d41db1fe3f5cc3bd14da13d32390e"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-graphics-android/1.8.3/ui-graphics-android-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-graphics-android",
+      "1.8.3",
+      "ui-graphics-release.aar"
+    ],
+    "sha256": [
+      "f247cdeda5e98865b9d9465fda28ae44418191cb62a82678e2df3e48615ccf18"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-graphics-android/1.8.3/ui-graphics-android-1.8.3.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-test",
+      "1.8.3",
+      "ui-test-1.8.3.module"
+    ],
+    "sha256": [
+      "96809f7223dd278691f2efe8a642589a95a78826c3366b2df10b8ca68cd11ae7"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-test/1.8.3/ui-test-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-test-android",
+      "1.8.3",
+      "ui-test-android-1.8.3.module"
+    ],
+    "sha256": [
+      "4b40e98530a1174157172d1d67501beaa2f88062ba411cf315b248c485200d7c"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-test-android/1.8.3/ui-test-android-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-test-android",
+      "1.8.3",
+      "ui-test-release.aar"
+    ],
+    "sha256": [
+      "c2a20feab95f01a68dd0dcf1ae1500b3742977fc5c75140f17dffac7991a050c"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-test-android/1.8.3/ui-test-android-1.8.3.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-test-junit4",
+      "1.8.3",
+      "ui-test-junit4-1.8.3.module"
+    ],
+    "sha256": [
+      "5a2f0bcf3c3773859fb795edee0ae7caa5c2b6fbcd7cb98b52d7325d3fb1f31e"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-test-junit4/1.8.3/ui-test-junit4-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-test-junit4-android",
+      "1.8.3",
+      "ui-test-junit4-android-1.8.3.module"
+    ],
+    "sha256": [
+      "28798e34492c13774d549e7a5fde34f58260bca3370e1ebd01b7afd66fb8957c"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-test-junit4-android/1.8.3/ui-test-junit4-android-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-test-junit4-android",
+      "1.8.3",
+      "ui-test-junit4-release.aar"
+    ],
+    "sha256": [
+      "92fcfed9d8caaa2a0170cd727ab1056c9adf16cc9ea0fe7bcaefab1ba911044a"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-test-junit4-android/1.8.3/ui-test-junit4-android-1.8.3.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-test-manifest",
+      "1.8.3",
+      "ui-test-manifest-1.8.3.aar"
+    ],
+    "sha256": [
+      "d53595d694b0c9f03ef5a4a08533aac741f022fa6026c447b902fcf28052da41"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-test-manifest/1.8.3/ui-test-manifest-1.8.3.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-test-manifest",
+      "1.8.3",
+      "ui-test-manifest-1.8.3.module"
+    ],
+    "sha256": [
+      "a1150d374bc4680730e12b5476657c6753da6ae3d002b392dfe8532447e6a3ab"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-test-manifest/1.8.3/ui-test-manifest-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-text",
+      "1.8.3",
+      "ui-text-1.8.3.module"
+    ],
+    "sha256": [
+      "388f95d6970478c73d4bb4995baeda8dd9e82d214d647aaa357e1785ba41c342"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-text/1.8.3/ui-text-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-text",
+      "1.8.3",
+      "ui-text-metadata-1.8.3.jar"
+    ],
+    "sha256": [
+      "28391893c1d3431e700450f40bd1ba773cf1895f62aceaa90893e8ac679b3775"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-text/1.8.3/ui-text-1.8.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-text-android",
+      "1.8.3",
+      "ui-text-android-1.8.3.module"
+    ],
+    "sha256": [
+      "8d61d5f697ff7e40aa955a2215dd79963667b41390ec59d256eac079d5b31df7"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-text-android/1.8.3/ui-text-android-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-text-android",
+      "1.8.3",
+      "ui-text-release.aar"
+    ],
+    "sha256": [
+      "3d8191b48686e48a843b4902143bd339e6bfa6a037c485cf281b83c4c4c72a93"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-text-android/1.8.3/ui-text-android-1.8.3.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-unit",
+      "1.8.3",
+      "ui-unit-1.8.3.module"
+    ],
+    "sha256": [
+      "cffb02cde49bf3c1cb926e7cc602a0902c524cec456514d786762ac0c2ef8bed"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-unit/1.8.3/ui-unit-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-unit",
+      "1.8.3",
+      "ui-unit-metadata-1.8.3.jar"
+    ],
+    "sha256": [
+      "a7c77aa13240e2565bac052e23c129d9692c3bc3b83f9db2634a924a553d2b05"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-unit/1.8.3/ui-unit-1.8.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-unit-android",
+      "1.8.3",
+      "ui-unit-android-1.8.3.module"
+    ],
+    "sha256": [
+      "f75bf064eae88997eb3807adecc784a069e06e63b106d98459b795b1f8d72376"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-unit-android/1.8.3/ui-unit-android-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-unit-android",
+      "1.8.3",
+      "ui-unit-release.aar"
+    ],
+    "sha256": [
+      "1bc7011b35339e016b61787e6ef854817b11d35ea3a70b47142d7d3336e6f386"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-unit-android/1.8.3/ui-unit-android-1.8.3.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-util",
+      "1.8.3",
+      "ui-util-1.8.3.module"
+    ],
+    "sha256": [
+      "4c4cc657ac723e7d6fab5e89523f0daf8475ec8a25c72b1838285de33c163960"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-util/1.8.3/ui-util-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-util",
+      "1.8.3",
+      "ui-util-metadata-1.8.3.jar"
+    ],
+    "sha256": [
+      "2b21aa10b58dbc60b0b3408e91c1133a106507dce5e5d129c0ad3a27614579a6"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-util/1.8.3/ui-util-1.8.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-util-android",
+      "1.8.3",
+      "ui-util-android-1.8.3.module"
+    ],
+    "sha256": [
+      "6962813e6a8c86167b1878623e3fcce31c7471c228dccd695a7d240ccdc04e38"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-util-android/1.8.3/ui-util-android-1.8.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.compose.ui",
+      "ui-util-android",
+      "1.8.3",
+      "ui-util-release.aar"
+    ],
+    "sha256": [
+      "123818b76aa874db83cc9e842dd9fa14eae4c5f82bec1d7336bd354d98651dfe"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-util-android/1.8.3/ui-util-android-1.8.3.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.core",
+      "core-viewtree",
+      "1.0.0",
+      "core-viewtree-1.0.0.aar"
+    ],
+    "sha256": [
+      "dc1b678d58ebcf2bfa1587be68ff826694ce3d221251b9ef30d4d4b36297e6de"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/core/core-viewtree/1.0.0/core-viewtree-1.0.0.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.core",
+      "core-viewtree",
+      "1.0.0",
+      "core-viewtree-1.0.0.module"
+    ],
+    "sha256": [
+      "11386cfa46cbbfddb6a4059f14354c00691cf65d3d63c3618818a83326ef3c7f"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/core/core-viewtree/1.0.0/core-viewtree-1.0.0.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.databinding",
+      "databinding-common",
+      "8.7.3",
+      "databinding-common-8.7.3.jar"
+    ],
+    "sha256": [
+      "66cab82639dac0f6c2433464c093b074d608c4bb887ec38a9b8bc4ac98126732"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/databinding/databinding-common/8.7.3/databinding-common-8.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.databinding",
+      "databinding-common",
+      "8.7.3",
+      "databinding-common-8.7.3.pom"
+    ],
+    "sha256": [
+      "9fe3c348a32758fec3c896eb5a57a1f63ca2b895de3d867513b671e1ee220ea4"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/databinding/databinding-common/8.7.3/databinding-common-8.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.databinding",
+      "databinding-compiler-common",
+      "8.7.3",
+      "databinding-compiler-common-8.7.3.jar"
+    ],
+    "sha256": [
+      "b2431cbbe38d0a31e001b7c34f52f69a323fc9ec573b6afe5893daced5ab3285"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/databinding/databinding-compiler-common/8.7.3/databinding-compiler-common-8.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.databinding",
+      "databinding-compiler-common",
+      "8.7.3",
+      "databinding-compiler-common-8.7.3.pom"
+    ],
+    "sha256": [
+      "1c7ba784aa79cdcf4e7ccb54986759804a68fa8cf8bffb32d0538fea0c1dd517"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/databinding/databinding-compiler-common/8.7.3/databinding-compiler-common-8.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.emoji2",
+      "emoji2",
+      "1.4.0",
+      "emoji2-1.4.0.aar"
+    ],
+    "sha256": [
+      "433febd3434a45667176c76a64f3f205ca6335a6b544c5b5d57f25a38a375242"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/emoji2/emoji2/1.4.0/emoji2-1.4.0.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.emoji2",
+      "emoji2",
+      "1.4.0",
+      "emoji2-1.4.0.module"
+    ],
+    "sha256": [
+      "92be16cccb757f807bddd92f1fca95a038a810ccca051c4149c11682478954b8"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/emoji2/emoji2/1.4.0/emoji2-1.4.0.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-common",
+      "2.6.1",
+      "lifecycle-common-2.6.1.module"
+    ],
+    "sha256": [
+      "93747a9145cb36bc71005f598ede32e2b1149ade5a16e62b0e4969345bc62d85"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common/2.6.1/lifecycle-common-2.6.1.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-common",
+      "2.8.5",
+      "lifecycle-common-2.8.5.module"
+    ],
+    "sha256": [
+      "030b8df19e4978ac1be969c2a29a01bfc2cc56284f512639a0ad34c22da6c4f1"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common/2.8.5/lifecycle-common-2.8.5.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-common",
+      "2.8.7",
+      "lifecycle-common-2.8.7.module"
+    ],
+    "sha256": [
+      "0de78fc06ee5045d68fc7e81c313a2a3d53ac7d127f79f9bc95abf7be49e5764"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common/2.8.7/lifecycle-common-2.8.7.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-common",
+      "2.8.7",
+      "lifecycle-common-metadata-2.8.7.jar"
+    ],
+    "sha256": [
+      "e26c6d7d04a490c6fdaa1415ac95797a7dcc7444be3f3ab3d9acad87dae4921c"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common/2.8.7/lifecycle-common-2.8.7.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-common-java8",
+      "2.8.7",
+      "lifecycle-common-java8-2.8.7.jar"
+    ],
+    "sha256": [
+      "c6deada2fac53b8ea6523dbda77597b128006674616f140f04df23264c6d1aa3"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common-java8/2.8.7/lifecycle-common-java8-2.8.7.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-common-java8",
+      "2.8.7",
+      "lifecycle-common-java8-2.8.7.module"
+    ],
+    "sha256": [
+      "e27df2ab2f9c1c02fc16fe87e19da0ebb79b4b3f1e2bd2af17364bed59a0a2a9"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common-java8/2.8.7/lifecycle-common-java8-2.8.7.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-common-jvm",
+      "2.8.7",
+      "lifecycle-common-jvm-2.8.7.jar"
+    ],
+    "sha256": [
+      "61c873a7327c946ec033c310bb98f3f92eeabcede0e1a5200ab8a1896483c7bf"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common-jvm/2.8.7/lifecycle-common-jvm-2.8.7.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-common-jvm",
+      "2.8.7",
+      "lifecycle-common-jvm-2.8.7.module"
+    ],
+    "sha256": [
+      "e487a4c007d6abf29d01083c33e28696cd42cffcf714489dc91e97c3d42c6060"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common-jvm/2.8.7/lifecycle-common-jvm-2.8.7.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-livedata-core",
+      "2.8.7",
+      "lifecycle-livedata-core-2.8.7.aar"
+    ],
+    "sha256": [
+      "d786e5e6f79b8fab026f09a2d4ae3de1d72875f7645a6b7be48f1d9ab384734b"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-livedata-core/2.8.7/lifecycle-livedata-core-2.8.7.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-livedata-core",
+      "2.8.7",
+      "lifecycle-livedata-core-2.8.7.module"
+    ],
+    "sha256": [
+      "b0a1da7f1fe36060ec7847f1972857a24b7db29e6cd4516e62c5520009d813c2"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-livedata-core/2.8.7/lifecycle-livedata-core-2.8.7.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-process",
+      "2.8.7",
+      "lifecycle-process-2.8.7.aar"
+    ],
+    "sha256": [
+      "62e076a2de2d650a23bf79495419f8a4357ad8e9b28d801318d0fcdd6e35fa87"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-process/2.8.7/lifecycle-process-2.8.7.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-process",
+      "2.8.7",
+      "lifecycle-process-2.8.7.module"
+    ],
+    "sha256": [
+      "98a1c08c10cfd4bdaa89e9c256a9b96c09cdd5bcfbb03a9260817a6d89cc2378"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-process/2.8.7/lifecycle-process-2.8.7.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-runtime",
+      "2.6.1",
+      "lifecycle-runtime-2.6.1.module"
+    ],
+    "sha256": [
+      "a4cbb01a42d07047bd8d870017c96a1b0b7b4673320e86b66317a13be2ec10c7"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime/2.6.1/lifecycle-runtime-2.6.1.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-runtime",
+      "2.8.5",
+      "lifecycle-runtime-2.8.5.module"
+    ],
+    "sha256": [
+      "3e7625c1c6c7a4bcfa8874d9d977b4f155fc33f6f02ad6d941a42703110dc475"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime/2.8.5/lifecycle-runtime-2.8.5.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-runtime",
+      "2.8.7",
+      "lifecycle-runtime-2.8.7.module"
+    ],
+    "sha256": [
+      "cb00e5cb9283b75948dcc0d27234fb6d72a80c34dcb7b3b8d493185e4316bf85"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime/2.8.7/lifecycle-runtime-2.8.7.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-runtime",
+      "2.8.7",
+      "lifecycle-runtime-metadata-2.8.7.jar"
+    ],
+    "sha256": [
+      "4ee784530e550754230395d4f4f56817c9fcbc08db4d645e77441f3dd82c56b5"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime/2.8.7/lifecycle-runtime-2.8.7.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-runtime-android",
+      "2.8.7",
+      "lifecycle-runtime-android-2.8.7.module"
+    ],
+    "sha256": [
+      "4d1b3881c98d42934cb8d5de7c8a9e12049549a5147718647d7be6ca6d958c46"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime-android/2.8.7/lifecycle-runtime-android-2.8.7.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-runtime-android",
+      "2.8.7",
+      "lifecycle-runtime-release.aar"
+    ],
+    "sha256": [
+      "b8eb997dd434d70eb97cbd6d1395b6337c6771717c7acd59f11c0853f3860284"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime-android/2.8.7/lifecycle-runtime-android-2.8.7.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-runtime-compose",
+      "2.8.7",
+      "lifecycle-runtime-compose-2.8.7.module"
+    ],
+    "sha256": [
+      "cc98a8849d81dab3064bc9ff871e43e91b48e0ba7d521f7c99ba26afec25657c"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime-compose/2.8.7/lifecycle-runtime-compose-2.8.7.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-runtime-compose",
+      "2.8.7",
+      "lifecycle-runtime-compose-metadata-2.8.7.jar"
+    ],
+    "sha256": [
+      "bb5489c9bf561b7addcff4179b10f959b3d441aa0fbae5c2d24a9065913fa212"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime-compose/2.8.7/lifecycle-runtime-compose-2.8.7.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-runtime-compose-android",
+      "2.8.7",
+      "lifecycle-runtime-compose-android-2.8.7.module"
+    ],
+    "sha256": [
+      "c024a16694c8b5c41ec8ef0ede2365eb612f8a3da25017fdf2ff343029f33902"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime-compose-android/2.8.7/lifecycle-runtime-compose-android-2.8.7.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-runtime-compose-android",
+      "2.8.7",
+      "lifecycle-runtime-compose-release.aar"
+    ],
+    "sha256": [
+      "80bf0a8fe9a79b93a318832bc36900f3ab8bd5931ff9ca0ecd3087100e1f07d8"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime-compose-android/2.8.7/lifecycle-runtime-compose-android-2.8.7.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-runtime-ktx",
+      "2.8.7",
+      "lifecycle-runtime-ktx-2.8.7.module"
+    ],
+    "sha256": [
+      "09c6dcf0fee2ad69c523db6c2a343168a8d9e9d27743cf84b69c757b7fcab243"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime-ktx/2.8.7/lifecycle-runtime-ktx-2.8.7.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-runtime-ktx",
+      "2.8.7",
+      "lifecycle-runtime-ktx-metadata-2.8.7.jar"
+    ],
+    "sha256": [
+      "92e90c3bd6cc2f66a15e9597cc015cd3a2f8767a9bd29d7feadaea4d44b2fccf"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime-ktx/2.8.7/lifecycle-runtime-ktx-2.8.7.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-runtime-ktx-android",
+      "2.8.7",
+      "lifecycle-runtime-ktx-android-2.8.7.module"
+    ],
+    "sha256": [
+      "adc61521e894f163beee3aedc8c4c0dfb5991663b88ea1ea7798fac95694e17d"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime-ktx-android/2.8.7/lifecycle-runtime-ktx-android-2.8.7.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-runtime-ktx-android",
+      "2.8.7",
+      "lifecycle-runtime-ktx-release.aar"
+    ],
+    "sha256": [
+      "b3d39c5dba5e207ef4c79d491a76500194c5ea6874157f05a15f01792c0cc4e7"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime-ktx-android/2.8.7/lifecycle-runtime-ktx-android-2.8.7.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-viewmodel",
+      "2.8.7",
+      "lifecycle-viewmodel-2.8.7.module"
+    ],
+    "sha256": [
+      "f1d821fc18036dd20cc21ffbe02f547120bf0051e06ae9e1977140213c934372"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel/2.8.7/lifecycle-viewmodel-2.8.7.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-viewmodel",
+      "2.8.7",
+      "lifecycle-viewmodel-metadata-2.8.7.jar"
+    ],
+    "sha256": [
+      "539281344ce8a81d33570be300d86bb872c7b719a6dd2ce494eacba438fb53ce"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel/2.8.7/lifecycle-viewmodel-2.8.7.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-viewmodel-android",
+      "2.8.7",
+      "lifecycle-viewmodel-android-2.8.7.module"
+    ],
+    "sha256": [
+      "b04994ce67d6999438316ff41b2ddb84613a64b8f81399ef3074895ad81065dc"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-android/2.8.7/lifecycle-viewmodel-android-2.8.7.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-viewmodel-android",
+      "2.8.7",
+      "lifecycle-viewmodel-release.aar"
+    ],
+    "sha256": [
+      "e7e7043f66b077637563ff564a7fc6cee461d284a0f2485c050a2143abbd8920"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-android/2.8.7/lifecycle-viewmodel-android-2.8.7.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-viewmodel-compose",
+      "2.8.7",
+      "lifecycle-viewmodel-compose-2.8.7.module"
+    ],
+    "sha256": [
+      "051a91eedd88c18b522c4b7b540f9361085ef446f2223ca16589d98ed626ac78"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-compose/2.8.7/lifecycle-viewmodel-compose-2.8.7.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-viewmodel-compose",
+      "2.8.7",
+      "lifecycle-viewmodel-compose-metadata-2.8.7.jar"
+    ],
+    "sha256": [
+      "68457770ac6b3e12b5f688d54e8227253cbebf1b3c137fbd00833ed4c45bd4bd"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-compose/2.8.7/lifecycle-viewmodel-compose-2.8.7.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-viewmodel-compose-android",
+      "2.8.7",
+      "lifecycle-viewmodel-compose-android-2.8.7.module"
+    ],
+    "sha256": [
+      "032b0fa892cc04ced39c4c5f0c73e5a0148da0847bf4bfb76fc275e143d48e88"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-compose-android/2.8.7/lifecycle-viewmodel-compose-android-2.8.7.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-viewmodel-compose-android",
+      "2.8.7",
+      "lifecycle-viewmodel-compose-release.aar"
+    ],
+    "sha256": [
+      "072532de580b03628c212388c9ce2ff066731f28031fb75ebd8505446455e5d1"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-compose-android/2.8.7/lifecycle-viewmodel-compose-android-2.8.7.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-viewmodel-ktx",
+      "2.8.7",
+      "lifecycle-viewmodel-ktx-2.8.7.aar"
+    ],
+    "sha256": [
+      "1acebb50df2f0c07f379d5e23a28f7794f70efb2b6c834acebe8c394784ee6d4"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-ktx/2.8.7/lifecycle-viewmodel-ktx-2.8.7.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-viewmodel-ktx",
+      "2.8.7",
+      "lifecycle-viewmodel-ktx-2.8.7.module"
+    ],
+    "sha256": [
+      "a99e3d0218ee92bda8f5c1ebf25d4832b301ef5810604e2e96e4b607ebf6a7f5"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-ktx/2.8.7/lifecycle-viewmodel-ktx-2.8.7.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-viewmodel-savedstate",
+      "2.8.7",
+      "lifecycle-viewmodel-savedstate-2.8.7.aar"
+    ],
+    "sha256": [
+      "646f2a42d2884b02308fb19837089e2669835fe21ca6a5b60666d5eb94d081dd"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-savedstate/2.8.7/lifecycle-viewmodel-savedstate-2.8.7.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.lifecycle",
+      "lifecycle-viewmodel-savedstate",
+      "2.8.7",
+      "lifecycle-viewmodel-savedstate-2.8.7.module"
+    ],
+    "sha256": [
+      "bab22c067f25577a6ac334e8682414818073e9f445038d19039c90f8716fbf6d"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-savedstate/2.8.7/lifecycle-viewmodel-savedstate-2.8.7.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.profileinstaller",
+      "profileinstaller",
+      "1.4.0",
+      "profileinstaller-1.4.0.aar"
+    ],
+    "sha256": [
+      "d502141fcce902430f62b674c32aecd0f75262e7ee2cd15c74adb617cd13130a"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/profileinstaller/profileinstaller/1.4.0/profileinstaller-1.4.0.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.profileinstaller",
+      "profileinstaller",
+      "1.4.0",
+      "profileinstaller-1.4.0.module"
+    ],
+    "sha256": [
+      "39bf997a28d8eed2cb319819f6f352a1ba3a78b9c979004fbe05e26b8f7d160b"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/profileinstaller/profileinstaller/1.4.0/profileinstaller-1.4.0.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.window",
+      "window",
+      "1.4.0",
+      "window-1.4.0.aar"
+    ],
+    "sha256": [
+      "7062ee9debb7bf3e8e5e8abd0d213f04aeb7c1f90fe83cad2d23f51626ab6109"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/window/window/1.4.0/window-1.4.0.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.window",
+      "window",
+      "1.4.0",
+      "window-1.4.0.module"
+    ],
+    "sha256": [
+      "39eebe65210e9c590b92e8593cc4bb7025e79e3996f08a5715f42f342d687248"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/window/window/1.4.0/window-1.4.0.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.window",
+      "window-core",
+      "1.4.0",
+      "window-core-1.4.0.module"
+    ],
+    "sha256": [
+      "2bfe555d7fea5456c5cb6d4d140ac88d8dcb6dbbd284443a8d2376eaa1de09ba"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/window/window-core/1.4.0/window-core-1.4.0.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.window",
+      "window-core-android",
+      "1.4.0",
+      "window-core-android-1.4.0.module"
+    ],
+    "sha256": [
+      "ff8230297fa7779d90c4e016571139dc06cac39429267d4c630dad36f486e631"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/window/window-core-android/1.4.0/window-core-android-1.4.0.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "androidx.window",
+      "window-core-android",
+      "1.4.0",
+      "window-core.aar"
+    ],
+    "sha256": [
+      "c6818f612fa0adee25de8583db0def3f609c3a6339204cd538a037fe38439fd3"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/androidx/window/window-core-android/1.4.0/window-core-android-1.4.0.aar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android",
+      "signflinger",
+      "8.7.3",
+      "signflinger-8.7.3.jar"
+    ],
+    "sha256": [
+      "c1dca2c683634ee1a294298f9c7179578af6a86e080bdc40f961915bc5c8142f"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/signflinger/8.7.3/signflinger-8.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android",
+      "signflinger",
+      "8.7.3",
+      "signflinger-8.7.3.pom"
+    ],
+    "sha256": [
+      "fc46c15cdfbcb219dad5d96ecec774022926ccff993263843beb2b532ba9da1f"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/signflinger/8.7.3/signflinger-8.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android",
+      "zipflinger",
+      "8.7.3",
+      "zipflinger-8.7.3.jar"
+    ],
+    "sha256": [
+      "81dd485618a509a3235929b9eb13091d884452661de6ce5a45cc38b1c555421c"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/zipflinger/8.7.3/zipflinger-8.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android",
+      "zipflinger",
+      "8.7.3",
+      "zipflinger-8.7.3.pom"
+    ],
+    "sha256": [
+      "7a847e140903435558c84703a90a52fb5486c8b767e0c8b1ace913554b2a5b98"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/zipflinger/8.7.3/zipflinger-8.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.application",
+      "com.android.application.gradle.plugin",
+      "8.7.3",
+      "com.android.application.gradle.plugin-8.7.3.pom"
+    ],
+    "sha256": [
+      "9458d46617319576d37fbec2ec7330061ef4b666df8538a375bc53986229b914"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/application/com.android.application.gradle.plugin/8.7.3/com.android.application.gradle.plugin-8.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.databinding",
+      "baseLibrary",
+      "8.7.3",
+      "baseLibrary-8.7.3.jar"
+    ],
+    "sha256": [
+      "794113709dab21b06c262b3795e73cb708fbacae61715f34361e1af6237a1870"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/databinding/baseLibrary/8.7.3/baseLibrary-8.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.databinding",
+      "baseLibrary",
+      "8.7.3",
+      "baseLibrary-8.7.3.pom"
+    ],
+    "sha256": [
+      "dedfa191214825ff3e35438dd3071930c61f17f837873eb6eb1be9c2a43dec9e"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/databinding/baseLibrary/8.7.3/baseLibrary-8.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools",
+      "annotations",
+      "31.7.3",
+      "annotations-31.7.3.jar"
+    ],
+    "sha256": [
+      "b25995fa7b220d35fbb8e325df071f8291691bfbaff9734c98e38f45ec2a73ee"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/annotations/31.7.3/annotations-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools",
+      "annotations",
+      "31.7.3",
+      "annotations-31.7.3.pom"
+    ],
+    "sha256": [
+      "2208238d471c0ab92c6ac7a059a0a9ec835d5ae1392aaf0bb24e455b70fd6b4b"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/annotations/31.7.3/annotations-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools",
+      "common",
+      "31.7.3",
+      "common-31.7.3.jar"
+    ],
+    "sha256": [
+      "abb5b2f28954ac09dcfb5d192e355af41236c8337afc08b16aa1adc0e8aebf63"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/common/31.7.3/common-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools",
+      "common",
+      "31.7.3",
+      "common-31.7.3.pom"
+    ],
+    "sha256": [
+      "7d62df28d0bc98a9d6de5dd5cf9a52b587b9f4d38e46b022a98fcaa972e0c0c3"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/common/31.7.3/common-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools",
+      "dvlib",
+      "31.7.3",
+      "dvlib-31.7.3.jar"
+    ],
+    "sha256": [
+      "8fd3495a2ebb50b1aacb1b4362dc4a471b87462c1eaec43691bb56f895e9c636"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/dvlib/31.7.3/dvlib-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools",
+      "dvlib",
+      "31.7.3",
+      "dvlib-31.7.3.pom"
+    ],
+    "sha256": [
+      "feedfc890ebbfb2302fc6f3765e7c1fd5d3f481b13742f27adb600af04737bb6"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/dvlib/31.7.3/dvlib-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools",
+      "play-sdk-proto",
+      "31.7.3",
+      "play-sdk-proto-31.7.3.jar"
+    ],
+    "sha256": [
+      "ec265a10db9d8c94b48f05975228a0423020081ce599e0bb8cb529b3444e4394"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/play-sdk-proto/31.7.3/play-sdk-proto-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools",
+      "play-sdk-proto",
+      "31.7.3",
+      "play-sdk-proto-31.7.3.pom"
+    ],
+    "sha256": [
+      "4671cd7a984b797f818d8c69374c551b1d31f6c4cc068b50637b75d8d615e7f0"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/play-sdk-proto/31.7.3/play-sdk-proto-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools",
+      "r8",
+      "8.10.21",
+      "r8-8.10.21.jar"
+    ],
+    "sha256": [
+      "bbdf3f6431af895d72a5f4bed6fbdde2b43241ec98b36992c554ce4a6dd7892b"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/r8/8.10.21/r8-8.10.21.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools",
+      "r8",
+      "8.10.21",
+      "r8-8.10.21.pom"
+    ],
+    "sha256": [
+      "4201531a86a3cc6275f1f28419fedd5a6fee89239c4a1977eae1fa4332a352df"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/r8/8.10.21/r8-8.10.21.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools",
+      "repository",
+      "31.7.3",
+      "repository-31.7.3.jar"
+    ],
+    "sha256": [
+      "169c2e7a77aa30978879dbf8b30436671165872fcbdfdda6c735aaddb6710340"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/repository/31.7.3/repository-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools",
+      "repository",
+      "31.7.3",
+      "repository-31.7.3.pom"
+    ],
+    "sha256": [
+      "fcabf044c454c5a8c9949e9dec596ef5eaa1bef043b0e11a2c1954b298c7db04"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/repository/31.7.3/repository-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools",
+      "sdk-common",
+      "31.7.3",
+      "sdk-common-31.7.3.jar"
+    ],
+    "sha256": [
+      "4fa44a7d9675df13da614dee512df90ad3e4308d0addb32ead99f57ce58f675f"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/sdk-common/31.7.3/sdk-common-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools",
+      "sdk-common",
+      "31.7.3",
+      "sdk-common-31.7.3.pom"
+    ],
+    "sha256": [
+      "aa2c57c1c91cf7a91105e0ce4bbdda91451d3646b67d91d156955dbcf4c8c1d3"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/sdk-common/31.7.3/sdk-common-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools",
+      "sdklib",
+      "31.7.3",
+      "sdklib-31.7.3.jar"
+    ],
+    "sha256": [
+      "0a3f7097a4a00b384046b783b7053a59ec0bd92256ab84baa6bd807aa02858b3"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/sdklib/31.7.3/sdklib-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools",
+      "sdklib",
+      "31.7.3",
+      "sdklib-31.7.3.pom"
+    ],
+    "sha256": [
+      "6bfefbed5d2ba354b0c4d1154fa6086e74810d265d7ce0f981da514b8735912e"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/sdklib/31.7.3/sdklib-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.analytics-library",
+      "crash",
+      "31.7.3",
+      "crash-31.7.3.jar"
+    ],
+    "sha256": [
+      "cca97ac29a1329bd310a3e832b6e57f46227e501aa529c00a63df217c5d7df41"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/analytics-library/crash/31.7.3/crash-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.analytics-library",
+      "crash",
+      "31.7.3",
+      "crash-31.7.3.pom"
+    ],
+    "sha256": [
+      "63693508ee9ed532e66fee129299dafba91a0f8d5164c1974be22a5af2e6df87"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/analytics-library/crash/31.7.3/crash-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.analytics-library",
+      "protos",
+      "31.7.3",
+      "protos-31.7.3.jar"
+    ],
+    "sha256": [
+      "692cf981395fe171a2f229ff70cc6cc1ddf9e2261b28eadda2269d66e5509786"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/analytics-library/protos/31.7.3/protos-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.analytics-library",
+      "protos",
+      "31.7.3",
+      "protos-31.7.3.pom"
+    ],
+    "sha256": [
+      "3942c672ca854b8425e899651cf023f6299c624817c52098034a4e5e42264bb4"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/analytics-library/protos/31.7.3/protos-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.analytics-library",
+      "shared",
+      "31.7.3",
+      "shared-31.7.3.jar"
+    ],
+    "sha256": [
+      "cad7bb8f96a047a5ef7a13b1c8303414229e9d507209646ec3b63a64861e1ce1"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/analytics-library/shared/31.7.3/shared-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.analytics-library",
+      "shared",
+      "31.7.3",
+      "shared-31.7.3.pom"
+    ],
+    "sha256": [
+      "5ea88c7af15770b495073b07efb7355965462f72549c993dfb19f3eeed9309f2"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/analytics-library/shared/31.7.3/shared-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.analytics-library",
+      "tracker",
+      "31.7.3",
+      "tracker-31.7.3.jar"
+    ],
+    "sha256": [
+      "e1f954973a4733f76027a5f96fa45472dc3cc22d27b1dc93f3fe6a46a75681be"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/analytics-library/tracker/31.7.3/tracker-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.analytics-library",
+      "tracker",
+      "31.7.3",
+      "tracker-31.7.3.pom"
+    ],
+    "sha256": [
+      "d5a83939370a74cba67e60df6cf1a73f77302562c26b131b26291cd805ff8b2f"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/analytics-library/tracker/31.7.3/tracker-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.build",
+      "aapt2",
+      "8.7.3-12006047",
+      "aapt2-8.7.3-12006047-linux.jar"
+    ],
+    "sha256": [
+      "028916a040b58f34c9c89984e1bc48f8da6581662014f2b66391860def8b9c36"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/aapt2/8.7.3-12006047/aapt2-8.7.3-12006047-linux.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.build",
+      "aapt2",
+      "8.7.3-12006047",
+      "aapt2-8.7.3-12006047-windows.jar"
+    ],
+    "sha256": [
+      "9406af8e4742da01e4ce65773e23bda40ed5f599917b38cacc261c9ba0952331"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/aapt2/8.7.3-12006047/aapt2-8.7.3-12006047-windows.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.build",
+      "aapt2",
+      "8.7.3-12006047",
+      "aapt2-8.7.3-12006047.pom"
+    ],
+    "sha256": [
+      "a8e9619d38e53a2ab28848ac5a20faac0ed751d224a8a2523664ec9987f13f0f"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/aapt2/8.7.3-12006047/aapt2-8.7.3-12006047.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.build",
+      "aapt2-proto",
+      "8.7.3-12006047",
+      "aapt2-proto-8.7.3-12006047.jar"
+    ],
+    "sha256": [
+      "b32f7d4b2975ac9ee7f06054c18f1fea9da045dc1a61ff436ecf543480036302"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/aapt2-proto/8.7.3-12006047/aapt2-proto-8.7.3-12006047.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.build",
+      "aapt2-proto",
+      "8.7.3-12006047",
+      "aapt2-proto-8.7.3-12006047.module"
+    ],
+    "sha256": [
+      "bc49547f77b28769cdca84198d2fece1d6594a2918d11cab3cf4b1bb57915e2b"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/aapt2-proto/8.7.3-12006047/aapt2-proto-8.7.3-12006047.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.build",
+      "aaptcompiler",
+      "8.7.3",
+      "aaptcompiler-8.7.3.jar"
+    ],
+    "sha256": [
+      "47062eb9e5497e0742946528fd93c3886773dd2339059315f6316d5c05d7cdaf"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/aaptcompiler/8.7.3/aaptcompiler-8.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.build",
+      "aaptcompiler",
+      "8.7.3",
+      "aaptcompiler-8.7.3.module"
+    ],
+    "sha256": [
+      "3df7be0fc664b16565428184c8cbb40c8f22322a233b4a8220dbbd6d399353af"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/aaptcompiler/8.7.3/aaptcompiler-8.7.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.build",
+      "apksig",
+      "8.7.3",
+      "apksig-8.7.3.jar"
+    ],
+    "sha256": [
+      "c070ed1394629d74641aa0906f60b2ffa1ee77e6366a1f93437f59717b1aeb89"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/apksig/8.7.3/apksig-8.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.build",
+      "apksig",
+      "8.7.3",
+      "apksig-8.7.3.pom"
+    ],
+    "sha256": [
+      "a68ba26d4a6e7a35bbee2fe514660146e6c2b217146b9c1a86b5b5abad99a3c9"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/apksig/8.7.3/apksig-8.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.build",
+      "apkzlib",
+      "8.7.3",
+      "apkzlib-8.7.3.jar"
+    ],
+    "sha256": [
+      "1c1a67d6f4f186427ac166ebaa0dd867f595d5144fc925252b05ffb9d1a156b7"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/apkzlib/8.7.3/apkzlib-8.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.build",
+      "apkzlib",
+      "8.7.3",
+      "apkzlib-8.7.3.pom"
+    ],
+    "sha256": [
+      "7c3ac37a12aef4137b7316edea35e5df32a61048d8bba8dd34903bc48531a7dd"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/apkzlib/8.7.3/apkzlib-8.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.build",
+      "builder",
+      "8.7.3",
+      "builder-8.7.3.jar"
+    ],
+    "sha256": [
+      "2d0ac036986c0f256b9f327810c25c1dde6d5839956580d3283e0e0f146cb926"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/builder/8.7.3/builder-8.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.build",
+      "builder",
+      "8.7.3",
+      "builder-8.7.3.module"
+    ],
+    "sha256": [
+      "890c58d6ab5ef7d0014daa8ddf38fd5b68aa4ad63c9bb4dd425da33ea64007b3"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/builder/8.7.3/builder-8.7.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.build",
+      "builder-model",
+      "8.7.3",
+      "builder-model-8.7.3.jar"
+    ],
+    "sha256": [
+      "0018c7dd2cab696e07f140bb1dc8c0b0ec93b6bf195e9387043010ac894db7d7"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/builder-model/8.7.3/builder-model-8.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.build",
+      "builder-model",
+      "8.7.3",
+      "builder-model-8.7.3.module"
+    ],
+    "sha256": [
+      "b6147a8057863e2019475c06f40ed6f4c1c753a9334d753844d81d35f1075c7f"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/builder-model/8.7.3/builder-model-8.7.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.build",
+      "builder-test-api",
+      "8.7.3",
+      "builder-test-api-8.7.3.jar"
+    ],
+    "sha256": [
+      "778dd9c17e559401c80db08ebcab67cb773a43de6657417b4320960d296b9b40"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/builder-test-api/8.7.3/builder-test-api-8.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.build",
+      "builder-test-api",
+      "8.7.3",
+      "builder-test-api-8.7.3.module"
+    ],
+    "sha256": [
+      "ea2ca22f106b6fcde3af6e841f6d389782a6932c22bdc8084f7bd62ddc852d95"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/builder-test-api/8.7.3/builder-test-api-8.7.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.build",
+      "bundletool",
+      "1.17.1",
+      "bundletool-1.17.1.jar"
+    ],
+    "sha256": [
+      "392fd3b099bd82b116c8772ab8fc4139984a91108a643f8dfc9ee29648818ad8"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/bundletool/1.17.1/bundletool-1.17.1.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.build",
+      "bundletool",
+      "1.17.1",
+      "bundletool-1.17.1.pom"
+    ],
+    "sha256": [
+      "7cdd337644d523fe60cfb632410c6b7fb7d982eec53270ddbedff1c26333545d"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/bundletool/1.17.1/bundletool-1.17.1.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.build",
+      "gradle",
+      "8.7.3",
+      "gradle-8.7.3.jar"
+    ],
+    "sha256": [
+      "abb4f9e92c9838bd9989ba05968ec892189e16e23f42adba2e063843da04070d"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/gradle/8.7.3/gradle-8.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.build",
+      "gradle",
+      "8.7.3",
+      "gradle-8.7.3.module"
+    ],
+    "sha256": [
+      "16f4c87b4f1b7b3b99b3dbc237dc0fe2c5a6b6a6b3143ba46e4a35b1db996a65"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/gradle/8.7.3/gradle-8.7.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.build",
+      "gradle-api",
+      "8.7.3",
+      "gradle-api-8.7.3.jar"
+    ],
+    "sha256": [
+      "869adf75ea8f5be7677850f4e70f221a407e7ef28934c58b1d8d1eb21d7fba45"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/gradle-api/8.7.3/gradle-api-8.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.build",
+      "gradle-api",
+      "8.7.3",
+      "gradle-api-8.7.3.module"
+    ],
+    "sha256": [
+      "39ea4c088b295b8e234b92b7936b777650e71fbc20da87def782d9882e379d7f"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/gradle-api/8.7.3/gradle-api-8.7.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.build",
+      "gradle-settings-api",
+      "8.7.3",
+      "gradle-settings-api-8.7.3.jar"
+    ],
+    "sha256": [
+      "8a8711ba27e0e8b725bd4b92b16b08d0ea364133364fdd2fd9b6be05f2aa8438"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/gradle-settings-api/8.7.3/gradle-settings-api-8.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.build",
+      "gradle-settings-api",
+      "8.7.3",
+      "gradle-settings-api-8.7.3.module"
+    ],
+    "sha256": [
+      "3181323998b479ffb707dc77b52a51c4d882ddd1eb45470ddf83937038ccae4f"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/gradle-settings-api/8.7.3/gradle-settings-api-8.7.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.build",
+      "manifest-merger",
+      "31.7.3",
+      "manifest-merger-31.7.3.jar"
+    ],
+    "sha256": [
+      "f1a6e56adbd557d6bf34447a62ff4680642c799c397a4bc14a81256bd961e6ab"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/manifest-merger/31.7.3/manifest-merger-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.build",
+      "manifest-merger",
+      "31.7.3",
+      "manifest-merger-31.7.3.module"
+    ],
+    "sha256": [
+      "f77ce53826d03b3a8bcd940f0c3ab2c7e5dc4df404f04858fc8724b26afe761c"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/manifest-merger/31.7.3/manifest-merger-31.7.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.ddms",
+      "ddmlib",
+      "31.7.3",
+      "ddmlib-31.7.3.jar"
+    ],
+    "sha256": [
+      "0d7ef53823f6a21b807f398f0d039a5dde184b58c5589625626ca4aa3d6108ed"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/ddms/ddmlib/31.7.3/ddmlib-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.ddms",
+      "ddmlib",
+      "31.7.3",
+      "ddmlib-31.7.3.pom"
+    ],
+    "sha256": [
+      "d3e758195895bb5ba17b406be5bdfd85b934579dbc536b332d17abfd280a9a06"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/ddms/ddmlib/31.7.3/ddmlib-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.emulator",
+      "proto",
+      "31.7.3",
+      "proto-31.7.3.jar"
+    ],
+    "sha256": [
+      "e0c33c9785c5d425dca6870d8cf48fba9a8a17e3aabdaa775c7957722931aec8"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/emulator/proto/31.7.3/proto-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.emulator",
+      "proto",
+      "31.7.3",
+      "proto-31.7.3.pom"
+    ],
+    "sha256": [
+      "49f87080507ffe63c4ab0c730e3c87201489011390569c2f27be8d4f9eb79178"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/emulator/proto/31.7.3/proto-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.external.com-intellij",
+      "intellij-core",
+      "31.7.3",
+      "intellij-core-31.7.3.jar"
+    ],
+    "sha256": [
+      "773beaca00b40d3e6924115d70e1db149f306521d24428d9152ff82f2e4b6abc"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/external/com-intellij/intellij-core/31.7.3/intellij-core-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.external.com-intellij",
+      "intellij-core",
+      "31.7.3",
+      "intellij-core-31.7.3.pom"
+    ],
+    "sha256": [
+      "fda46ade0cc1823c541c1efa3e3438e800920213ffe428d9ede53ea014e59b01"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/external/com-intellij/intellij-core/31.7.3/intellij-core-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.external.com-intellij",
+      "kotlin-compiler",
+      "31.7.3",
+      "kotlin-compiler-31.7.3.jar"
+    ],
+    "sha256": [
+      "1fb8b7885e43525ebe460bd55acafa1e43785e87fb89fcf47ba8709bce47f9b0"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/external/com-intellij/kotlin-compiler/31.7.3/kotlin-compiler-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.external.com-intellij",
+      "kotlin-compiler",
+      "31.7.3",
+      "kotlin-compiler-31.7.3.pom"
+    ],
+    "sha256": [
+      "51d50f36030139519bbd59bb478b39f60cbf411e0f11abb173632fb5547a9b77"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/external/com-intellij/kotlin-compiler/31.7.3/kotlin-compiler-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.external.org-jetbrains",
+      "uast",
+      "31.7.3",
+      "uast-31.7.3.jar"
+    ],
+    "sha256": [
+      "46828281e96a3c52c14db267873b47121ad97758e654013cdb85e7bb6add92cf"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/external/org-jetbrains/uast/31.7.3/uast-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.external.org-jetbrains",
+      "uast",
+      "31.7.3",
+      "uast-31.7.3.pom"
+    ],
+    "sha256": [
+      "b6ab37de5ae70b7a6b1141a564b596fe8aa42d5aec645c295e129a946be2b3d4"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/external/org-jetbrains/uast/31.7.3/uast-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.layoutlib",
+      "layoutlib-api",
+      "31.7.3",
+      "layoutlib-api-31.7.3.jar"
+    ],
+    "sha256": [
+      "98bae36ff051e114dd4eef5effa80fbe5e552944f4233ce892160da2cd9eeaed"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/layoutlib/layoutlib-api/31.7.3/layoutlib-api-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.layoutlib",
+      "layoutlib-api",
+      "31.7.3",
+      "layoutlib-api-31.7.3.pom"
+    ],
+    "sha256": [
+      "b3d95df21356ce666d73cdba6a296524c9afff39bd1ff9150fd19db589f9a612"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/layoutlib/layoutlib-api/31.7.3/layoutlib-api-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.lint",
+      "lint",
+      "31.7.3",
+      "lint-31.7.3.jar"
+    ],
+    "sha256": [
+      "ca0c4787b1def7b3edc10651cb20162175e908880fb1fd50ac711bd2d22e2d01"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/lint/lint/31.7.3/lint-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.lint",
+      "lint",
+      "31.7.3",
+      "lint-31.7.3.pom"
+    ],
+    "sha256": [
+      "550bd46509769e91e7079362fe1c0adaa4ef8609aa2a40d763efb71c9b1080bc"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/lint/lint/31.7.3/lint-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.lint",
+      "lint-api",
+      "31.7.3",
+      "lint-api-31.7.3.jar"
+    ],
+    "sha256": [
+      "94547c69afc5c8dc4c98901f0e08f707cdba0e4c4714ea657252f784629d5a5b"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/lint/lint-api/31.7.3/lint-api-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.lint",
+      "lint-api",
+      "31.7.3",
+      "lint-api-31.7.3.pom"
+    ],
+    "sha256": [
+      "c024786774fc7c40bc7c6a872bbe3013d8c7db7a5494e88963bcc86a85eb29cb"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/lint/lint-api/31.7.3/lint-api-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.lint",
+      "lint-checks",
+      "31.7.3",
+      "lint-checks-31.7.3.jar"
+    ],
+    "sha256": [
+      "6c285320dadd7d590d89030227c766d752bfea1069976ef25d35a0fe15c1a6bf"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/lint/lint-checks/31.7.3/lint-checks-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.lint",
+      "lint-checks",
+      "31.7.3",
+      "lint-checks-31.7.3.pom"
+    ],
+    "sha256": [
+      "adf789e83491e70a45b241777805b4c282fe0941b64352f6d23b44a240ce6cec"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/lint/lint-checks/31.7.3/lint-checks-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.lint",
+      "lint-gradle",
+      "31.7.3",
+      "lint-gradle-31.7.3.jar"
+    ],
+    "sha256": [
+      "ec188c62447a6c7cd781072577b04470d7a8c321de926a95f5c7f92342060fbe"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/lint/lint-gradle/31.7.3/lint-gradle-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.lint",
+      "lint-gradle",
+      "31.7.3",
+      "lint-gradle-31.7.3.pom"
+    ],
+    "sha256": [
+      "bd462b7bc92341859686306c932f266945f868408b0db8dd241a0cacdd40499b"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/lint/lint-gradle/31.7.3/lint-gradle-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.lint",
+      "lint-model",
+      "31.7.3",
+      "lint-model-31.7.3.jar"
+    ],
+    "sha256": [
+      "9f4c087a199174521d1bc7b8ff05ff1484f770f4518b7fd9f6dae6c261882dbd"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/lint/lint-model/31.7.3/lint-model-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.lint",
+      "lint-model",
+      "31.7.3",
+      "lint-model-31.7.3.pom"
+    ],
+    "sha256": [
+      "2eaa5ae36189ba929be77ca788f54599940285f25d0c142241ad8d7fdd44122a"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/lint/lint-model/31.7.3/lint-model-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.lint",
+      "lint-typedef-remover",
+      "31.7.3",
+      "lint-typedef-remover-31.7.3.jar"
+    ],
+    "sha256": [
+      "5b4f485215ca4d86ef2319fc398b5f2251e62f5446bc5fd0e00653648ddde318"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/lint/lint-typedef-remover/31.7.3/lint-typedef-remover-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.lint",
+      "lint-typedef-remover",
+      "31.7.3",
+      "lint-typedef-remover-31.7.3.pom"
+    ],
+    "sha256": [
+      "12b06b1c9d9778781fe23368e723176f66f0e97641925580a2e80d2f870d2ce9"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/lint/lint-typedef-remover/31.7.3/lint-typedef-remover-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-device-provider-ddmlib",
+      "31.7.3",
+      "android-device-provider-ddmlib-31.7.3.jar"
+    ],
+    "sha256": [
+      "60cf666b057a3b3bb5063e29e226e211b8e0cc455a5625cdf898400034f59478"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-device-provider-ddmlib/31.7.3/android-device-provider-ddmlib-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-device-provider-ddmlib",
+      "31.7.3",
+      "android-device-provider-ddmlib-31.7.3.module"
+    ],
+    "sha256": [
+      "8341b26c0b7a49e6ee0d45335de851ef579179aa38f3f32b6ccdf75a8f111ca8"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-device-provider-ddmlib/31.7.3/android-device-provider-ddmlib-31.7.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-device-provider-ddmlib-proto",
+      "31.7.3",
+      "android-device-provider-ddmlib-proto-31.7.3.jar"
+    ],
+    "sha256": [
+      "da9f3f3dae26544c90668549584765d5854a87c425d2cfe577cd34d3600ea097"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-device-provider-ddmlib-proto/31.7.3/android-device-provider-ddmlib-proto-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-device-provider-ddmlib-proto",
+      "31.7.3",
+      "android-device-provider-ddmlib-proto-31.7.3.pom"
+    ],
+    "sha256": [
+      "4ca12ac8e065e4f40029da4b6682c819904464e852b53aa817cc86844279ae4a"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-device-provider-ddmlib-proto/31.7.3/android-device-provider-ddmlib-proto-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-device-provider-gradle",
+      "31.7.3",
+      "android-device-provider-gradle-31.7.3.jar"
+    ],
+    "sha256": [
+      "481a1b33e20083e5a70824ec34006b168d070c4a851378392b24b52a018c1ab8"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-device-provider-gradle/31.7.3/android-device-provider-gradle-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-device-provider-gradle",
+      "31.7.3",
+      "android-device-provider-gradle-31.7.3.module"
+    ],
+    "sha256": [
+      "2d7bb2165aa3a479b83f5bcf927e9171ae544fb91895805084dbc4d785fd8b29"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-device-provider-gradle/31.7.3/android-device-provider-gradle-31.7.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-device-provider-gradle-proto",
+      "31.7.3",
+      "android-device-provider-gradle-proto-31.7.3.jar"
+    ],
+    "sha256": [
+      "ad2342bb1d6f95563400a322493ea1c229cb93df3944f1261b7399f718494049"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-device-provider-gradle-proto/31.7.3/android-device-provider-gradle-proto-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-device-provider-gradle-proto",
+      "31.7.3",
+      "android-device-provider-gradle-proto-31.7.3.pom"
+    ],
+    "sha256": [
+      "f3dace1d46b265cd8f8264ca7861612073c8db6299c99abdce6babac39ff75aa"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-device-provider-gradle-proto/31.7.3/android-device-provider-gradle-proto-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-device-provider-profile",
+      "31.7.3",
+      "android-device-provider-profile-31.7.3.jar"
+    ],
+    "sha256": [
+      "3ac388cbd6dccc1c53f5f3b7e855d19f3f881bc426971b087553186caf4a0504"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-device-provider-profile/31.7.3/android-device-provider-profile-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-device-provider-profile",
+      "31.7.3",
+      "android-device-provider-profile-31.7.3.module"
+    ],
+    "sha256": [
+      "bccda84bd3dcfb658dbf9214b49e31dd6c9fe42816cf8cf5a807f9c08fe6cf75"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-device-provider-profile/31.7.3/android-device-provider-profile-31.7.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-device-provider-profile-proto",
+      "31.7.3",
+      "android-device-provider-profile-proto-31.7.3.jar"
+    ],
+    "sha256": [
+      "10d100ced5d083714c1c68bbbb10bb375e8546f92ab0e4219c0e4a5ff298115e"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-device-provider-profile-proto/31.7.3/android-device-provider-profile-proto-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-device-provider-profile-proto",
+      "31.7.3",
+      "android-device-provider-profile-proto-31.7.3.pom"
+    ],
+    "sha256": [
+      "89b175084a37cc6f3875af5685c8882374f56cb6e3bd8dc44f897f5cdc6143e9"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-device-provider-profile-proto/31.7.3/android-device-provider-profile-proto-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-host-additional-test-output",
+      "31.7.3",
+      "android-test-plugin-host-additional-test-output-31.7.3.jar"
+    ],
+    "sha256": [
+      "22c56d78a129269399696172f292606fa305a5fea882a4d22469b11933285ef3"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-additional-test-output/31.7.3/android-test-plugin-host-additional-test-output-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-host-additional-test-output",
+      "31.7.3",
+      "android-test-plugin-host-additional-test-output-31.7.3.module"
+    ],
+    "sha256": [
+      "76e628a6e8ee342cc2ccc25bc4f3ede336f901e13d22129179c27e1fefd121d6"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-additional-test-output/31.7.3/android-test-plugin-host-additional-test-output-31.7.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-host-additional-test-output-proto",
+      "31.7.3",
+      "android-test-plugin-host-additional-test-output-proto-31.7.3.jar"
+    ],
+    "sha256": [
+      "38450694de6328c2c4cba696f9c04ecdd5ce6952355f68c3a22f9541d1d6546f"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-additional-test-output-proto/31.7.3/android-test-plugin-host-additional-test-output-proto-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-host-additional-test-output-proto",
+      "31.7.3",
+      "android-test-plugin-host-additional-test-output-proto-31.7.3.pom"
+    ],
+    "sha256": [
+      "aa87561ee38800bb1192d56a3edc60465dac6dbfa73a345a8ccb14b0f4e89447"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-additional-test-output-proto/31.7.3/android-test-plugin-host-additional-test-output-proto-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-host-apk-installer",
+      "31.7.3",
+      "android-test-plugin-host-apk-installer-31.7.3.jar"
+    ],
+    "sha256": [
+      "9d6f35cfaea2bce5167761c680c5e4498ca46dbd8b2b027158cd4b0e2c818160"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-apk-installer/31.7.3/android-test-plugin-host-apk-installer-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-host-apk-installer",
+      "31.7.3",
+      "android-test-plugin-host-apk-installer-31.7.3.module"
+    ],
+    "sha256": [
+      "fc5ffea00417f07992b3f825fd481823582405fb9523f74c62ec9a9c7a84ad59"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-apk-installer/31.7.3/android-test-plugin-host-apk-installer-31.7.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-host-apk-installer-proto",
+      "31.7.3",
+      "android-test-plugin-host-apk-installer-proto-31.7.3.jar"
+    ],
+    "sha256": [
+      "543eb6c8d72b2ed7451f8e939d5d80890566f14bc26b7df9c8347506b258d7ae"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-apk-installer-proto/31.7.3/android-test-plugin-host-apk-installer-proto-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-host-apk-installer-proto",
+      "31.7.3",
+      "android-test-plugin-host-apk-installer-proto-31.7.3.pom"
+    ],
+    "sha256": [
+      "0b8d1ed982e7ab36e958a63bc975e5b31a98f6c6ba6f92fcafc22c692bb4a08f"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-apk-installer-proto/31.7.3/android-test-plugin-host-apk-installer-proto-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-host-coverage",
+      "31.7.3",
+      "android-test-plugin-host-coverage-31.7.3.jar"
+    ],
+    "sha256": [
+      "a8fe3c4bb51374feee9b0f4d6f3009ed60dafa669c7308da6b18633b22129855"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-coverage/31.7.3/android-test-plugin-host-coverage-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-host-coverage",
+      "31.7.3",
+      "android-test-plugin-host-coverage-31.7.3.module"
+    ],
+    "sha256": [
+      "0a3b47413c14c9e82256665acdaccd32e1bcd584de563340a474f4b231f66595"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-coverage/31.7.3/android-test-plugin-host-coverage-31.7.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-host-coverage-proto",
+      "31.7.3",
+      "android-test-plugin-host-coverage-proto-31.7.3.jar"
+    ],
+    "sha256": [
+      "efb4d7014aaa7355246a07c2e437a2231fb252540ff1bce6872c88dc8da89d12"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-coverage-proto/31.7.3/android-test-plugin-host-coverage-proto-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-host-coverage-proto",
+      "31.7.3",
+      "android-test-plugin-host-coverage-proto-31.7.3.pom"
+    ],
+    "sha256": [
+      "4ddcc6b6df4c92071035ae13f980e05f9bd2e6e3b6cc053e09e70b1d5373b1b3"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-coverage-proto/31.7.3/android-test-plugin-host-coverage-proto-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-host-device-info",
+      "31.7.3",
+      "android-test-plugin-host-device-info-31.7.3.jar"
+    ],
+    "sha256": [
+      "aae7600061eefd5fc5217278b00db9b2fd75005ccd64f6f19cdcb2523bc8ebc5"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-device-info/31.7.3/android-test-plugin-host-device-info-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-host-device-info",
+      "31.7.3",
+      "android-test-plugin-host-device-info-31.7.3.module"
+    ],
+    "sha256": [
+      "a770fb4a0fdb06f2309b12b3fa9470a8f20cd8c93914824b7cad1c96b86162ae"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-device-info/31.7.3/android-test-plugin-host-device-info-31.7.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-host-device-info-proto",
+      "31.7.3",
+      "android-test-plugin-host-device-info-proto-31.7.3.jar"
+    ],
+    "sha256": [
+      "4f5eccc1d47a981b3ff120e98a3de0988214108fe9dc7b068e95a6b686ada495"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-device-info-proto/31.7.3/android-test-plugin-host-device-info-proto-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-host-device-info-proto",
+      "31.7.3",
+      "android-test-plugin-host-device-info-proto-31.7.3.pom"
+    ],
+    "sha256": [
+      "8e8b5a5e08d5857452073a0e3395eb33ad5e021c5f1fb76c0a95e318b0dd948b"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-device-info-proto/31.7.3/android-test-plugin-host-device-info-proto-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-host-emulator-control",
+      "31.7.3",
+      "android-test-plugin-host-emulator-control-31.7.3.jar"
+    ],
+    "sha256": [
+      "e8879d8bc5ae580d90597f02b18abf492506414bf3fd6fd88df1b485309c644a"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-emulator-control/31.7.3/android-test-plugin-host-emulator-control-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-host-emulator-control",
+      "31.7.3",
+      "android-test-plugin-host-emulator-control-31.7.3.module"
+    ],
+    "sha256": [
+      "e8831575ce572d9c54f9d309017584719444c954133090e430b346a7d8b173b8"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-emulator-control/31.7.3/android-test-plugin-host-emulator-control-31.7.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-host-emulator-control-proto",
+      "31.7.3",
+      "android-test-plugin-host-emulator-control-proto-31.7.3.jar"
+    ],
+    "sha256": [
+      "aedec5ec4627d898cccdf42d8038db20eba4495753c53d1b0b378734491caf5f"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-emulator-control-proto/31.7.3/android-test-plugin-host-emulator-control-proto-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-host-emulator-control-proto",
+      "31.7.3",
+      "android-test-plugin-host-emulator-control-proto-31.7.3.pom"
+    ],
+    "sha256": [
+      "a27b4bc63f2f73f7a5b5b5775d381083fadd1d20fbfee0712a7130b88349aedd"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-emulator-control-proto/31.7.3/android-test-plugin-host-emulator-control-proto-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-host-logcat",
+      "31.7.3",
+      "android-test-plugin-host-logcat-31.7.3.jar"
+    ],
+    "sha256": [
+      "a66b846fe457f32fca5ec2af5c5de4a4650290017f86859481bcd2ee441892d4"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-logcat/31.7.3/android-test-plugin-host-logcat-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-host-logcat",
+      "31.7.3",
+      "android-test-plugin-host-logcat-31.7.3.module"
+    ],
+    "sha256": [
+      "9eb3c05697d26b2985ff50a26ce8858cd338336e0dd28dd60d42e81eb8863550"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-logcat/31.7.3/android-test-plugin-host-logcat-31.7.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-host-logcat-proto",
+      "31.7.3",
+      "android-test-plugin-host-logcat-proto-31.7.3.jar"
+    ],
+    "sha256": [
+      "9129024bd8e38353bca3eb26dfd8e3628e058d57d6e9d8451ffc35f016751e63"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-logcat-proto/31.7.3/android-test-plugin-host-logcat-proto-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-host-logcat-proto",
+      "31.7.3",
+      "android-test-plugin-host-logcat-proto-31.7.3.pom"
+    ],
+    "sha256": [
+      "1ae54e5f93cd6e0d0f8f4fe2e41ccfeeb3f9ed996cc21ea7749420ebf9a23d83"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-logcat-proto/31.7.3/android-test-plugin-host-logcat-proto-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-host-retention",
+      "31.7.3",
+      "android-test-plugin-host-retention-31.7.3.jar"
+    ],
+    "sha256": [
+      "7a944a016315af54394934c63dfcc18bd649185338ed880b8379eb0a3b571fb8"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-retention/31.7.3/android-test-plugin-host-retention-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-host-retention",
+      "31.7.3",
+      "android-test-plugin-host-retention-31.7.3.module"
+    ],
+    "sha256": [
+      "0c72f03ea7248b9cf3146fd78c8dc4028e7d3a7f5a118e9913571609f8fa9717"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-retention/31.7.3/android-test-plugin-host-retention-31.7.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-host-retention-proto",
+      "31.7.3",
+      "android-test-plugin-host-retention-proto-31.7.3.jar"
+    ],
+    "sha256": [
+      "3db8ed38ef49b694caea466ae22e3b36cedc9557b3589d0e07c0cdd83294591c"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-retention-proto/31.7.3/android-test-plugin-host-retention-proto-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-host-retention-proto",
+      "31.7.3",
+      "android-test-plugin-host-retention-proto-31.7.3.pom"
+    ],
+    "sha256": [
+      "d362f8f50fbd1cdee8dc92f79f2e901ab82970d5d4e09a19ae17946c56c0884c"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-host-retention-proto/31.7.3/android-test-plugin-host-retention-proto-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-result-listener-gradle",
+      "31.7.3",
+      "android-test-plugin-result-listener-gradle-31.7.3.jar"
+    ],
+    "sha256": [
+      "bf558c1e3f6f3f6d9800f965c4fe4bf39553ec255473122211de1228f5897acf"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-result-listener-gradle/31.7.3/android-test-plugin-result-listener-gradle-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-result-listener-gradle",
+      "31.7.3",
+      "android-test-plugin-result-listener-gradle-31.7.3.module"
+    ],
+    "sha256": [
+      "f74ded347660a21c0cfb3cd5322409ca1bfb4caaa6221ceefbe566beace5665d"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-result-listener-gradle/31.7.3/android-test-plugin-result-listener-gradle-31.7.3.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-result-listener-gradle-proto",
+      "31.7.3",
+      "android-test-plugin-result-listener-gradle-proto-31.7.3.jar"
+    ],
+    "sha256": [
+      "cbdf71bca60e14c30e7b2cf4b90f0f0a3e8c138f7cadd874b0d9c0ae082e0274"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-result-listener-gradle-proto/31.7.3/android-test-plugin-result-listener-gradle-proto-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "android-test-plugin-result-listener-gradle-proto",
+      "31.7.3",
+      "android-test-plugin-result-listener-gradle-proto-31.7.3.pom"
+    ],
+    "sha256": [
+      "63e52f778588440bc6daa9aa31589ae9f52b3fa5b28adb510c739f0ff4b8d2bc"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/android-test-plugin-result-listener-gradle-proto/31.7.3/android-test-plugin-result-listener-gradle-proto-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "utp-common",
+      "31.7.3",
+      "utp-common-31.7.3.jar"
+    ],
+    "sha256": [
+      "595702fb80bcd4373a1b9b438e5977687cba3c5fba6fa1a2936beef79b13ee9d"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/utp-common/31.7.3/utp-common-31.7.3.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.android.tools.utp",
+      "utp-common",
+      "31.7.3",
+      "utp-common-31.7.3.pom"
+    ],
+    "sha256": [
+      "52b3ccadb9126afd7359c7c7b659922bdd056411ffa17ae9cc76fdd80205fa3f"
+    ],
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/utp/utp-common/31.7.3/utp-common-31.7.3.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "com.google.code.gson",
+      "gson",
+      "2.11.0",
+      "gson-2.11.0.jar"
+    ],
+    "sha256": [
+      "57928d6e5a6edeb2abd3770a8f95ba44dce45f3b23b7a9dc2b309c581552a78b"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/com/google/code/gson/gson/2.11.0/gson-2.11.0.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "com.google.code.gson",
+      "gson",
+      "2.11.0",
+      "gson-2.11.0.pom"
+    ],
+    "sha256": [
+      "c0e547bea998888e6e25c5886a90e762272bc88b5275343dd2c05ded6ca2e360"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/com/google/code/gson/gson/2.11.0/gson-2.11.0.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "com.google.code.gson",
+      "gson-parent",
+      "2.11.0",
+      "gson-parent-2.11.0.pom"
+    ],
+    "sha256": [
+      "8acb1f3b72a6f026916ac0735bad9aab0293d527edb7b365327def13a9367b7a"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/com/google/code/gson/gson-parent/2.11.0/gson-parent-2.11.0.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "com.google.errorprone",
+      "error_prone_annotations",
+      "2.27.0",
+      "error_prone_annotations-2.27.0.jar"
+    ],
+    "sha256": [
+      "24c923372c58e35d0b9f16a028929bb9aedc77521867c274f2bd0735df5ba1f5"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/com/google/errorprone/error_prone_annotations/2.27.0/error_prone_annotations-2.27.0.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "com.google.errorprone",
+      "error_prone_annotations",
+      "2.27.0",
+      "error_prone_annotations-2.27.0.pom"
+    ],
+    "sha256": [
+      "4ca5a35d61235e16549ac346d1e34551cdf0fe27e84aa57e03cbeb255ea4e5da"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/com/google/errorprone/error_prone_annotations/2.27.0/error_prone_annotations-2.27.0.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "com.google.errorprone",
+      "error_prone_parent",
+      "2.27.0",
+      "error_prone_parent-2.27.0.pom"
+    ],
+    "sha256": [
+      "fa81829d049559df6927f9c9a6fd6bbd09f8b50e6d4736ae72c8300b6c3d7654"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/com/google/errorprone/error_prone_parent/2.27.0/error_prone_parent-2.27.0.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.codehaus.groovy",
+      "groovy",
+      "3.0.21",
+      "groovy-3.0.21.jar"
+    ],
+    "sha256": [
+      "5cf3730c0c2c15c293f7750dd7114ed27a671fc940165bbae0378a281f5b2d5e"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/codehaus/groovy/groovy/3.0.21/groovy-3.0.21.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "org.codehaus.groovy",
+      "groovy",
+      "3.0.21",
+      "groovy-3.0.21.pom"
+    ],
+    "sha256": [
+      "b8e9e8a5e2462d2fcc146ce41da96079b8931e70db3eab9d59d689863d096b17"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/codehaus/groovy/groovy/3.0.21/groovy-3.0.21.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.androidx.lifecycle",
+      "lifecycle-common",
+      "2.8.4",
+      "lifecycle-common-2.8.4.module"
+    ],
+    "sha256": [
+      "a3bc9bde2ffefc8153d52afc580426b38ad6576cae1346bb8c83dbcc506f00f4"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/androidx/lifecycle/lifecycle-common/2.8.4/lifecycle-common-2.8.4.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.androidx.lifecycle",
+      "lifecycle-runtime",
+      "2.8.4",
+      "lifecycle-runtime-2.8.4.module"
+    ],
+    "sha256": [
+      "b7fe68ab94b89dc0c5d705a5b64dcb0c3c83a484e298f35f036c797116601ea4"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/androidx/lifecycle/lifecycle-runtime/2.8.4/lifecycle-runtime-2.8.4.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.androidx.lifecycle",
+      "lifecycle-runtime-compose",
+      "2.8.4",
+      "lifecycle-runtime-compose-2.8.4.module"
+    ],
+    "sha256": [
+      "43b79e342717f2cc7dad0cdd74d51ac2dc316c48668f78df26c21cf0695e103e"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/androidx/lifecycle/lifecycle-runtime-compose/2.8.4/lifecycle-runtime-compose-2.8.4.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.androidx.lifecycle",
+      "lifecycle-viewmodel",
+      "2.8.4",
+      "lifecycle-viewmodel-2.8.4.module"
+    ],
+    "sha256": [
+      "61d93126c9e2bd3c85a74f97ad815bc618b9039d9b1483b3f4e5e9e80c9cf81c"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/androidx/lifecycle/lifecycle-viewmodel/2.8.4/lifecycle-viewmodel-2.8.4.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.compose.animation",
+      "animation",
+      "1.8.2",
+      "animation-1.8.2.module"
+    ],
+    "sha256": [
+      "ed1bd6bce69f7e79d077066a528d6a29b1fcf7f961f02c534791eb325f814661"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/compose/animation/animation/1.8.2/animation-1.8.2.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.compose.animation",
+      "animation-core",
+      "1.8.2",
+      "animation-core-1.8.2.module"
+    ],
+    "sha256": [
+      "b5119bcbbfd328c0dc0fcc8a4729d793a837bf3e276923f56d10adbe27c648c9"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/compose/animation/animation-core/1.8.2/animation-core-1.8.2.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.compose.annotation-internal",
+      "annotation",
+      "1.8.2",
+      "annotation-1.8.2.module"
+    ],
+    "sha256": [
+      "ead43d4e6c7446e4371fc2a91918412942572820296216ec13f8403a3d30f56c"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/compose/annotation-internal/annotation/1.8.2/annotation-1.8.2.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.compose.collection-internal",
+      "collection",
+      "1.8.2",
+      "collection-1.8.2.module"
+    ],
+    "sha256": [
+      "7adef3f2dc4ced688a6c9cfb60d606bb62b40369ef89cdb2afe9763428aea189"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/compose/collection-internal/collection/1.8.2/collection-1.8.2.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.compose.foundation",
+      "foundation",
+      "1.8.2",
+      "foundation-1.8.2.module"
+    ],
+    "sha256": [
+      "3d1117715e9b17a8ed60039a34159b5e2bd81d29eee661b03d3edcedc7855655"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/compose/foundation/foundation/1.8.2/foundation-1.8.2.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.compose.foundation",
+      "foundation-layout",
+      "1.8.2",
+      "foundation-layout-1.8.2.module"
+    ],
+    "sha256": [
+      "e193b441eb200a73dc7ab37486031cce42a26e2ce700fa79dd6b3166eb7a4794"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/compose/foundation/foundation-layout/1.8.2/foundation-layout-1.8.2.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.compose.material3",
+      "material3-window-size-class",
+      "1.8.2",
+      "material3-window-size-class-1.8.2.module"
+    ],
+    "sha256": [
+      "64e1cc26990282cd07b1a477870095927f018f414278f64cf9ca01cb125b0330"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/compose/material3/material3-window-size-class/1.8.2/material3-window-size-class-1.8.2.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.compose.runtime",
+      "runtime",
+      "1.8.2",
+      "runtime-1.8.2.module"
+    ],
+    "sha256": [
+      "e69d58b918d2981589816cc9c43b8626a74d9b3d430cd83147acc43dacd5b6df"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/compose/runtime/runtime/1.8.2/runtime-1.8.2.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.compose.runtime",
+      "runtime-saveable",
+      "1.8.2",
+      "runtime-saveable-1.8.2.module"
+    ],
+    "sha256": [
+      "b639d8ab9e6613f1fbb75d0d5d3c5ccb7795247707975ea66cba9f4e8362576e"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/compose/runtime/runtime-saveable/1.8.2/runtime-saveable-1.8.2.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.compose.ui",
+      "ui",
+      "1.8.2",
+      "ui-1.8.2.module"
+    ],
+    "sha256": [
+      "7c8f02050bc073026b7aa650630d72ef1c9a96e26bce6001827bde99e9b6f0f1"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/compose/ui/ui/1.8.2/ui-1.8.2.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.compose.ui",
+      "ui-geometry",
+      "1.8.2",
+      "ui-geometry-1.8.2.module"
+    ],
+    "sha256": [
+      "5ef3a63e6543901a7db1f714d73d381c57733e3f2eac7ce731bf3a826df11d59"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/compose/ui/ui-geometry/1.8.2/ui-geometry-1.8.2.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.compose.ui",
+      "ui-graphics",
+      "1.8.2",
+      "ui-graphics-1.8.2.module"
+    ],
+    "sha256": [
+      "6a1f446e25e186c5c55d4386e36cca1a769d7a34b441237abd6c664ab3eb3e25"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/compose/ui/ui-graphics/1.8.2/ui-graphics-1.8.2.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.compose.ui",
+      "ui-text",
+      "1.8.2",
+      "ui-text-1.8.2.module"
+    ],
+    "sha256": [
+      "e8c23cd4b3301d0015a6c809615b72edd4c93c229aae2aed99f015809e8ae7a9"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/compose/ui/ui-text/1.8.2/ui-text-1.8.2.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.compose.ui",
+      "ui-unit",
+      "1.8.2",
+      "ui-unit-1.8.2.module"
+    ],
+    "sha256": [
+      "bd61d018cc234290a3ba24afc267afeaf90cff84107dbbd2561aa107f9982ea4"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/compose/ui/ui-unit/1.8.2/ui-unit-1.8.2.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.compose.ui",
+      "ui-util",
+      "1.8.2",
+      "ui-util-1.8.2.module"
+    ],
+    "sha256": [
+      "f99b967b1ff02052567d4c4d1bd03a3b4181bd7f57da58e04a306263e861f0f8"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/compose/ui/ui-util/1.8.2/ui-util-1.8.2.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "abi-tools-api",
+      "2.2.10",
+      "abi-tools-api-2.2.10.jar"
+    ],
+    "sha256": [
+      "de9b34e9bacda1d0f6857d3e01dcd2852c9498f6611a832c5807fbacc7c1ccdc"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/abi-tools-api/2.2.10/abi-tools-api-2.2.10.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "abi-tools-api",
+      "2.2.10",
+      "abi-tools-api-2.2.10.pom"
+    ],
+    "sha256": [
+      "c6f377dcf03cdb7385fa082ca11c8d2d0892753f22eabe5d53b1ae8b01af2d62"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/abi-tools-api/2.2.10/abi-tools-api-2.2.10.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "compose-compiler-gradle-plugin",
+      "2.2.10",
+      "compose-compiler-gradle-plugin-2.2.10-gradle88.jar"
+    ],
+    "sha256": [
+      "736d595884c87f3fb88df50c0d6fdfd0b651f5117aefacaeabeb19c4f3b15b1a"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/compose-compiler-gradle-plugin/2.2.10/compose-compiler-gradle-plugin-2.2.10-gradle88.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "compose-compiler-gradle-plugin",
+      "2.2.10",
+      "compose-compiler-gradle-plugin-2.2.10.module"
+    ],
+    "sha256": [
+      "f7c7c352ece1b07d87e172bdb6e955cf58d8204759600c1c31cf740486acf68c"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/compose-compiler-gradle-plugin/2.2.10/compose-compiler-gradle-plugin-2.2.10.module",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "fus-statistics-gradle-plugin",
+      "2.2.10",
+      "fus-statistics-gradle-plugin-2.2.10-gradle88.jar"
+    ],
+    "sha256": [
+      "5b6e2c379cb83f3eed18094f3de5e1e168f71be73f26b6618efcd39cd90324c3"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/fus-statistics-gradle-plugin/2.2.10/fus-statistics-gradle-plugin-2.2.10-gradle88.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "fus-statistics-gradle-plugin",
+      "2.2.10",
+      "fus-statistics-gradle-plugin-2.2.10.module"
+    ],
+    "sha256": [
+      "1ccdc7960dcba31e3a7dc8885b89c4347c7a85685bcd664d55bf89347b96176c"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/fus-statistics-gradle-plugin/2.2.10/fus-statistics-gradle-plugin-2.2.10.module",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-build-statistics",
+      "2.2.10",
+      "kotlin-build-statistics-2.2.10.jar"
+    ],
+    "sha256": [
+      "4650ac8d0d3bd1563343d66f03570b437887c8209434dfb261ee3baab2201780"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-build-statistics/2.2.10/kotlin-build-statistics-2.2.10.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-build-statistics",
+      "2.2.10",
+      "kotlin-build-statistics-2.2.10.pom"
+    ],
+    "sha256": [
+      "524f0679cc96597a02bed5dc3a68e2802968925aa7536aba0db394416bd44dee"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-build-statistics/2.2.10/kotlin-build-statistics-2.2.10.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-build-tools-api",
+      "2.2.10",
+      "kotlin-build-tools-api-2.2.10.jar"
+    ],
+    "sha256": [
+      "6f5ca321fcc74e0f8b0c73228aabb5e2f3e22badd07eb214209247d5cbf3e13f"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-build-tools-api/2.2.10/kotlin-build-tools-api-2.2.10.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-build-tools-api",
+      "2.2.10",
+      "kotlin-build-tools-api-2.2.10.pom"
+    ],
+    "sha256": [
+      "03839cac3ed75ca1b39cafca9c2dc978d4a648a361a4afeb39315091d2d299fd"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-build-tools-api/2.2.10/kotlin-build-tools-api-2.2.10.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-build-tools-impl",
+      "2.2.10",
+      "kotlin-build-tools-impl-2.2.10.jar"
+    ],
+    "sha256": [
+      "1305c17d5dff5e9ee6bfe80e2962a9b88716424687c251fbc9bb8fefc4ffc0a8"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-build-tools-impl/2.2.10/kotlin-build-tools-impl-2.2.10.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-build-tools-impl",
+      "2.2.10",
+      "kotlin-build-tools-impl-2.2.10.pom"
+    ],
+    "sha256": [
+      "08095965d5b7b63dc094776767193c613632930d6cd877bc268101ff7343899c"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-build-tools-impl/2.2.10/kotlin-build-tools-impl-2.2.10.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-compiler-embeddable",
+      "2.2.10",
+      "kotlin-compiler-embeddable-2.2.10.jar"
+    ],
+    "sha256": [
+      "79628fd5d64b4692a62f98962baab00e9076a37e2cffd6ace33cd0b7be7d1cdf"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-compiler-embeddable/2.2.10/kotlin-compiler-embeddable-2.2.10.jar",
+    "verified": true,
+    "method": "published-sha1-and-local-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-compiler-embeddable",
+      "2.2.10",
+      "kotlin-compiler-embeddable-2.2.10.pom"
+    ],
+    "sha256": [
+      "b8ac50cc8dcb3b7c63a405b3cf19e83ca5fd1955fb040596c8d961a1734cb48b"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-compiler-embeddable/2.2.10/kotlin-compiler-embeddable-2.2.10.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-compiler-runner",
+      "2.2.10",
+      "kotlin-compiler-runner-2.2.10.jar"
+    ],
+    "sha256": [
+      "6ac159f175510bf81989a87b03cf7bb1e790e961f48ad0e0848b58c87785e52c"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-compiler-runner/2.2.10/kotlin-compiler-runner-2.2.10.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-compiler-runner",
+      "2.2.10",
+      "kotlin-compiler-runner-2.2.10.pom"
+    ],
+    "sha256": [
+      "f1f161e1071304f55ee6b942576c26bfe94541d86f7e3b80dc302fb733545b2e"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-compiler-runner/2.2.10/kotlin-compiler-runner-2.2.10.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-compose-compiler-plugin-embeddable",
+      "2.2.10",
+      "kotlin-compose-compiler-plugin-embeddable-2.2.10.jar"
+    ],
+    "sha256": [
+      "f0af68d37d91f8c3a4c60f5bb7a8ee71e99c768931f15317a1be2e229cfa4686"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-compose-compiler-plugin-embeddable/2.2.10/kotlin-compose-compiler-plugin-embeddable-2.2.10.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-compose-compiler-plugin-embeddable",
+      "2.2.10",
+      "kotlin-compose-compiler-plugin-embeddable-2.2.10.pom"
+    ],
+    "sha256": [
+      "22b6b55eef2ed602928937323ee42243f48e6a65cdbb2050f994bc81776be353"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-compose-compiler-plugin-embeddable/2.2.10/kotlin-compose-compiler-plugin-embeddable-2.2.10.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-daemon-client",
+      "2.2.10",
+      "kotlin-daemon-client-2.2.10.jar"
+    ],
+    "sha256": [
+      "2e18ccb9ae8388a32c16c9fee68093d7a204ff714fd3717423824b8b8537f0df"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-daemon-client/2.2.10/kotlin-daemon-client-2.2.10.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-daemon-client",
+      "2.2.10",
+      "kotlin-daemon-client-2.2.10.pom"
+    ],
+    "sha256": [
+      "3d3cf92935b16ceefdd9b2143d5ccd2c5d5476a4f4df054eaba06d10bef82ebc"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-daemon-client/2.2.10/kotlin-daemon-client-2.2.10.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-daemon-embeddable",
+      "2.2.10",
+      "kotlin-daemon-embeddable-2.2.10.jar"
+    ],
+    "sha256": [
+      "b31573d418961fa080760fedcfc90d68ad67a85eafa245c73fe3d551476777ba"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-daemon-embeddable/2.2.10/kotlin-daemon-embeddable-2.2.10.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-daemon-embeddable",
+      "2.2.10",
+      "kotlin-daemon-embeddable-2.2.10.pom"
+    ],
+    "sha256": [
+      "fecac8d2ddc08a38315bf809cc06c66ae7312c637a821a877aa654d722d30743"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-daemon-embeddable/2.2.10/kotlin-daemon-embeddable-2.2.10.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-gradle-plugin",
+      "2.2.10",
+      "kotlin-gradle-plugin-2.2.10-gradle88.jar"
+    ],
+    "sha256": [
+      "2af2be88c373a0f6d490e0f26f413d25ad76df861669f85d97e9412a6b016ba6"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin/2.2.10/kotlin-gradle-plugin-2.2.10-gradle88.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-gradle-plugin",
+      "2.2.10",
+      "kotlin-gradle-plugin-2.2.10.module"
+    ],
+    "sha256": [
+      "d0aa54915c5b57407a3c1740b0c530cf9657bf587d6d1018b79a8fa67f6a8821"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin/2.2.10/kotlin-gradle-plugin-2.2.10.module",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-gradle-plugin-annotations",
+      "2.2.10",
+      "kotlin-gradle-plugin-annotations-2.2.10.jar"
+    ],
+    "sha256": [
+      "bb84505ddf5f3d6788f0300de99f365c62c98a5cecf2a058278451aa10300036"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin-annotations/2.2.10/kotlin-gradle-plugin-annotations-2.2.10.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-gradle-plugin-annotations",
+      "2.2.10",
+      "kotlin-gradle-plugin-annotations-2.2.10.pom"
+    ],
+    "sha256": [
+      "d68b80360f231a17be162cd6d5f74c777561b0b96c0758a36e16275206579ead"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin-annotations/2.2.10/kotlin-gradle-plugin-annotations-2.2.10.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-gradle-plugin-api",
+      "2.2.10",
+      "kotlin-gradle-plugin-api-2.2.10-gradle88.jar"
+    ],
+    "sha256": [
+      "9411be7345c4161a97d39796041d3b4c5e9d70cea744404f181199256265bfb5"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin-api/2.2.10/kotlin-gradle-plugin-api-2.2.10-gradle88.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-gradle-plugin-api",
+      "2.2.10",
+      "kotlin-gradle-plugin-api-2.2.10.jar"
+    ],
+    "sha256": [
+      "9411be7345c4161a97d39796041d3b4c5e9d70cea744404f181199256265bfb5"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin-api/2.2.10/kotlin-gradle-plugin-api-2.2.10.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-gradle-plugin-api",
+      "2.2.10",
+      "kotlin-gradle-plugin-api-2.2.10.module"
+    ],
+    "sha256": [
+      "d1e1306a627f8e2766423312892bd627acfe565ba9e31ab1d86bfddbd8c0d530"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin-api/2.2.10/kotlin-gradle-plugin-api-2.2.10.module",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-gradle-plugin-idea",
+      "2.2.10",
+      "kotlin-gradle-plugin-idea-2.2.10.jar"
+    ],
+    "sha256": [
+      "ec969c5f0b099f823846232238f9bd64f3d3741e62ea9050ad2e432fad79d0a0"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin-idea/2.2.10/kotlin-gradle-plugin-idea-2.2.10.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-gradle-plugin-idea",
+      "2.2.10",
+      "kotlin-gradle-plugin-idea-2.2.10.module"
+    ],
+    "sha256": [
+      "bf692dff0af33f4199b828303add8318c93bcf8b5e51d87ca06cdcb79d91fb52"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin-idea/2.2.10/kotlin-gradle-plugin-idea-2.2.10.module",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-gradle-plugin-idea-proto",
+      "2.2.10",
+      "kotlin-gradle-plugin-idea-proto-2.2.10.jar"
+    ],
+    "sha256": [
+      "efa9a91c17f464d7973de2273b7af8571cd334200baac107b91fc84effc54c1f"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin-idea-proto/2.2.10/kotlin-gradle-plugin-idea-proto-2.2.10.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-gradle-plugin-idea-proto",
+      "2.2.10",
+      "kotlin-gradle-plugin-idea-proto-2.2.10.pom"
+    ],
+    "sha256": [
+      "935bfa694894e99f8dd5630cd3781f01ae1900d63dd9f6ed21455c9789ef4710"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin-idea-proto/2.2.10/kotlin-gradle-plugin-idea-proto-2.2.10.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-gradle-plugin-model",
+      "2.2.10",
+      "kotlin-gradle-plugin-model-2.2.10.jar"
+    ],
+    "sha256": [
+      "90be3a572be6cee45e5cd65f216d446b26942b0e4c5aa7b6cb8733a79fd5a84c"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin-model/2.2.10/kotlin-gradle-plugin-model-2.2.10.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-gradle-plugin-model",
+      "2.2.10",
+      "kotlin-gradle-plugin-model-2.2.10.module"
+    ],
+    "sha256": [
+      "a831bbebeec454793a3dceae0137eec4cb1080c7dc1fd76f46da28cec6398dc6"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin-model/2.2.10/kotlin-gradle-plugin-model-2.2.10.module",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-gradle-plugins-bom",
+      "2.2.10",
+      "kotlin-gradle-plugins-bom-2.2.10.module"
+    ],
+    "sha256": [
+      "e4b7dd0b5570aa7ae6597d1f479bcea94e78e12735fa86f80afa95e7014efed6"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugins-bom/2.2.10/kotlin-gradle-plugins-bom-2.2.10.module",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-gradle-plugins-bom",
+      "2.2.10",
+      "kotlin-gradle-plugins-bom-2.2.10.pom"
+    ],
+    "sha256": [
+      "c0a5a21a4e6eec4d8bb6a2c491fac42f35ab9f08dd2af6bedb085715ac805296"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugins-bom/2.2.10/kotlin-gradle-plugins-bom-2.2.10.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-klib-commonizer-api",
+      "2.2.10",
+      "kotlin-klib-commonizer-api-2.2.10.jar"
+    ],
+    "sha256": [
+      "cc6b3278a16df1ea6f7720cdc1126ea216b4ae642f3454dea7a36b7d903aea41"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-klib-commonizer-api/2.2.10/kotlin-klib-commonizer-api-2.2.10.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-klib-commonizer-api",
+      "2.2.10",
+      "kotlin-klib-commonizer-api-2.2.10.pom"
+    ],
+    "sha256": [
+      "578a716f344221e85396e793876a4853992f275cfe5590f09e328662af2223ec"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-klib-commonizer-api/2.2.10/kotlin-klib-commonizer-api-2.2.10.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-native-utils",
+      "2.2.10",
+      "kotlin-native-utils-2.2.10.jar"
+    ],
+    "sha256": [
+      "98c7231c8561fe7befb35500f270b150e1ee0e833bfb0309163384f14878dde6"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-native-utils/2.2.10/kotlin-native-utils-2.2.10.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-native-utils",
+      "2.2.10",
+      "kotlin-native-utils-2.2.10.pom"
+    ],
+    "sha256": [
+      "00c77adf6f1afa278af18d2d3c43944188c6e88a342bcca863a73ac4d28ea73d"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-native-utils/2.2.10/kotlin-native-utils-2.2.10.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-script-runtime",
+      "2.2.10",
+      "kotlin-script-runtime-2.2.10.jar"
+    ],
+    "sha256": [
+      "c304a67dba6a61dde560e6310920bed746307c3854f6675c29ac29114731b6b0"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-script-runtime/2.2.10/kotlin-script-runtime-2.2.10.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-script-runtime",
+      "2.2.10",
+      "kotlin-script-runtime-2.2.10.pom"
+    ],
+    "sha256": [
+      "8c06c7d7f2478c9ff2db1941a3b9289b79302a6e2aa9e0069469af09a5e493ae"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-script-runtime/2.2.10/kotlin-script-runtime-2.2.10.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-scripting-common",
+      "2.2.10",
+      "kotlin-scripting-common-2.2.10.jar"
+    ],
+    "sha256": [
+      "16257fc00d625c179f422adc2e000ec53324435e65d9b67d02be72f1e4d0138f"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-scripting-common/2.2.10/kotlin-scripting-common-2.2.10.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-scripting-common",
+      "2.2.10",
+      "kotlin-scripting-common-2.2.10.pom"
+    ],
+    "sha256": [
+      "6c453feb9bd94d02912f5cc80c06ee219f709615d6fe2ac30a4ab9995ff49b9f"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-scripting-common/2.2.10/kotlin-scripting-common-2.2.10.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-scripting-compiler-embeddable",
+      "2.2.10",
+      "kotlin-scripting-compiler-embeddable-2.2.10.jar"
+    ],
+    "sha256": [
+      "ec92086d9bfd5c4fd57462184cf0a23fc8d5ca38d79624242d7a95f178e6295f"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-scripting-compiler-embeddable/2.2.10/kotlin-scripting-compiler-embeddable-2.2.10.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-scripting-compiler-embeddable",
+      "2.2.10",
+      "kotlin-scripting-compiler-embeddable-2.2.10.pom"
+    ],
+    "sha256": [
+      "1318593fdc25f85b8d217c40b954fb9f0b53cefc275e823bb68124c2e80c9d98"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-scripting-compiler-embeddable/2.2.10/kotlin-scripting-compiler-embeddable-2.2.10.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-scripting-compiler-impl-embeddable",
+      "2.2.10",
+      "kotlin-scripting-compiler-impl-embeddable-2.2.10.jar"
+    ],
+    "sha256": [
+      "69940658c2077c1ccabbf9ea9a8e43af1b3514340420676cc5c22c63e5a3ebe7"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-scripting-compiler-impl-embeddable/2.2.10/kotlin-scripting-compiler-impl-embeddable-2.2.10.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-scripting-compiler-impl-embeddable",
+      "2.2.10",
+      "kotlin-scripting-compiler-impl-embeddable-2.2.10.pom"
+    ],
+    "sha256": [
+      "8d237fee0920808e72a54a6090735d5688514b7a624a9a55f39cdb4c06e444db"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-scripting-compiler-impl-embeddable/2.2.10/kotlin-scripting-compiler-impl-embeddable-2.2.10.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-scripting-jvm",
+      "2.2.10",
+      "kotlin-scripting-jvm-2.2.10.jar"
+    ],
+    "sha256": [
+      "2580de81c7cbe9412e43d99cec207949afdaf0883a81269635a3618db4b6f2e0"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-scripting-jvm/2.2.10/kotlin-scripting-jvm-2.2.10.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-scripting-jvm",
+      "2.2.10",
+      "kotlin-scripting-jvm-2.2.10.pom"
+    ],
+    "sha256": [
+      "be4ff3d745bfba57dcba24b385c1ab8cd2cca717d2ea7e1248fc22883eeacf79"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-scripting-jvm/2.2.10/kotlin-scripting-jvm-2.2.10.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-stdlib",
+      "2.2.10",
+      "kotlin-stdlib-2.2.10-all.jar"
+    ],
+    "sha256": [
+      "e2300faa59c935293dabb0a183d2e6108a9b011c427076c3f7ba10d24b73ba0a"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.2.10/kotlin-stdlib-2.2.10-all.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-stdlib",
+      "2.2.10",
+      "kotlin-stdlib-2.2.10.jar"
+    ],
+    "sha256": [
+      "9c67cc79efd6b9215b49d2a4308f5f3433537376c7c88e89bdd6729bd096e61a"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.2.10/kotlin-stdlib-2.2.10.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-stdlib",
+      "2.2.10",
+      "kotlin-stdlib-2.2.10.module"
+    ],
+    "sha256": [
+      "db78df08283591cb67c8b9d2796109eb52b6088d4dfe102b545f20118249713f"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.2.10/kotlin-stdlib-2.2.10.module",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-stdlib-common",
+      "2.2.10",
+      "kotlin-stdlib-common-2.2.10.module"
+    ],
+    "sha256": [
+      "336afb512852028b1da5d5d07a6fb833cf9a797ee4b33519694d312f683227c9"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/2.2.10/kotlin-stdlib-common-2.2.10.module",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-tooling-core",
+      "2.2.10",
+      "kotlin-tooling-core-2.2.10.jar"
+    ],
+    "sha256": [
+      "74014ec4f3ef78ce7da7e3e6964f2c526a3121d5c58fef8ca2979e5f344582f4"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-tooling-core/2.2.10/kotlin-tooling-core-2.2.10.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-tooling-core",
+      "2.2.10",
+      "kotlin-tooling-core-2.2.10.pom"
+    ],
+    "sha256": [
+      "41ab85d6788048f1922defb240d351ac3fe1882c70bab03ae6aee5209f2773d9"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-tooling-core/2.2.10/kotlin-tooling-core-2.2.10.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-util-io",
+      "2.2.10",
+      "kotlin-util-io-2.2.10.jar"
+    ],
+    "sha256": [
+      "682be217196dd053860f5bea804a0a11fcb777e55eb8a79512659424808d65d3"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-util-io/2.2.10/kotlin-util-io-2.2.10.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-util-io",
+      "2.2.10",
+      "kotlin-util-io-2.2.10.pom"
+    ],
+    "sha256": [
+      "bd6437f55351786336098c28a60b9cc4c7b055a7f64a7e7251cc5957bc0c7388"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-util-io/2.2.10/kotlin-util-io-2.2.10.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-util-klib",
+      "2.2.10",
+      "kotlin-util-klib-2.2.10.jar"
+    ],
+    "sha256": [
+      "9e6d04a60e9b63a51741293c2ec181ddb78b92104d4a10647d4371045a037041"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-util-klib/2.2.10/kotlin-util-klib-2.2.10.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-util-klib",
+      "2.2.10",
+      "kotlin-util-klib-2.2.10.pom"
+    ],
+    "sha256": [
+      "3a3f4de603e5c1912d5a22b9bddc169543e44c57375b41b8bf3dd0d3eb22cc18"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-util-klib/2.2.10/kotlin-util-klib-2.2.10.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-util-klib-metadata",
+      "2.2.10",
+      "kotlin-util-klib-metadata-2.2.10.jar"
+    ],
+    "sha256": [
+      "2a07067dcc13481bad4f45e0858123ab930ee04329f86192b9b2f9989f814560"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-util-klib-metadata/2.2.10/kotlin-util-klib-metadata-2.2.10.jar",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin",
+      "kotlin-util-klib-metadata",
+      "2.2.10",
+      "kotlin-util-klib-metadata-2.2.10.pom"
+    ],
+    "sha256": [
+      "5d364eec2d4af72fac5e6fec3acb5f975d64a629703277754435400dbbc3bf4d"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-util-klib-metadata/2.2.10/kotlin-util-klib-metadata-2.2.10.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin.android",
+      "org.jetbrains.kotlin.android.gradle.plugin",
+      "2.2.10",
+      "org.jetbrains.kotlin.android.gradle.plugin-2.2.10.pom"
+    ],
+    "sha256": [
+      "dee26ade2abbf8fa4f101e80a63d966dd3722dc92556b9674369ebc706e0d27f"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/android/org.jetbrains.kotlin.android.gradle.plugin/2.2.10/org.jetbrains.kotlin.android.gradle.plugin-2.2.10.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlin.plugin.compose",
+      "org.jetbrains.kotlin.plugin.compose.gradle.plugin",
+      "2.2.10",
+      "org.jetbrains.kotlin.plugin.compose.gradle.plugin-2.2.10.pom"
+    ],
+    "sha256": [
+      "db6facfc95abf5da9f071282183adba9146060f3585f38d54690d19e5b185427"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/plugin/compose/org.jetbrains.kotlin.plugin.compose.gradle.plugin/2.2.10/org.jetbrains.kotlin.plugin.compose.gradle.plugin-2.2.10.pom",
+    "verified": true,
+    "method": "canonical-file-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlinx",
+      "kotlinx-coroutines-android",
+      "1.6.4",
+      "kotlinx-coroutines-android-1.6.4.module"
+    ],
+    "sha256": [
+      "68516559e6f84a621b9783cd892a64630ccd7875843588ddb3f0501425e33f15"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-android/1.6.4/kotlinx-coroutines-android-1.6.4.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlinx",
+      "kotlinx-coroutines-bom",
+      "1.8.0",
+      "kotlinx-coroutines-bom-1.8.0.pom"
+    ],
+    "sha256": [
+      "1239e9dbe1397cd5971342956b2511bc3ace7b641842e4372a088dcfa8b9ad55"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-bom/1.8.0/kotlinx-coroutines-bom-1.8.0.pom",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlinx",
+      "kotlinx-coroutines-core",
+      "1.8.0",
+      "kotlinx-coroutines-core-1.8.0.module"
+    ],
+    "sha256": [
+      "144eecd5365de3e30d7b46226c058051e39955b5c189e31fa4c7cffb99d620ba"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core/1.8.0/kotlinx-coroutines-core-1.8.0.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlinx",
+      "kotlinx-coroutines-core-jvm",
+      "1.8.0",
+      "kotlinx-coroutines-core-jvm-1.8.0.jar"
+    ],
+    "sha256": [
+      "9860906a1937490bf5f3b06d2f0e10ef451e65b95b269f22daf68a3d1f5065c5"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.8.0/kotlinx-coroutines-core-jvm-1.8.0.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "org.jetbrains.kotlinx",
+      "kotlinx-coroutines-core-jvm",
+      "1.8.0",
+      "kotlinx-coroutines-core-jvm-1.8.0.module"
+    ],
+    "sha256": [
+      "ff6a22da40040938751db0ae21177e76517dbf126a76796f5426727bf76c1228"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.8.0/kotlinx-coroutines-core-jvm-1.8.0.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "org.jspecify",
+      "jspecify",
+      "1.0.0",
+      "jspecify-1.0.0.jar"
+    ],
+    "sha256": [
+      "1fad6e6be7557781e4d33729d49ae1cdc8fdda6fe477bb0cc68ce351eafdfbab"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jspecify/jspecify/1.0.0/jspecify-1.0.0.jar",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "org.jspecify",
+      "jspecify",
+      "1.0.0",
+      "jspecify-1.0.0.module"
+    ],
+    "sha256": [
+      "d307ca77a54e18ac1ef1aaed4e5bbe014bd2f49f29e1d2f813e47c278283195b"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/org/jspecify/jspecify/1.0.0/jspecify-1.0.0.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "top.yukonga.miuix.kmp",
+      "miuix-android",
+      "0.5.1",
+      "miuix-android-0.5.1.module"
+    ],
+    "sha256": [
+      "f1199fe94ce0b17a8fa03f994e602bf285667760a618b203471f1a962ce58a4c"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/top/yukonga/miuix/kmp/miuix-android/0.5.1/miuix-android-0.5.1.module",
+    "verified": true,
+    "method": "published-sha256"
+  },
+  {
+    "artifact": [
+      "top.yukonga.miuix.kmp",
+      "miuix-android",
+      "0.5.1",
+      "miuix-release.aar"
+    ],
+    "sha256": [
+      "354147515f9f010cd6e5a22ab59a467910b78bc0a9fb8ca5cf946945082bd779"
+    ],
+    "url": "https://repo.maven.apache.org/maven2/top/yukonga/miuix/kmp/miuix-android/0.5.1/miuix-android-0.5.1.aar",
+    "verified": true,
+    "method": "published-sha256"
+  }
+]

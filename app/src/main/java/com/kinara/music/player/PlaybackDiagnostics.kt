@@ -4,7 +4,8 @@ package com.kinara.music.player
 /** Numeric, typed events prevent exception messages/URLs/tokens from reaching exported reports. */
 object PlaybackDiagnostics {
     enum class Event { STATE, PLAYING, PLAY_WHEN_READY, SUPPRESSION, PLAYER_VOLUME, OUTPUT_GAIN,
-        AUDIO_SESSION, ERROR, FALLBACK, SKIP, EXHAUSTED, UNDERRUN, SYSTEM_VOLUME, SYSTEM_MODE, OUTPUT_TYPE, TIMER }
+        AUDIO_SESSION, ERROR, FALLBACK, SKIP, EXHAUSTED, UNDERRUN, SYSTEM_VOLUME, SYSTEM_MODE, OUTPUT_TYPE, TIMER,
+        RESOLVE_MS, NEXT_SOURCE_READY }
     private val entries = ArrayDeque<String>()
     @Synchronized fun record(event: Event, value: Number) {
         if (entries.size >= 200) entries.removeFirst()

@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Kinara — Android music client. Copyright (C) 2026 Kinara contributors. GPL-3.0 -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Miuix 0.5.1 declares 26, but its Android-specific source only uses API 23
+         window insets and guards RoundedCorner behind API 31. Keep Kinara's API 24
+         support; the imported components are covered by the API 24 UI smoke test. -->
+    <uses-sdk tools:overrideLibrary="top.yukonga.miuix.kmp" />
 
     <!-- 联网用于音乐服务，以及用户主动检查和下载应用更新。本地播放不依赖网络。 -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -40,6 +46,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTask"
+            android:configChanges="orientation|screenSize|smallestScreenSize"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

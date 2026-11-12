@@ -54,15 +54,19 @@ class DynamicLyricsTest {
     @Test fun visualDirectorsAndQualityAreSelectedInSettingsAndRemembered() {
         var settings by mutableStateOf(KinaraSettings())
         compose.setContent { KinaraTheme(KinaraThemeKind.DEFAULT, KinaraDarkMode.LIGHT) {
-            SettingsScreen(settings, {}, {}, { _, _ -> }, onPreferences = { settings = it(settings) })
+            SettingsTestHost(settings, {}, {}, { _, _ -> }, onPreferences = { settings = it(settings) })
         } }
-        compose.onNodeWithText("动态视界").performScrollTo().performClick()
+        compose.onNodeWithText("歌词视觉模式").performScrollTo().performClick()
+        compose.onNodeWithText("动态视界").performClick()
         assertEquals(LyricRenderer.FOLIA_LUMIERE, settings.lyricRenderer)
-        compose.onNodeWithText("动态排字").performScrollTo().performClick()
+        compose.onNodeWithText("视觉编排").performScrollTo().performClick()
+        compose.onNodeWithText("诗行").performClick()
         assertEquals(LyricVisualStyle.SONNET, settings.lyricVisualStyle)
-        compose.onNodeWithText("凝彩").performScrollTo().performClick()
+        compose.onNodeWithText("视觉编排").performScrollTo().performClick()
+        compose.onNodeWithText("绘境").performClick()
         assertEquals(LyricVisualStyle.TEMPERA, settings.lyricVisualStyle)
-        compose.onNodeWithText("省电").performScrollTo().performClick()
+        compose.onNodeWithText("动态画质").performScrollTo().performClick()
+        compose.onNodeWithText("省电").performClick()
         assertEquals(LumiereQuality.LOW, settings.lumiereQuality)
         assertEquals(settings, parseSettings { settings.toPrefsMap()[it] })
         compose.onNodeWithText("视觉编排").performScrollTo()
@@ -83,12 +87,14 @@ class DynamicLyricsTest {
             KinaraTheme(KinaraThemeKind.DEFAULT, KinaraDarkMode.DARK) {
                 if (preview) PlayScreen(player, lyrics, {}, {}, {}, {}, settings = settings,
                     onVisualMode = { mode -> vm.update { it.copy(playerVisualMode = mode) } })
-                else SettingsScreen(settings, {}, {}, { _, _ -> }, onPreferences = vm::update,
+                else SettingsTestHost(settings, {}, {}, { _, _ -> }, onPreferences = vm::update,
                     onPreviewLyrics = { preview = true })
             }
         }
-        compose.onNodeWithText("动态视界").performScrollTo().performClick()
-        compose.onNodeWithText("动态排字").performScrollTo().performClick()
+        compose.onNodeWithText("歌词视觉模式").performScrollTo().performClick()
+        compose.onNodeWithText("动态视界").performClick()
+        compose.onNodeWithText("视觉编排").performScrollTo().performClick()
+        compose.onNodeWithText("诗行").performClick()
         compose.onNodeWithText("查看当前歌曲效果").performScrollTo().performClick()
         compose.onNodeWithTag("folia_lyrics").assertIsDisplayed()
         compose.onNodeWithTag("dynamic_lyrics").assertDoesNotExist()

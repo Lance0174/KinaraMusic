@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- kinara_prefs.xml holds source credentials; kinara_downloads.xml is a listening history
+     (titles/artists/SAF URIs). Neither belongs in a cloud backup or a device transfer. -->
 <data-extraction-rules>
     <cloud-backup>
         <exclude domain="sharedpref" path="kinara_prefs.xml" />
+        <exclude domain="sharedpref" path="kinara_downloads.xml" />
     </cloud-backup>
     <device-transfer>
         <exclude domain="sharedpref" path="kinara_prefs.xml" />
+        <exclude domain="sharedpref" path="kinara_downloads.xml" />
     </device-transfer>
 </data-extraction-rules>

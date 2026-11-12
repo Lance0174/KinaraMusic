@@ -15,19 +15,29 @@ import com.kinara.music.download.*
 import com.kinara.music.ui.theme.LocalKinaraTheme
 
 @Composable
-fun DownloadsScreen(downloads: Downloads, onPlay: (List<Track>, Int) -> Unit, onAdd: (Track) -> Unit) {
+fun DownloadsScreen(downloads: Downloads, onPlay: (List<Track>, Int) -> Unit, onAdd: (Track) -> Unit,
+    onPlayNext: (Track) -> Unit = {}) {
     val entries by downloads.entries.collectAsStateWithLifecycle()
     val c = LocalKinaraTheme.current.colors
-    LaunchedEffect(Unit) { downloads.refresh() }
-    if (entries.isEmpty()) EmptyState(Glyph.IMPORT, "把音乐带到离线", "在播放器的更多菜单中选择下载。\n文件保存在手机的 Music/Kinara 文件夹。")
-    else LazyColumn(contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = LocalDockInset.current)) {
+    // 下载记录是构造时异步从磁盘解码的，首帧 entries 还是空集合。
+    // 直接按空集合渲染会让"把音乐带到离线"闪一下，看起来像是一条下载都没有。
+    // 已有数据时（多数情况）同步就绪，不显示加载态，避免每次进页面都闪一次。
+    var loaded by remember { mutableStateOf(entries.isNotEmpty()) }
+    LaunchedEffect(Unit) { downloads.awaitReady(); downloads.refresh(); loaded = true }
+    if (!loaded) Box(Modifier.fillMaxSize().padding(bottom = LocalDockInset.current), contentAlignment = Alignment.Center) {
+        CircularProgressIndicator()
+    }
+    else if (entries.isEmpty()) EmptyState(Glyph.IMPORT, "把音乐带到离线", "在播放器的更多菜单中选择下载。\n文件保存在手机的 Music/Kinara 文件夹。")
+    else LazyColumn(modifier = Modifier.padding(bottom = LocalDockInset.current), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 8.dp)) {
         items(entries, key = { it.key }) { entry ->
             Column(Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
                 TrackRow(entry.localTrack() ?: entry.track, onClick = {
                     val playable = entries.mapNotNull { it.localTrack() }
                     val index = playable.indexOfFirst { it.mediaId == entry.track.mediaId }
                     if (entry.phase == DownloadPhase.COMPLETE && index >= 0) onPlay(playable, index)
-                }, onAdd = if (entry.phase == DownloadPhase.COMPLETE) ({ entry.localTrack()?.let(onAdd) }) else null)
+                }, onAdd = if (entry.phase == DownloadPhase.COMPLETE) ({ entry.localTrack()?.let(onAdd) }) else null,
+                    // 已下载完成的项可以直接排到下一首；未完成的本地文件还不存在，不提供入口。
+                    onPlayNext = if (entry.phase == DownloadPhase.COMPLETE) ({ onPlayNext(entry.localTrack() ?: entry.track) }) else null)
                 Row(Modifier.fillMaxWidth().padding(start = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                     Text(when (entry.phase) {
                         DownloadPhase.RESOLVING -> "正在获取音频…"

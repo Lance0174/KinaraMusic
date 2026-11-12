@@ -16,6 +16,8 @@
 .externalNativeBuild
 .cxx
 /.signing/
+/KinaraSigning/
+/_research/
 **/signing.properties
 **/keystore.properties
 *.keystore

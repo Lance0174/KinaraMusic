@@ -112,7 +112,21 @@ class PlaybackService : MediaSessionService() {
                 stablePlayback?.cancel()
                 if (isPlaying) stablePlayback = scope.launch {
                     delay(5000)
-                    if (player.isPlaying) unavailableQueue.reset()
+                    if (player.isPlaying) {
+                        unavailableQueue.reset()
+                        suspend fun warmNext() {
+                            val next = player.nextMediaItemIndex
+                            if (next != C.INDEX_UNSET && next != player.currentMediaItemIndex) {
+                                val track = player.getMediaItemAt(next).localConfiguration?.uri?.toString()?.let(OnlineMediaUri::decode)
+                                if (track != null) withContext(Dispatchers.IO) { resolver.warm(track) }
+                            }
+                        }
+                        warmNext()
+                        // Signed stream URLs have a short life. Refresh near the transition too,
+                        // so a long current song cannot outlive the address prepared at its start.
+                        while (player.isPlaying && player.duration > 0 && player.duration - player.currentPosition > 45_000) delay(5000)
+                        if (player.isPlaying && player.duration > 0) warmNext()
+                    }
                 }
             }
             override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {

@@ -102,8 +102,12 @@ object NeteaseSource {
 
     suspend fun lyrics(id: String): LyricDocument {
         val rich = try {
+            // 这里的开关原来全是 0：接口于是什么都不返回，parseLyrics 拿到的 yrc 恒为空，
+            // useWords 永远 false，逐字时间轴与译文轨道全部失效，而且每次都要白跑一次
+            // 再回落到下面的老接口（两次串行请求）。改成 1 才能真正拿到 YRC 逐字与翻译；
+            // 万一某首歌没有逐字，parseLyrics 里的 useWords 分支会自动退回普通 LRC。
             val response = OnlineTransport.getText("https://music.163.com/api/song/lyric/v1?id=" + OnlineTransport.enc(id) +
-                "&cp=false&lv=0&tv=0&rv=0&kv=0&yv=0&ytv=0&yrv=0")
+                "&cp=false&lv=1&tv=1&rv=1&kv=1&yv=1&ytv=1&yrv=1")
             if (response.code == 200) parseLyrics(JSONObject(response.body)) else LyricDocument()
         } catch (e: Exception) {
             if (e is kotlinx.coroutines.CancellationException) throw e

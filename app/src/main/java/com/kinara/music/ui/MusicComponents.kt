@@ -13,6 +13,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -49,6 +51,11 @@ fun PageTitle(title: String, subtitle: String, trailing: @Composable RowScope.()
                 Spacer(Modifier.height(6.dp))
             }
             Text(title, color = c.text, style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.Bold)
+            // subtitle 是调用方一直在传的参数,但之前从未渲染,页面标题区因此显得空旷。
+            if (subtitle.isNotBlank()) {
+                Text(subtitle, color = c.textDim, fontSize = 12.sp, lineHeight = 17.sp,
+                    modifier = Modifier.padding(top = 3.dp))
+            }
         }
         trailing()
     }
@@ -58,29 +65,30 @@ fun PageTitle(title: String, subtitle: String, trailing: @Composable RowScope.()
 fun SearchField(value: String, onValueChange: (String) -> Unit, placeholder: String, modifier: Modifier = Modifier) {
     val c = LocalKinaraTheme.current.colors
     val focus = LocalFocusManager.current
-    KinaraGlassPanel(modifier = modifier.fillMaxWidth(), shape = RoundedCornerShape(20.dp)) {
-        TextField(value, onValueChange, modifier = Modifier.fillMaxWidth(), singleLine = true,
+    top.yukonga.miuix.kmp.basic.TextField(value, onValueChange, modifier = modifier.fillMaxWidth(), singleLine = true,
+            label = placeholder, useLabelAsPlaceholder = true, cornerRadius = 16.dp,
+            backgroundColor = c.panel, labelColor = c.textDim,
+            textStyle = MaterialTheme.typography.bodyLarge.copy(color = c.text),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
             keyboardActions = KeyboardActions(onSearch = { focus.clearFocus() }),
-            placeholder = { Text(placeholder, style = MaterialTheme.typography.bodyLarge) },
-            leadingIcon = { KinaraIcon(Glyph.SEARCH, tint = c.textDim) },
-            trailingIcon = if (value.isNotEmpty()) {{ IconButton(onClick = { onValueChange("") }) { KinaraIcon(Glyph.CLOSE, "清空搜索") } }} else null,
-            colors = TextFieldDefaults.colors(focusedContainerColor = Color.Transparent, unfocusedContainerColor = Color.Transparent,
-                focusedIndicatorColor = Color.Transparent, unfocusedIndicatorColor = Color.Transparent,
-                focusedTextColor = c.text, unfocusedTextColor = c.text, focusedPlaceholderColor = c.textDim, unfocusedPlaceholderColor = c.textDim))
-    }
+            leadingIcon = { Box(Modifier.padding(start = 16.dp, end = 10.dp)) { KinaraIcon(Glyph.SEARCH, modifier = Modifier.size(20.dp), tint = c.textDim) } },
+            trailingIcon = if (value.isNotEmpty()) {{ IconButton(onClick = { onValueChange("") }) { KinaraIcon(Glyph.CLOSE, "清空搜索") } }} else null)
 }
 
 @Composable
 fun TrackRow(track: Track, active: Boolean = false, favorite: Boolean = false, onClick: () -> Unit,
              onFavorite: (() -> Unit)? = null, onAdd: (() -> Unit)? = null, onRemove: (() -> Unit)? = null,
-             showSource: Boolean = true) {
+             onPlayNext: (() -> Unit)? = null, onMoveUp: (() -> Unit)? = null, onMoveDown: (() -> Unit)? = null,
+             canMoveUp: Boolean = true, canMoveDown: Boolean = true,
+             removeLabel: String = "从歌单移除", showSource: Boolean = true) {
     val c = LocalKinaraTheme.current.colors
     var menu by remember(track.mediaId) { mutableStateOf(false) }
     Row(Modifier.fillMaxWidth().clip(kinaraShape(16.dp))
         .background(if (active) c.accent.copy(alpha = 0.09f) else Color.Transparent)
+        // 正在播放此前只用颜色区分,TalkBack 读不出哪一行在播,补一个可朗读的状态描述。
+        .semantics { if (active) stateDescription = "正在播放" }
         .clickable(onClick = onClick).padding(start = 8.dp, top = 9.dp, bottom = 9.dp), verticalAlignment = Alignment.CenterVertically) {
-        KinaraArtwork(track, 52.dp, corner = 12.dp)
+        KinaraArtwork(track, 48.dp, corner = 10.dp)
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
             Text(track.title, color = if (active) c.accent else c.text, fontSize = 16.sp,
@@ -94,15 +102,34 @@ fun TrackRow(track: Track, active: Boolean = false, favorite: Boolean = false, o
             }, color = c.textDim, fontSize = 13.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
         if (favorite) KinaraIcon(Glyph.HEART_FILLED, "已收藏", Modifier.size(14.dp).padding(1.dp), c.accent)
-        if (onFavorite != null || onAdd != null || onRemove != null) Box {
+        if (onFavorite != null || onAdd != null || onRemove != null ||
+            onPlayNext != null || onMoveUp != null || onMoveDown != null) Box {
             IconButton(onClick = { menu = true }) { KinaraIcon(Glyph.MORE, "更多操作：${track.title}", tint = c.textDim) }
             DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
+                if (onPlayNext != null) DropdownMenuItem(text = { Text("下一首播放") },
+                    leadingIcon = { KinaraIcon(Glyph.PLAY) }, onClick = { menu = false; onPlayNext() })
                 if (onFavorite != null) DropdownMenuItem(text = { Text(if (favorite) "取消收藏" else "收藏歌曲") },
                     leadingIcon = { KinaraIcon(if (favorite) Glyph.HEART_FILLED else Glyph.HEART) }, onClick = { menu = false; onFavorite() })
                 if (onAdd != null) DropdownMenuItem(text = { Text("加入歌单") }, leadingIcon = { KinaraIcon(Glyph.QUEUE) }, onClick = { menu = false; onAdd() })
-                if (onRemove != null) DropdownMenuItem(text = { Text("从歌单移除") }, onClick = { menu = false; onRemove() })
+                // 首行/末行不再把菜单项抽掉：项目数量随位置变化会让菜单高度跳动，
+                // TalkBack 用户也会以为这个功能时有时无。改成可见但禁用。
+                if (onMoveUp != null) DropdownMenuItem(text = { Text("上移一位") }, enabled = canMoveUp,
+                    onClick = { menu = false; onMoveUp() })
+                if (onMoveDown != null) DropdownMenuItem(text = { Text("下移一位") }, enabled = canMoveDown,
+                    onClick = { menu = false; onMoveDown() })
+                if (onRemove != null) DropdownMenuItem(text = { Text(removeLabel) }, onClick = { menu = false; onRemove() })
             }
         } else Spacer(Modifier.width(12.dp))
+    }
+}
+
+/** 为可能重复的 mediaId 生成稳定且唯一的列表 key（下标不能进 key，否则重排后整张表会重建）。 */
+internal fun stableRowKeys(ids: List<String>): List<String> {
+    val seen = HashMap<String, Int>(ids.size)
+    return ids.map { id ->
+        val n = seen.getOrElse(id) { 0 }
+        seen[id] = n + 1
+        "$id#$n"
     }
 }
 
